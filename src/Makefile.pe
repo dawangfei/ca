@@ -1,0 +1,41 @@
+include ${ESWTDIR}/etc/Custom.defines
+
+
+DBLIB  = -L$(ESWTDIR)/lib -ldbapi $(DB2LIBS)
+CALIB  = -L$(FAPWORKDIR)/lib -lca
+
+SRCFLAG= -qalign=natural -DAIXUSE -D_ALL_SOURCE
+SPECIAL= -DSTARRING_INTEGRATE
+CAFLAG = -DENABLE_HIS -DDB2
+CAINCL = -Idbincl -I$(FAPWORKDIR)/include
+CFLAGS = $(CAFLAG) $(SPECIAL) $(CAINCL) $(SRCFLAG)
+
+DBEXT  = db/dbext.o
+CA     = $(FAPWORKDIR)/lib/libca.a 
+ADM    = $(FAPWORKDIR)/bin/caadm
+TARGET = $(CA) $(ADM)
+
+all: $(TARGET)
+
+LIB_OBJS = aux.o ext.o his.o load.o \
+       object.o put.o rs.o seg.o api.o blk.o \
+       query.o sec.o shm.o sql.o \
+       where.o tree.o stack.o \
+       hash.o list.o lock.o tm.o util.o log.o
+
+BIN_OBJS = caadmin.o mydb.o
+
+$(CA):  $(LIB_OBJS)
+	${AR} ${AROPT} $@ $(LIB_OBJS) $(DBEXT)
+	@cp -f api.h $(FAPWORKDIR)/include/caapi.h
+
+$(ADM):  $(BIN_OBJS)
+	$(CC) -o $@ $(BIN_OBJS) $(CALIB) $(DBLIB)
+
+.c.o:
+	$(CC) -o $@ $(CFLAGS) -c $<
+
+clean:
+	rm -f $(TARGET) core $(LIB_OBJS) $(BIN_OBJS)
+
+#

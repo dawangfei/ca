@@ -1,0 +1,13 @@
+#!/bin/ksh
+
+# 'addr' only for AIX+starring
+KEY=7788
+
+caadm << EOF
+addr -x 700000360000000
+add -t T_TX -m 1000
+boot -k ${KEY}
+info
+EOF
+
+# bootca

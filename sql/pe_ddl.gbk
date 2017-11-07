@@ -1,0 +1,5927 @@
+-- t_plat_para  平台参数表
+drop table t_plat_para;
+create table t_plat_para
+(
+    plat_no char(20) not null,
+    plat_name varchar(60),
+    sys_no char(4) not null,
+    plat_stat char(1) default '1' not null,
+    plat_date char(8),
+    clear_date char(8),
+    pre_date char(8),
+    act_date char(8),
+    brch_no char(12),
+    dayend_flag BIGINT,
+    dayend_date char(8),
+    dayend_time char(6),
+    dayend_sec BIGINT default 28800 not null,
+    pass_day BIGINT default 90 not null,
+    hist_day BIGINT default 365 not null,
+    file_len BIGINT default 10485760 not null,
+    qry_num BIGINT default 50 not null,
+    plat_seq BIGINT default 0 not null,
+    pay_seq BIGINT default 0 not null,
+    bat_seq BIGINT default 0 not null,
+    plat_version char(20) default '0',
+    dac char(16)
+);
+
+create unique index uidx_t_plat_para on t_plat_para ( plat_no);
+
+
+-- t_plat_para_ext  平台参数扩展表
+drop table t_plat_para_ext;
+create table t_plat_para_ext
+(
+    para_type varchar(8) not null,
+    para_name varchar(60) not null,
+    value1 varchar(200),
+    value2 varchar(200),
+    value3 BIGINT,
+    value4 BIGINT,
+    value5 decimal(16,2),
+    value6 decimal(16,2),
+    elememt1 varchar(60),
+    elememt2 varchar(60),
+    memo varchar(60),
+    stat char(1),
+    dac char(16)
+);
+
+create unique index uidx_t_plat_para_ext on t_plat_para_ext ( para_type,para_name);
+
+
+-- t_pe_para  参数配置表
+drop table t_pe_para;
+create table t_pe_para
+(
+    para_name char(30) not null,
+    para_desc char(60) not null,
+    para_val varchar(255),
+    pre_date char(8) default '99999999',
+    pre_time char(6) default '999999',
+    pre_val varchar(255),
+    memo varchar(100),
+    Dac char(16)
+);
+
+create unique index uidx_t_pe_para on t_pe_para ( para_name);
+
+
+-- t_tx  交易码表
+drop table t_tx;
+create table t_tx
+(
+    tx_code varchar(50) not null,
+    tx_type char(1),
+    tx_flag char(1) not null,
+    jrnl_flag char(1) not null,
+    tx_stat char(1) default 'Y' not null,
+    tx_name char(60),
+    item_no char(6) not null,
+    rev_dta varchar(20),
+    rev_svc varchar(50),
+    crt_psn char(20),
+    crt_time char(14),
+    mod_psn char(20),
+    mod_time char(14),
+    dac char(16)
+);
+
+create unique index uidx_t_tx on t_tx ( tx_code);
+
+
+-- t_teller  柜员表
+drop table t_teller;
+create table t_teller
+(
+    index BIGINT default 0 not null,
+    teller_no char(12) not null,
+    dac char(16)
+);
+
+create unique index uidx_t_teller on t_teller ( index);
+
+
+-- t_busi_type  业务种类参数表
+drop table t_busi_type;
+create table t_busi_type
+(
+    operate_type char(23) not null,
+    productid char(20) not null,
+    sys_no char(3),
+    eusp_pay_trntype varchar(128),
+    eusp_payee_trntype varchar(128),
+    dm_pay_trntype varchar(128),
+    dm_payee_trntype varchar(128),
+    dm_pay_crd_savtype char(1),
+    dm_payee_crd_savtype char(1),
+    dm_pay_tt_no char(6),
+    dm_payee_tt_no char(6),
+    para_msg1 varchar(128),
+    para_msg2 varchar(128),
+    para_int1 BIGINT default 0 not null,
+    para_int2 BIGINT default 0 not null,
+    para_amt1 decimal(15,2) default 0 not null,
+    para_amt2 decimal(15,2) default 0 not null,
+    stat char(1) default '0' not null,
+    dac char(16)
+);
+
+create unique index uidx_t_busi_type on t_busi_type ( operate_type,productid);
+
+
+-- t_jrnl  交易流水表
+drop table t_jrnl;
+create table t_jrnl
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    chnl_svc_name char(40) not null,
+    chnl_svc_dsp varchar(128) not null,
+    sys_no char(3),
+    brch_no char(12),
+    teller_no char(12),
+    tx_code char(40),
+    operate_type char(23) not null,
+    productid char(20) not null,
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    in_curr_cod char(5),
+    in_curr_type char(1),
+    trn_amt decimal(15,2) default 0 not null,
+    fee decimal(15,2) default 0 not null,
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    oth_amt3 decimal(15,2) default 0 not null,
+    oth_amt4 decimal(15,2) default 0 not null,
+    exh_rate char(14),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_vou_date char(8),
+    pay_mode char(4),
+    pay_trn_flag char(1) not null,
+    pay_acct_type char(1),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name char(100),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    payee_mode varchar(4),
+    payee_trn_flag char(1) not null,
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_type char(1),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name char(100),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    runup_brch_no char(12),
+    fee_acct_no varchar(64),
+    fee_item_no varchar(20),
+    fee_type char(1),
+    fee_runup_brch_no char(12),
+    fee_add_flag char(1),
+    fee_agree_id char(10),
+    rev_plat_date char(8),
+    rev_seq_no BIGINT default 0 not null,
+    oth_plat_date char(8),
+    oth_seq_no BIGINT default 0 not null,
+    order_id char(20),
+    org_order_id char(20),
+    cncl_id char(40),
+    payee_runup_cncl_id char(40),
+    cncl_dir char(2),
+    bat_no char(20),
+    auth_no char(60),
+    bat_plat_date char(8),
+    bat_seq_no BIGINT default 0 not null,
+    tx_stat char(1) not null,
+    tx_msg varchar(255) not null,
+    pay_jrnl_num BIGINT default 0 not null,
+    pay_stat char(16) default 'NNNNNNNNNNNNNNNN' not null,
+    ret_cod char(20),
+    ret_msg varchar(255),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    ext_data varchar(300),
+    beg_date char(8) not null,
+    beg_time char(9) not null,
+    end_date char(8),
+    end_time char(9),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_jrnl on t_jrnl ( plat_date,seq_no);
+create unique index  ui_t_jrnl1  on  t_jrnl  (chnl_seq_no);
+
+create index  i_t_jrnl1  on  t_jrnl  (rsv_stat2);
+create index  i_t_jrnl2  on  t_jrnl  (chnl_date, sys_no, cncl_id, payee_runup_cncl_id);
+create index  i_t_jrnl3  on  t_jrnl  (tx_stat);
+
+-- t_order  支付指令表
+drop table t_order;
+create table t_order
+(
+    order_id char(20) not null,
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    brch_no char(12) not null,
+    teller_no char(12) not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    operate_type char(23) not null,
+    productid char(20) not null,
+    order_type char(1) not null,
+    order_busi_type char(1) not null,
+    order_rslt_type char(1) not null,
+    cncl_id char(40),
+    payee_runup_cncl_id char(40),
+    cncl_dir char(2),
+    busi_id1 char(60),
+    busi_id2 char(60),
+    busi_id3 char(60),
+    bat_plat_date char(8),
+    bat_seq_no BIGINT default 0 not null,
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    in_curr_cod char(5),
+    in_curr_type char(1),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name char(100),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    pay_mode char(4),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_vou_date char(8),
+    pay_acct_type char(1),
+    pay_addr varchar(256),
+    pay_nation char(3),
+    pay_cert_type char(6),
+    pay_cert_no varchar(60),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name char(100),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    payee_mode char(4),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_type char(1),
+    payee_nation char(3),
+    payee_cert_type char(6),
+    payee_cert_no varchar(60),
+    payee_inform_flg char(1),
+    payee_mb_no char(20),
+    rmit_urgnt_flag char(1),
+    rmit_chnl_date char(8),
+    rmit_agt_date char(8),
+    rmit_exh_session char(2),
+    pay_runup_brch_no char(12),
+    end_acct_brch_no1 char(12),
+    end_acct_brch_name1 char(100),
+    end_acct_no1 char(64),
+    end_acct_name1 varchar(146),
+    curr_operate_type1 char(23),
+    curr_productid1 char(20),
+    payee_runup_brch_no char(12),
+    end_acct_brch_no2 char(12),
+    end_acct_brch_name2 char(100),
+    end_acct_no2 char(64),
+    end_acct_name2 varchar(146),
+    curr_operate_type2 char(23),
+    curr_productid2 char(20),
+    trn_amt decimal(15,2) default 0 not null,
+    fee decimal(15,2) default 0 not null,
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    bal1 decimal(15,2) default 0 not null,
+    bal2 decimal(15,2) default 0 not null,
+    oth_order_no char(20),
+    oth_order_num BIGINT default 0 not null,
+    cnclltn_times BIGINT default 0 not null,
+    det_num BIGINT default 0 not null,
+    pay_jrnl_num BIGINT default 0 not null,
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    stat char(1) not null,
+    dac char(16),
+    last_date char(8) not null,
+    batclr_order_id1 char(20),
+    batclr_amt1 decimal(15,2) default 0 not null,
+    batclr_order_id2 char(20),
+    batclr_amt2 decimal(15,2) default 0 not null
+);
+
+create unique index uidx_t_order on t_order ( order_id);
+
+create index  i_t_order1  on  t_order  (plat_date, seq_no);
+create index  i_t_order2  on  t_order  (chnl_no, chnl_date, chnl_seq_no);
+create index  i_t_order3  on  t_order  (chnl_date, order_type, order_busi_type, cncl_id, payee_runup_cncl_id, stat);
+
+-- t_pay_jrnl  支付流水表
+drop table t_pay_jrnl;
+create table t_pay_jrnl
+(
+    order_id char(20) not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    pe_seq_no char(32),
+    rev_pe_seq_no char(32),
+    jrnl_step_no BIGINT default 0 not null,
+    brch_no char(12),
+    teller_no char(12),
+    operate_type char(23) not null,
+    productid char(20) not null,
+    dc_flag char(1),
+    trn_type char(2),
+    amt_type char(1),
+    cash_type char(1),
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    in_curr_cod char(5),
+    in_curr_type char(1),
+    pay_vou_proc_flag char(1) not null,
+    pay_vou_type char(13) not null,
+    pay_vou_no char(20),
+    pay_vou_date char(8),
+    pay_vou_seq_no varchar(32),
+    rev_vou_seq_no varchar(32),
+    pay_mode char(4),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    pay_acct_no varchar(64),
+    pay_acct_name varchar(146),
+    pay_cert_type char(6),
+    pay_cert_no char(60),
+    pay_host_date char(8),
+    pay_host_seq_no varchar(32),
+    pay_bal decimal(15,2) default 0 not null,
+    payee_mode char(4),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(100),
+    payee_acct_no varchar(64),
+    payee_acct_name varchar(146),
+    payee_cert_type char(6),
+    payee_cert_no varchar(60),
+    payee_host_date char(8),
+    payee_host_seq_no varchar(32),
+    payee_bal decimal(15,2) default 0 not null,
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    pay_runup_brch_no char(12),
+    payee_runup_brch_no char(12),
+    runup_brch_no char(12),
+    trn_amt decimal(15,2) default 0 not null,
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    fee_item_no varchar(20),
+    fee_runup_brch_no char(12),
+    fee_agree_id char(10),
+    svr_no char(10),
+    svr_tx_code varchar(50),
+    rmit_chnl_name char(4),
+    rmit_chnl_date char(8),
+    rmit_agt_date char(8),
+    rmit_exh_session char(2),
+    rmit_urgnt_flag char(1),
+    busi_no1 varchar(60),
+    busi_no2 varchar(60),
+    busi_no3 varchar(60),
+    full_rope_flag char(1),
+    cash_prjct_cod varchar(20),
+    cash_box_id varchar(20),
+    chnl_snd_trn_type varchar(20),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    oth_order_no char(20),
+    stat char(1),
+    beg_date char(8) not null,
+    beg_time char(9) not null,
+    end_date char(8),
+    end_time char(9),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pay_jrnl on t_pay_jrnl ( order_id,pay_jrnl_seq);
+
+create index  i_t_pay_jrnl1  on  t_pay_jrnl  (plat_date, seq_no);
+create index  i_t_pay_jrnl2  on  t_pay_jrnl  (pay_jrnl_seq, oth_order_no);
+
+-- t_pay_jrnl_ext  支付流水扩展表
+drop table t_pay_jrnl_ext;
+create table t_pay_jrnl_ext
+(
+    order_id char(20) not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    fee_productid char(20),
+    fee_cust_no char(40),
+    fee_amo_agree_id char(20),
+    fee_amo_sf_flg char(1),
+    fee_amo_amt decimal(15,2),
+    fee_amo_bdate char(8),
+    fee_amo_edate char(8),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pay_jrnl_ext on t_pay_jrnl_ext ( order_id,pay_jrnl_seq);
+
+
+-- t_pay_book  挂销登记簿
+drop table t_pay_book;
+create table t_pay_book
+(
+    order_id char(20) not null,
+    book_seq_no BIGINT default 0 not null,
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    trn_order_id char(20) not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    brch_no char(12) not null,
+    teller_no char(12) not null,
+    pay_flag char(2) not null,
+    dc_flag char(1) not null,
+    pay_acct_no varchar(40) not null,
+    pay_acct_name varchar(146),
+    payee_acct_no varchar(40),
+    payee_acct_name varchar(146),
+    trn_msg varchar(128),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    trn_amt decimal(15,2) default 0 not null,
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    stat char(1),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pay_book on t_pay_book ( order_id,book_seq_no);
+
+create index  i_t_pay_book1  on  t_pay_book  (plat_date, seq_no);
+create index  i_t_pay_book2  on  t_pay_book  (trn_order_id, pay_jrnl_seq);
+
+-- t_troute_merchant  通道商户表
+drop table t_troute_merchant;
+create table t_troute_merchant
+(
+    PLAT_DATE char(8) not null,
+    PLAT_SEQ BIGINT not null,
+    SERIAL_NO BIGINT not null,
+    protocol_code char(20) not null,
+    pay_chnl char(4) not null,
+    protocol_type char(1) not null,
+    norm_merchant_code char(32),
+    norm_merchant_name varchar(255),
+    merchant_brch_no char(20),
+    merchant_brch_name varchar(255),
+    merchant_acct char(40),
+    Merchant_name varchar(255),
+    mch_code char(20),
+    mch_type char(20),
+    mch_name varchar(255),
+    mch_abbr varchar(255),
+    mch_addr varchar(255),
+    mch_fee_type char(1),
+    mch_fee decimal(15,2),
+    mch_fee1 BIGINT,
+    crt_date char(8),
+    last_date char(8),
+    stat char(1),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT,
+    rsv_int2 BIGINT,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255)
+);
+
+create unique index uidx_t_troute_merchant on t_troute_merchant ( protocol_code,pay_chnl,protocol_type);
+create unique index  ui_t_troute_merch1  on  t_troute_merchant  (PLAT_DATE, PLAT_SEQ, SERIAL_NO);
+
+
+-- t_clt_step_rev  步骤表
+drop table t_clt_step_rev;
+create table t_clt_step_rev
+(
+    seq_no BIGINT default 0 not null,
+    plat_date char(8) not null,
+    pe_seq_no char(32) not null,
+    pe_rev_seq_no char(32),
+    table_name char(50),
+    pay_jrnl_seq BIGINT,
+    dta_name char(50) not null,
+    svc_name char(50) not null,
+    rev_svc_name char(50) not null,
+    tran_date char(8),
+    tran_time char(9),
+    step_num BIGINT not null,
+    last_date char(8),
+    stat char(1) not null
+);
+
+create unique index uidx_t_clt_step_rev on t_clt_step_rev ( seq_no,plat_date,pe_seq_no);
+
+
+-- t_pay_chnl  资金通道表
+drop table t_pay_chnl;
+create table t_pay_chnl
+(
+    pay_chnl char(4) not null,
+    pay_chnl_name varchar(128) not null,
+    pay_chnl_type char(1) not null,
+    remit_chnl_ver char(1),
+    remit_real_clr_flg char(1),
+    chnl_sys_no char(3),
+    chnl_self_pay_flg char(1),
+    chnl_call_flg char(1),
+    pay_chnl_stat char(1) not null,
+    dac char(16)
+);
+
+create unique index uidx_t_pay_chnl on t_pay_chnl ( pay_chnl);
+
+
+-- t_order_ctrl  挂销业务支付指令控制表
+drop table t_order_ctrl;
+create table t_order_ctrl
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    order_id char(20) not null,
+    order_type char(1) not null,
+    order_busi_type char(1) not null,
+    beg_stat char(1) not null,
+    end_stat char(1) not null,
+    pay_type char(1) not null,
+    pay_runupamt decimal(15,2) default 0 not null,
+    rev_pay_runupamt decimal(15,2) default 0 not null,
+    payee_type char(1) not null,
+    payee_runupamt decimal(15,2) default 0 not null,
+    rev_payee_runupamt decimal(15,2) default 0 not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    rev_plat_date char(8),
+    rev_seq_no BIGINT default 0 not null,
+    rev_times BIGINT default 0 not null,
+    stat char(1) not null,
+    dac char(16)
+);
+
+create unique index uidx_t_order_ctrl on t_order_ctrl ( plat_date,seq_no,order_id);
+
+
+-- t_remit_pay  提出贷记汇兑信息表
+drop table t_remit_pay;
+create table t_remit_pay
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    order_id char(20) not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    pe_seq_no char(32),
+    brch_no char(12),
+    teller_no char(12),
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    operate_type char(23) not null,
+    productid char(20) not null,
+    remit_chnl_no char(4) not null,
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    cash_type char(1) not null,
+    cash_prjct_cod varchar(20),
+    pay_mode char(4),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_vou_date char(8),
+    pay_acct_type char(1),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    pay_acct_no varchar(64),
+    pay_acct_name varchar(146),
+    pay_addr varchar(256),
+    pay_nation char(3),
+    pay_cert_type char(6),
+    pay_cert_no varchar(60),
+    remitter_name varchar(146),
+    remitter_cert_type char(6),
+    remittr_cert_no varchar(60),
+    remitter_cert_grnt varchar(60),
+    remitter_tel_no char(20),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_type char(1),
+    payee_acct_brch_no char(30) not null,
+    payee_acct_brch_name varchar(100),
+    payee_acct_no varchar(64) not null,
+    payee_acct_name varchar(146) not null,
+    payee_nation char(3),
+    payee_cert_type char(6),
+    payee_cert_no varchar(60),
+    payee_inform_flag char(1),
+    payee_inform_mb char(20),
+    rmit_urgnt_flag char(1),
+    rmit_chnl_date char(8),
+    rmit_agt_date char(8),
+    rmit_exh_session char(2),
+    trn_amt decimal(15,2) default 0 not null,
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    ext_data varchar(300),
+    payment_type varchar(30),
+    remit_seq_no char(32),
+    remit_trn_date char(8),
+    remit_acct_seq_no char(32),
+    remit_trn_seq_no char(40),
+    remit_pay_runup_brch_no char(12),
+    remit_pay_cncl_id char(40),
+    remit_sys_date char(8),
+    remit_sys_time char(9),
+    remit_ret_cod varchar(128),
+    remit_ret_msg varchar(128),
+    crt_date char(8) not null,
+    crt_time char(9) not null,
+    snd_date char(8),
+    snd_time char(9),
+    qry_date char(8),
+    qry_time char(9),
+    snd_stat char(1) not null,
+    qry_stat char(1) not null,
+    qry_times BIGINT default 0 not null,
+    snd_times BIGINT default 0 not null,
+    qry_ret char(30),
+    dac char(16)
+);
+
+create unique index uidx_t_remit_pay on t_remit_pay ( plat_date,seq_no);
+create unique index  ui_t_remit_pay2  on  t_remit_pay  (chnl_seq_no);
+
+create index  i_t_remit_pay1  on  t_remit_pay  (snd_date, snd_time, snd_stat, qry_times);
+create index  i_t_remit_pay2  on  t_remit_pay  (pe_seq_no);
+
+-- t_remit_pay_ext  提出贷记汇兑信息扩展表
+drop table t_remit_pay_ext;
+create table t_remit_pay_ext
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    chnl_seq_no char(32) not null,
+    rel_biz_auth_date char(8),
+    fee_code char(3),
+    snd_fee decimal(15,2),
+    rcv_fee decimal(15,2),
+    inter_bank_rate char(20),
+    inter_bank_prd char(5),
+    ptp_id char(35),
+    draft_issue_date char(8),
+    draft_type char(4),
+    draft_amt decimal(15,2),
+    app_acct_no char(40),
+    app_acct_name char(180),
+    redundant_amt decimal(15,2),
+    act_set_amt decimal(15,2),
+    trans_acct_no char(40)
+);
+
+create unique index uidx_t_remit_pay_ext on t_remit_pay_ext ( plat_date,seq_no);
+create unique index  ui_t_remit_pay_ex2  on  t_remit_pay_ext  (chnl_seq_no);
+
+
+-- t_redo_info  重做交易信息表
+drop table t_redo_info;
+create table t_redo_info
+(
+    order_id char(20) not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    redo_rsn char(1) not null,
+    redo_times BIGINT default 0 not null,
+    redo_max_times BIGINT default 0 not null,
+    crt_date char(8) not null,
+    crt_time char(9) not null,
+    next_date char(8) not null,
+    next_time char(9) not null,
+    last_date char(8),
+    last_time char(9),
+    stat char(1) not null,
+    proc_stat char(1) not null,
+    proc_mode char(1) not null,
+    proc_order_id char(20),
+    dac char(16)
+);
+
+create unique index uidx_t_redo_info on t_redo_info ( order_id,pay_jrnl_seq);
+
+create index  i_t_redo_info1  on  t_redo_info  (redo_times, stat);
+
+-- t_redo_jrnl  重做流水表
+drop table t_redo_jrnl;
+create table t_redo_jrnl
+(
+    order_id char(20) not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    redo_seq BIGINT default 0 not null,
+    redo_type char(1) not null,
+    stat char(1),
+    errcode char(20),
+    errmsg varchar(255),
+    beg_date char(8) not null,
+    beg_time char(9) not null,
+    end_date char(8),
+    end_time char(9),
+    redo_mode char(1),
+    redo_order_id char(20),
+    trn_type char(2) not null,
+    trn_amt decimal(15,2) default 0 not null,
+    trn_plat_date char(8),
+    pe_seq_no char(32),
+    host_date char(8),
+    host_seq varchar(32),
+    brch_no char(12),
+    teller_no char(12),
+    operate_type char(23) not null,
+    productid char(20) not null,
+    trn_msg1 varchar(255),
+    trn_msg2 varchar(255),
+    trn_msg3 varchar(255),
+    trn_msg4 varchar(255),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    dac char(16)
+);
+
+create unique index uidx_t_redo_jrnl on t_redo_jrnl ( order_id,pay_jrnl_seq,redo_seq);
+
+
+-- t_fee_add  手续费累加信息表
+drop table t_fee_add;
+create table t_fee_add
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    fee_add_seq BIGINT default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    brch_no char(12),
+    teller_no char(12),
+    fee_type char(1) not null,
+    fee_runup_brch_no char(12),
+    fee_orderid char(32),
+    fee_agree_id char(10),
+    fee decimal(15,2) default 0 not null,
+    fee_acct_no varchar(64),
+    fee_item_no varchar(20),
+    proc_type char(1) not null,
+    org_plat_date char(8) not null,
+    org_seq_no BIGINT default 0 not null,
+    org_chnl_no char(4) not null,
+    org_chnl_date char(8) not null,
+    org_chnl_seq_no char(32) not null,
+    snd_stat char(1) not null,
+    errcode char(32),
+    errmsg varchar(255),
+    sndtimes BIGINT default 0 not null,
+    crt_date char(8) not null,
+    crt_time char(9) not null,
+    snd_date char(8),
+    snd_time char(9),
+    dac char(16),
+    last_date char(8)
+);
+
+create unique index uidx_t_fee_add on t_fee_add ( plat_date,seq_no,fee_add_seq);
+create unique index  ui_t_fee_add1  on  t_fee_add  (fee_add_seq, chnl_no, chnl_date, chnl_seq_no);
+
+
+-- t_pay_task  支付任务表
+drop table t_pay_task;
+create table t_pay_task
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    order_id char(20) not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    pe_seq_no char(32),
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    brch_no char(12),
+    teller_no char(12),
+    sys_domain char(3),
+    operate_type char(23) not null,
+    productid char(20) not null,
+    clear_kind char(1) not null,
+    clear_type char(1),
+    runup_brch_no char(12),
+    agn_clr_cdtion char(40),
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    tot_row BIGINT default 0 not null,
+    tot_amt decimal(16,2) default 0 not null,
+    clr_dir char(1),
+    payee_mode char(4),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_type char(1),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(146),
+    payee_acct_no varchar(64),
+    payee_acct_name varchar(146),
+    payee_nation char(3),
+    payee_cert_type char(6),
+    payee_cert_no varchar(60),
+    payee_inform_mb char(20),
+    clear_acct_no varchar(64),
+    clear_acct_name varchar(146),
+    pay_acct_brch_no char(30),
+    pay_acct_no varchar(64),
+    pay_acct_name varchar(146),
+    urgnt_flag char(1),
+    path_date char(8),
+    entrust_date char(8),
+    exh_session char(2),
+    fee_type char(1),
+    fee_runup_brch_no char(12),
+    fee_add_flag char(1),
+    fee_order_id char(32),
+    fee_agree_id char(10),
+    fee decimal(15,2) default 0 not null,
+    fee_acct_no varchar(64),
+    fee_item_no varchar(20),
+    clear_cdtion char(40),
+    clear_sdate char(8),
+    clear_edate char(8),
+    file_name varchar(128),
+    result_ip char(20),
+    result_port char(10),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    ext_data varchar(300),
+    status char(1) not null,
+    status1 char(50),
+    times BIGINT default 0 not null,
+    tot_pay decimal(16,2),
+    tot_payee decimal(16,2),
+    detail_name varchar(63),
+    last_date char(8),
+    last_time char(9),
+    err_msg varchar(255),
+    ret_code char(20),
+    ret_msg varchar(255),
+    ret_amt decimal(16,2) default 0 not null,
+    ret_dir char(1),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    dac char(16)
+);
+
+create unique index uidx_t_pay_task on t_pay_task ( plat_date,seq_no);
+create unique index  ui_t_pay_task1  on  t_pay_task  (order_id, pay_jrnl_seq);
+create unique index  ui_t_pay_task2  on  t_pay_task  (chnl_no, chnl_date, chnl_seq_no);
+
+
+-- t_pay_tmp  支付异步核销明细表
+drop table t_pay_tmp;
+create table t_pay_tmp
+(
+    count_no BIGINT default 0 not null,
+    par_id BIGINT default 0 not null,
+    detail_no char(32) not null,
+    order_id char(20) not null,
+    curr_cod char(5) not null,
+    curr_type char(1),
+    trs_amt decimal(16,2) default 0 not null,
+    status char(1) not null,
+    dac char(16)
+);
+
+create unique index uidx_t_pay_tmp on t_pay_tmp ( count_no);
+create unique index  ui_t_pay_tmp1  on  t_pay_tmp  (detail_no);
+
+create index  i_t_pay_tmp1  on  t_pay_tmp  (par_id);
+create index  i_t_pay_tmp2  on  t_pay_tmp  (status);
+
+-- t_pay_bat_stat  批量流程处理状态表
+drop table t_pay_bat_stat;
+create table t_pay_bat_stat
+(
+    plat_date char(8) not null,
+    seq_no BIGINT not null,
+    pe_seq_no char(32),
+    bat_prj_no char(15) not null,
+    bat_no char(20) not null,
+    order_id char(20) not null,
+    pay_node char(4) not null,
+    bat_pri char(4),
+    bat_name varchar(100),
+    tot_row BIGINT default 0 not null,
+    tot_amt decimal(16,2) default 0 not null,
+    suc_row BIGINT default 0,
+    suc_amt decimal(16,2) default 0,
+    fal_row BIGINT default 0,
+    fal_amt decimal(16,2) default 0,
+    priority char(1) not null,
+    bat_class char(1) not null,
+    bat_type char(1) not null,
+    sys_datetime char(14),
+    plan_datetime char(14),
+    lmt_datetime char(14),
+    bat_file varchar(120),
+    pre_bat_num BIGINT default 0 not null,
+    request_times BIGINT default 0 not null,
+    ret_msg varchar(255),
+    stat char(2) not null,
+    suc_path varchar(120),
+    suc_file varchar(120),
+    fal_path varchar(120),
+    fal_file varchar(120),
+    memo varchar(60),
+    memo1 varchar(128),
+    memo2 varchar(256),
+    memo3 varchar(512),
+    dac varchar(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pay_bat_stat on t_pay_bat_stat ( plat_date,seq_no,pay_node);
+create unique index  ui_t_pay_bat_stat1  on  t_pay_bat_stat  (bat_no, pay_node);
+create unique index  ui_t_pay_bat_stat2  on  t_pay_bat_stat  (order_id, pay_node);
+
+create index  i_t_pay_bat_stat1  on  t_pay_bat_stat  (bat_prj_no, sys_datetime, plan_datetime, lmt_datetime);
+create index  i_t_pay_bat_stat2  on  t_pay_bat_stat  (sys_datetime);
+create index  i_t_pay_bat_stat3  on  t_pay_bat_stat  (pe_seq_no);
+
+-- t_pay_bat_info  批量项目表
+drop table t_pay_bat_info;
+create table t_pay_bat_info
+(
+    bat_prj_no char(15) not null,
+    bat_prj_name char(60) not null,
+    sgin_acct char(64),
+    sgin_name char(146),
+    bank_mng_brch char(12),
+    sgin_type char(8) not null,
+    oper_type char(8) not null,
+    bat_type char(1) not null,
+    file_bat_kind char(1),
+    if_sback_amt char(1),
+    sgnr_rmrk char(50),
+    if_chk_acct char(1),
+    if_chk_acct_na char(1),
+    start_time char(6),
+    stop_time char(6),
+    proc_kind char(1) not null,
+    bat_acct_place char(1) not null,
+    curr_code char(3),
+    curr_iden char(1),
+    tx_amt decimal(16,2) default 0,
+    pay_type char(1),
+    inst_no char(20),
+    brch_no char(12),
+    cust_num BIGINT default 0,
+    oper_catgy char(8),
+    ret_rec_tm char(8),
+    sgnr_name char(146),
+    pay_no char(10),
+    pay_week_date char(1),
+    pay_quota decimal(16,2) default 0,
+    pay_acct_type char(1),
+    pay_bank_class char(1),
+    pay_acctsvr char(12),
+    pay_cert_type char(6),
+    pay_cert_no char(60),
+    pay_tel char(20),
+    pay_addr varchar(256),
+    rec_acct_info varchar(200),
+    agctld char(60),
+    path char(4),
+    gu_type char(2),
+    sm_quota decimal(16,2) default 0,
+    date_max_num char(8),
+    date_max_amt decimal(16,2) default 0,
+    creat_date char(8),
+    lim_contion char(60),
+    pay_pwd_type char(2),
+    pay_pwd_no char(10),
+    pay_vch_type char(13),
+    inu_date char(8),
+    abate_date char(8),
+    sgin_date char(8),
+    trs_name char(60),
+    trs_cert_type char(6),
+    trs_cert_no char(60),
+    trs_cg_org char(60),
+    trs_tel char(20),
+    trs_addr varchar(256),
+    trs_post_code char(6),
+    before_func char(30),
+    after_func char(30),
+    return_file CHAR(60),
+    stat char(1) not null,
+    crt_date char(8),
+    crt_teller char(20),
+    cust_memo varchar(300),
+    memo varchar(60),
+    memo1 varchar(60),
+    dac char(16)
+);
+
+create unique index uidx_t_pay_bat_info on t_pay_bat_info ( bat_prj_no);
+
+create index  i_t_pay_bat_info1  on  t_pay_bat_info  (bank_mng_brch, if_sback_amt, if_chk_acct, if_chk_acct_na);
+create index  i_t_pay_bat_info2  on  t_pay_bat_info  (sgin_acct);
+
+-- t_pay_bat_ctrl  批量控制表
+drop table t_pay_bat_ctrl;
+create table t_pay_bat_ctrl
+(
+    plat_date char(8) not null,
+    seq_no BIGINT not null,
+    bat_prj_no char(15) not null,
+    order_id char(20) not null,
+    bat_no char(20) not null,
+    chn_no char(4),
+    chn_seqno char(32) not null,
+    rel_bat_no varchar(100),
+    batch_prt_flag char(1),
+    bat_name varchar(100),
+    bat_class char(1) not null,
+    bat_type char(1) not null,
+    file_bat_kind char(1),
+    busi_type char(1) default '1' not null,
+    busi_no char(8),
+    busi_msg varchar(255),
+    curr_code char(3),
+    curr_iden char(1),
+    trans_type char(2),
+    pay_node char(4) not null,
+    proc_kind char(1) not null,
+    snd_brch char(12) not null,
+    snd_oper char(20),
+    product_id char(20),
+    sys_domain char(3),
+    fee_item char(20),
+    fore_seq BIGINT default 0,
+    aft_seq BIGINT default 0,
+    fore_host_seq char(20),
+    aft_host_seq char(32),
+    ch_amt decimal(16,2) default 0,
+    df_amt decimal(16,2) default 0,
+    tot_row BIGINT default 0,
+    tot_amt decimal(16,2) default 0,
+    suc_row BIGINT default 0,
+    suc_amt decimal(16,2) default 0,
+    fal_row BIGINT default 0,
+    fal_amt decimal(16,2) default 0,
+    bal_amt decimal(16,2) default 0,
+    priority char(1) not null,
+    pay_type char(2),
+    clear_ction char(40),
+    ret_rectm char(8),
+    ment_path char(4),
+    entr_Date char(8),
+    bat_pri char(4),
+    desc_code char(4),
+    rmrk char(40),
+    pay_purp varchar(100),
+    sys_datetime char(14),
+    plan_datetime char(14),
+    lmt_datetime char(14),
+    times BIGINT,
+    errmsg char(60),
+    data char(100),
+    obo_svc char(40),
+    bat_file char(128),
+    return_file char(128),
+    recv_ip char(20),
+    recv_port char(10),
+    post_scrpt char(50),
+    summary char(60),
+    extend_data varchar(300),
+    flags char(10),
+    save_stat char(2),
+    stat char(2) not null,
+    node_no BIGINT,
+    bat_pid BIGINT,
+    ret_code char(20),
+    ret_msg varchar(255),
+    memo varchar(60),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pay_bat_ctrl on t_pay_bat_ctrl ( plat_date,seq_no);
+create unique index  ui_t_pay_bat_ctrl1  on  t_pay_bat_ctrl  (order_id);
+create unique index  ui_t_pay_bat_ctrl2  on  t_pay_bat_ctrl  (bat_no);
+
+create index  i_t_pay_bat_ctrl1  on  t_pay_bat_ctrl  (bat_prj_no, snd_brch, snd_oper);
+
+-- t_pay_bat_detail  批量明细表
+drop table t_pay_bat_detail;
+create table t_pay_bat_detail
+(
+    plat_date char(8) not null,
+    bat_no char(20) not null,
+    node_seq char(32) not null,
+    dmu_seq char(32) not null,
+    bat_flag char(1) not null,
+    dcc_node char(4) not null,
+    acct_date char(8),
+    tran_amt decimal(16,2) default 0.00,
+    pay_type char(1),
+    pay_memo char(100),
+    th_pt char(1),
+    term_no char(32),
+    gup_no char(10),
+    trans_seq char(32),
+    curr_code char(3),
+    curr_iden char(1),
+    trans_type char(2),
+    trans_no char(35),
+    acct_xtype char(4),
+    acct_brch char(4),
+    acct_brch_nm char(62),
+    proc_kind char(2),
+    fee_pay_brch char(12),
+    acct_no char(40),
+    acct_name char(146),
+    acct_type char(1),
+    bank_class char(1),
+    cnaps_code char(20),
+    acct_bal decimal(16,2) default 0,
+    pay_nation char(3),
+    pay_cert_type char(6),
+    pay_cert_no char(60),
+    acct_addr varchar(256),
+    cunt_code char(3),
+    bank_code char(15),
+    cust_no char(10),
+    rope_no char(32),
+    isf_rope char(1),
+    isf_rs char(1),
+    dc_flag char(1),
+    inner_num char(32),
+    path char(4),
+    path_dt char(8),
+    ecs_degr char(2),
+    op_cgy char(8),
+    mamtld char(60),
+    oper_type char(18),
+    busi_type char(8),
+    fee_pid char(12),
+    fee_item char(20),
+    bdt_scal char(4),
+    bdt_code char(12),
+    revn_no char(20),
+    lyo_no char(12),
+    ps_crpt char(50),
+    bank_sum char(60),
+    stat char(2) not null,
+    check_flag char(1),
+    flag char(10),
+    bk_amt decimal(16,2),
+    bk_num BIGINT,
+    host_seq char(32),
+    ret_code char(20),
+    ret_msg varchar(255),
+    ret_case char(64),
+    ret_type char(1),
+    rmrk char(300),
+    memo varchar(300),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    memo4 varchar(255),
+    memo5 varchar(255),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pay_bat_detail on t_pay_bat_detail ( bat_no,node_seq);
+create unique index  ui_t_pay_bat_deta1  on  t_pay_bat_detail  (dmu_seq);
+create unique index  ui_t_pay_bat_deta2  on  t_pay_bat_detail  (bat_no, term_no, gup_no);
+
+create index  i_t_pay_bat_deta1  on  t_pay_bat_detail  (plat_date, bat_no, dcc_node, acct_date, stat, check_flag);
+create index  i_t_pay_bat_deta3  on  t_pay_bat_detail  (acct_date, host_seq);
+
+-- t_pay_bat_detail_ext  批量明细扩展表
+drop table t_pay_bat_detail_ext;
+create table t_pay_bat_detail_ext
+(
+    plat_date char(8) not null,
+    bat_no char(20) not null,
+    node_seq char(32) not null,
+    dmu_seq char(32) not null,
+    bat_flag char(1) not null,
+    chnl_no char(4) not null,
+    dcc_node char(4) not null,
+    acct_date char(8),
+    inter_date char(8),
+    tran_amt decimal(16,2) default 0.00,
+    pay_type char(1),
+    pay_memo varchar(100),
+    th_pt char(1),
+    term_no char(32),
+    gup_no char(10),
+    trans_seq char(32),
+    curr_code char(3),
+    curr_iden char(1),
+    busi_stype char(50),
+    busi_kind char(6),
+    busi_no char(36),
+    trans_no char(35),
+    pay_acct_xtype char(4),
+    pay_acct_brch char(4),
+    pay_acct_brch_nm char(62),
+    proc_kind char(2),
+    fee_pay_brch char(12),
+    pay_acct_no char(40),
+    pay_trans_type char(2),
+    pay_acct_name varchar(146),
+    pay_acct_type char(1),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_bank_class char(1),
+    pay_cnaps_code char(20),
+    pay_acct_bal decimal(16,2) default 0,
+    pay_nation char(3),
+    pay_cert_type char(6),
+    pay_cert_no char(60),
+    pay_acct_addr varchar(256),
+    pay_cunt_code char(3),
+    pay_bank_code char(15),
+    pay_cust_no char(10),
+    pay_cust_name varchar(146),
+    payee_acct_xtype char(4),
+    payee_acct_brch char(4),
+    payee_acct_brch_nm char(62),
+    payee_acct_no char(40),
+    payee_trans_type char(2),
+    payee_acct_name varchar(146),
+    payee_acct_type char(1),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_bank_class char(1),
+    payee_cnaps_code char(20),
+    payee_acct_bal decimal(16,2) default 0,
+    payee_nation char(3),
+    payee_cert_type char(6),
+    payee_cert_no char(60),
+    payee_acct_addr varchar(256),
+    payee_cunt_code char(3),
+    payeebank_code char(15),
+    payee_cust_no char(10),
+    payee_cust_name varchar(146),
+    rope_no char(32),
+    isf_rope char(1),
+    isf_rs char(1),
+    dc_flag char(1),
+    inner_num char(32),
+    path char(4),
+    path_dt char(8),
+    ecs_degr char(2),
+    op_cgy char(8),
+    mamtld char(60),
+    oper_type char(18),
+    busi_type char(8),
+    fee_pid char(12),
+    fee_item char(20),
+    bdt_scal char(4),
+    bdt_code char(12),
+    revn_no char(20),
+    lyo_no char(12),
+    ps_crpt char(50),
+    bank_sum char(60),
+    stat char(2) not null,
+    check_flag char(1),
+    flag char(10),
+    bk_amt decimal(16,2),
+    bk_num BIGINT,
+    host_seq char(32),
+    p0_id CHAR(32),
+    p0_reg CHAR(4),
+    p0_chnl_no CHAR(12),
+    payee_incontr CHAR(32),
+    payee_pi_chnl_no CHAR(32),
+    pay_incontr CHAR(32),
+    pay_pi_chnl_no CHAR(32),
+    ret_code char(20),
+    ret_msg varchar(255),
+    ret_case char(64),
+    ret_type char(1),
+    rmrk varchar(300),
+    memo varchar(300),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    memo4 varchar(255),
+    memo5 varchar(255),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pay_bat_detail_ext on t_pay_bat_detail_ext ( bat_no,node_seq);
+create unique index  ui_t_pay_bat_deta1  on  t_pay_bat_detail_ext  (dmu_seq);
+create unique index  ui_t_pay_bat_deta2  on  t_pay_bat_detail_ext  (bat_no, term_no, gup_no);
+
+create index  i_t_pay_bat_deta1  on  t_pay_bat_detail_ext  (plat_date, bat_no, dcc_node, acct_date, stat, check_flag);
+create index  i_t_pay_bat_deta3  on  t_pay_bat_detail_ext  (acct_date, host_seq);
+
+-- t_pay_bat_detail_op  批量明细对手信息表
+drop table t_pay_bat_detail_op;
+create table t_pay_bat_detail_op
+(
+    bat_no char(20) not null,
+    node_seq char(32) not null,
+    acct_type char(1),
+    acct_brch_no char(12),
+    acct_brch_name char(100),
+    acct_no char(64),
+    acct_name varchar(146),
+    mode char(4),
+    vou_type char(13),
+    vou_no char(20),
+    vou_date char(8),
+    addr varchar(256),
+    nation char(3),
+    cert_type char(6),
+    cert_no varchar(60),
+    runup_brch_no char(12),
+    end_acct_brch_no1 char(12),
+    end_acct_brch_name1 char(100),
+    end_acct_no1 char(64),
+    end_acct_name1 varchar(146),
+    trn_amt decimal(15,2) default 0 not null,
+    fee decimal(15,2) default 0 not null,
+    rmrk varchar(300),
+    memo varchar(300),
+    memo1 varchar(300),
+    memo2 varchar(300),
+    memo3 varchar(300),
+    memo4 varchar(300),
+    memo5 varchar(300),
+    memo6 varchar(300),
+    memo7 varchar(300),
+    memo8 varchar(300),
+    memo9 varchar(300),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pay_bat_detail_op on t_pay_bat_detail_op ( bat_no,node_seq);
+
+
+-- t_pay_bat_detail_sign  批量明细签约
+drop table t_pay_bat_detail_sign;
+create table t_pay_bat_detail_sign
+(
+    bat_prj_no char(15) not null,
+    bat_seq BIGINT not null,
+    curr_code char(3),
+    acct_type char(1),
+    acct_no char(64),
+    acct_name char(146),
+    open_brch char(20),
+    open_name char(60),
+    stat char(1) not null,
+    erp_number char(20),
+    crt_date char(8),
+    crt_teller char(20),
+    memo varchar(60),
+    dac char(16)
+);
+
+create unique index uidx_t_pay_bat_detail_sign on t_pay_bat_detail_sign ( bat_prj_no,bat_seq);
+create unique index  ui_t_pay_bat_deta1  on  t_pay_bat_detail_sign  (bat_prj_no, acct_no);
+
+
+-- t_ctrl_acct  支付控制主表
+drop table t_ctrl_acct;
+create table t_ctrl_acct
+(
+    acct_no varchar(40),
+    ctrl_type char(2),
+    ctrl_no varchar(20)
+);
+
+create unique index uidx_t_ctrl_acct on t_ctrl_acct ( acct_no,ctrl_type);
+
+
+-- t_ctrl_svc  交易行为限制规则表
+drop table t_ctrl_svc;
+create table t_ctrl_svc
+(
+    ctrl_no varchar(20) not null,
+    ctrl_name varchar(60) not null,
+    product_id varchar(20) not null,
+    operate_type varchar(30) not null,
+    ctrl_flag varchar(2) not null
+);
+
+create unique index uidx_t_ctrl_svc on t_ctrl_svc ( ctrl_no,product_id,operate_type,ctrl_flag);
+
+
+-- t_ctrl_prod_oper  挂销控制主表
+drop table t_ctrl_prod_oper;
+create table t_ctrl_prod_oper
+(
+    product_id char(20) not null,
+    operate_type char(30) not null,
+    ctrl_type char(2),
+    ctrl_no char(20) not null
+);
+
+create unique index uidx_t_ctrl_prod_oper on t_ctrl_prod_oper ( product_id,operate_type,ctrl_type);
+
+
+-- t_ctrl_clrrule  挂销行为限制规则表
+drop table t_ctrl_clrrule;
+create table t_ctrl_clrrule
+(
+    ctrl_no char(20) not null,
+    ctrl_name char(60) not null,
+    ctrl_sys char(10),
+    product_id char(20) not null,
+    operate_type char(30) not null,
+    ctrl_flag char(2) not null
+);
+
+create unique index uidx_t_ctrl_clrrule on t_ctrl_clrrule ( ctrl_no,product_id,operate_type,ctrl_flag);
+
+create index  i_t_ctrl_clrrule1  on  t_ctrl_clrrule  (ctrl_no, ctrl_flag);
+
+-- t_ctrl_value  产品配置表
+drop table t_ctrl_value;
+create table t_ctrl_value
+(
+    ctrl_no varchar(24) not null,
+    ctrl_name varchar(60) not null,
+    sys_no varchar(8) not null,
+    product_id varchar(20) not null,
+    operate_type varchar(30) not null,
+    svc_dta varchar(20) not null,
+    svc_name varchar(20) not null,
+    svc_pay_dir BIGINT not null,
+    svc_type varchar(2) not null
+);
+
+create unique index uidx_t_ctrl_value on t_ctrl_value ( ctrl_no,product_id,operate_type,svc_pay_dir);
+
+
+-- t_ctrl_acct_bw  黑白名单记录表
+drop table t_ctrl_acct_bw;
+create table t_ctrl_acct_bw
+(
+    drawacct_no varchar(40) not null,
+    payeeacct_no varchar(40) not null,
+    product_id varchar(20) not null,
+    operate_type varchar(30) not null,
+    ctrl_flag varchar(2) not null
+);
+
+create unique index uidx_t_ctrl_acct_bw on t_ctrl_acct_bw ( drawacct_no,payeeacct_no,product_id,operate_type);
+
+create index  i_t_ctrl_acct_bw1  on  t_ctrl_acct_bw  (drawacct_no, product_id, operate_type);
+create index  i_t_ctrl_acct_bw2  on  t_ctrl_acct_bw  (payeeacct_no, product_id, operate_type);
+
+-- t_brch  机构表
+drop table t_brch;
+create table t_brch
+(
+    brch_no char(9) not null,
+    sup_brch_no char(9),
+    brch_level char(4),
+    brch_name varchar(100) not null,
+    valid_date char(19),
+    invalid_date char(19),
+    language_key char(2) default 'EN',
+    business_language char(2) default 'ZH',
+    bank_country char(2) default 'CN',
+    bank_key char(4) default 'C001',
+    bank_postcode char(4) default '1',
+    canlendar char(2) default 'C2',
+    address char(90),
+    region_code char(3),
+    net_id char(12),
+    telephone char(25),
+    post_code char(6),
+    national_code char(10),
+    last_date char(8)
+);
+
+create unique index uidx_t_brch on t_brch ( brch_no);
+
+
+-- t_brch_trsf  机构迁移表
+drop table t_brch_trsf;
+create table t_brch_trsf
+(
+    brch_no char(9) not null,
+    sys_flag char(1)
+);
+
+create unique index uidx_t_brch_trsf on t_brch_trsf ( brch_no);
+
+
+-- t_credit_bin  信用卡卡BIN表
+drop table t_credit_bin;
+create table t_credit_bin
+(
+    bin char(6) not null,
+    name char(50)
+);
+
+create unique index uidx_t_credit_bin on t_credit_bin ( bin);
+
+
+-- t_bin  借记卡卡BIN表
+drop table t_bin;
+create table t_bin
+(
+    bin char(6) not null
+);
+
+create unique index uidx_t_bin on t_bin ( bin);
+
+
+-- t_iccontral  卡控制表
+drop table t_iccontral;
+create table t_iccontral
+(
+    city_code char(2) not null,
+    brch_no char(4) not null
+);
+
+create unique index uidx_t_iccontral on t_iccontral ( city_code);
+
+
+-- t_acct_spcl  账号特例表
+drop table t_acct_spcl;
+create table t_acct_spcl
+(
+    acct_no char(20) not null,
+    acct_type char(1) not null,
+    pay_mode char(4)
+);
+
+create unique index uidx_t_acct_spcl on t_acct_spcl ( acct_no);
+
+
+-- t_brch_remit_trsf  机构二代支付迁移表
+drop table t_brch_remit_trsf;
+create table t_brch_remit_trsf
+(
+    brch_no char(9) not null,
+    hvps_flag char(1) not null,
+    beps_flag char(1) not null,
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255)
+);
+
+create unique index uidx_t_brch_remit_trsf on t_brch_remit_trsf ( brch_no);
+
+
+-- t_merchant_info  商户信息表
+drop table t_merchant_info;
+create table t_merchant_info
+(
+    mer_no char(20) not null,
+    ext_mer_no char(32) not null,
+    mer_type char(10) not null,
+    mer_name char(250),
+    bank_no char(32),
+    bank_name char(100),
+    acc_no char(35) not null,
+    acc_name char(100),
+    mer_date char(8),
+    mer_stat char(2) not null,
+    order_id char(20)
+);
+
+create unique index uidx_t_merchant_info on t_merchant_info ( mer_no);
+
+
+-- t_merchant_stat  商户组工作业务状态表
+drop table t_merchant_stat;
+create table t_merchant_stat
+(
+    mer_type char(10) not null,
+    sett_stat char(2) not null,
+    sett_strt varchar(17) not null,
+    sett_stop char(17),
+    sett_time char(6) not null,
+    work_date char(8) not null,
+    sett_date char(8) not null
+);
+
+create unique index uidx_t_merchant_stat on t_merchant_stat ( mer_type);
+
+
+-- t_exchange_book  汇兑登记簿
+drop table t_exchange_book;
+create table t_exchange_book
+(
+    exchange_order_id char(20) not null,
+    order_id char(20) not null,
+    plat_date char(8) not null,
+    chnl_no char(4) not null,
+    brch_no char(12) not null,
+    teller_no_send char(12) not null,
+    teller_no_send_war char(12) not null,
+    teller_no_recv char(12),
+    teller_no_recv_war char(12),
+    pay_stat char(1) not null,
+    product_code char(12),
+    org_party_id char(30),
+    pay_runup_brch_no char(12),
+    pay_acct_type char(1),
+    pay_acct_name varchar(146),
+    pay_acct_no varchar(40) not null,
+    rec_party_id char(30) not null,
+    payee_acct_name varchar(146),
+    payee_acct_no varchar(40),
+    act_payee_acct_type char(1),
+    act_payee_acct_name varchar(146),
+    act_payee_acct_no varchar(40),
+    curr_cod char(5) not null,
+    trn_amt decimal(15,2) default 0 not null,
+    curr_type char(1) not null,
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    payee_proper char(1),
+    payee_nation char(3),
+    payee_code char(12),
+    is_cancel char(1),
+    dsp_msg varchar(300),
+    dac char(16),
+    send_stat char(1),
+    time_out BIGINT,
+    last_date char(8) not null,
+    send_msg varchar(255),
+    chnl_seq_no char(32),
+    rec_party_name varchar(146),
+    rmrk varchar(300),
+    payee_acct_type char(1),
+    draw_chnl_seq_no char(32),
+    drawee_chnl_seq_no char(32),
+    rec_dsp_msg varchar(300),
+    rec_rmrk varchar(300),
+    euspdasq char(20),
+    org_order_id char(20),
+    tx_code char(32),
+    rvs1 varchar(255),
+    rvs2 varchar(255),
+    rvs3 varchar(255),
+    rvs4 varchar(255),
+    rvs5 varchar(255),
+    rvs6 varchar(255),
+    rvs7 varchar(255),
+    rvs8 BIGINT,
+    rvs9 BIGINT
+);
+
+create unique index uidx_t_exchange_book on t_exchange_book ( exchange_order_id);
+create unique index  ui_t_exchange_boo1  on  t_exchange_book  (order_id);
+
+
+-- t_qryrsn_book  查询查复登记簿
+drop table t_qryrsn_book;
+create table t_qryrsn_book
+(
+    qry_id char(8) not null,
+    rsn_id char(8),
+    qry_chnl_seq char(32),
+    rsn_chnl_seq char(32),
+    stat char(1) default '0' not null,
+    exchange_order_id char(20),
+    rsn_order_id char(20),
+    qry_date char(8),
+    rsn_date char(8),
+    brch_no_send char(12),
+    brch_no_recv char(12),
+    qry_teller_no char(12),
+    rsn_teller_no char(12),
+    war_teller_id char(12),
+    trn_amt decimal(15,2) default 0 not null,
+    qry_con varchar(1024),
+    rsn_con varchar(1024),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    rmrk1 varchar(300),
+    rmrk2 varchar(300)
+);
+
+create unique index uidx_t_qryrsn_book on t_qryrsn_book ( qry_id,qry_date);
+
+
+-- t_qry_para  自动任务控制表
+drop table t_qry_para;
+create table t_qry_para
+(
+    qry_type varchar(50) default '0' not null,
+    qry_curr_id BIGINT default 0 not null,
+    next_time char(14)
+);
+
+create unique index uidx_t_qry_para on t_qry_para ( qry_type);
+
+
+-- t_cap_trans  资金调拨单登记簿
+drop table t_cap_trans;
+create table t_cap_trans
+(
+    trans_id char(20) not null,
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    order_id char(20) not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    trans_type char(1),
+    trans_date char(8) not null,
+    trans_path char(4),
+    party_id_out char(12) not null,
+    party_name_out varchar(100),
+    acct_out char(40),
+    acct_out_name char(146),
+    acct_out_bank_no char(12),
+    party_id_in char(12) not null,
+    party_name_in varchar(100),
+    acct_in char(40),
+    acct_in_name char(146),
+    acct_in_bank_no char(12),
+    curr_cod char(5),
+    trn_amt decimal(15,2),
+    remit_trn_seq_no char(40),
+    entr_date char(8),
+    trade_seq char(32),
+    pay_acct_brch_no char(12),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    payee_acct_brch_no char(12),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    runup_teller_no char(12),
+    runup_wrnt_teller_no char(12),
+    cncl_chnl_seq_no char(32),
+    cncl_teller_no char(12),
+    cncl_wrnt_teller_no char(12),
+    cncl_type char(1),
+    cncl_brch_no char(12),
+    cncl_date char(8),
+    cncl_summary varchar(300),
+    runup_summary varchar(300),
+    runup_state char(1) not null,
+    trans_cat char(1) not null,
+    post_seq_no char(32),
+    snd_stat char(1),
+    remit_ret_cod varchar(128),
+    remit_ret_msg varchar(128),
+    in_post_seq_no char(32),
+    out_int_from_date char(8),
+    in_int_from_date char(8),
+    pay_order_id char(20),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0,
+    rsv_int2 BIGINT default 0,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255)
+);
+
+create unique index uidx_t_cap_trans on t_cap_trans ( trans_id);
+create unique index  ui_t_cap_trans1  on  t_cap_trans  (plat_date, seq_no);
+
+
+-- t_edu  教育储蓄续存登记簿
+drop table t_edu;
+create table t_edu
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    order_id char(20) not null,
+    pay_jrnl_seq BIGINT default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    entr_date char(8),
+    pay_acct_no varchar(64),
+    pay_host_date char(8),
+    pay_host_seq_no varchar(32),
+    payee_acct_no varchar(64),
+    payee_host_date char(8),
+    payee_host_seq_no varchar(32),
+    trn_amt decimal(15,2) default 0,
+    brch_no char(12),
+    teller_no char(12),
+    ret_code char(20),
+    ret_msg varchar(255),
+    stat char(1),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0,
+    rsv_int2 BIGINT default 0,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255)
+);
+
+
+create index  i_t_edu2  on  t_edu  (entr_date);
+
+-- t_remit_busi_type  汇兑业务种类参数表
+drop table t_remit_busi_type;
+create table t_remit_busi_type
+(
+    operate_type char(23) not null,
+    productid char(20) not null,
+    pay_chnl char(4) not null,
+    map_data char(254) not null
+);
+
+create unique index uidx_t_remit_busi_type on t_remit_busi_type ( operate_type,productid,pay_chnl);
+
+
+-- t_remit_busi_type_payee  汇兑借记业务种类参数表
+drop table t_remit_busi_type_payee;
+create table t_remit_busi_type_payee
+(
+    operate_type char(23) not null,
+    productid char(20) not null,
+    pay_chnl char(4) not null,
+    map_data varchar(254) not null,
+    rsv_int1 BIGINT default 0,
+    rsv_int2 BIGINT default 0,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255)
+);
+
+create unique index uidx_t_remit_busi_type_payee on t_remit_busi_type_payee ( operate_type,productid,pay_chnl);
+
+
+-- t_except  异常处理信息表
+drop table t_except;
+create table t_except
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    sys_code char(3) not null,
+    chnl_seq_no char(32) not null,
+    chnl_svc_dsp varchar(300) not null,
+    chnl_sys_code char(3) not null,
+    chnl_stat char(8) not null,
+    flow_stat char(3) not null,
+    rcv_stat char(2) not null,
+    run_stat char(2) not null,
+    productid varchar(32),
+    run_time varchar(32),
+    stat char(2) not null,
+    exc_type char(2) not null,
+    send_time varchar(32),
+    send_flag char(2),
+    add_time varchar(32),
+    upt_time varchar(32),
+    redo_time varchar(32),
+    rmrk1 varchar(255),
+    rmrk2 varchar(255)
+);
+
+create unique index uidx_t_except on t_except ( plat_date,seq_no);
+create unique index  ui_t_except1  on  t_except  (chnl_seq_no);
+
+create index  i_t_except1  on  t_except  (chnl_seq_no, send_flag);
+create index  i_t_except2  on  t_except  (stat, exc_type);
+
+-- t_except_detail  异常处理明细信息表
+drop table t_except_detail;
+create table t_except_detail
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    des_sys_code char(3) not null,
+    step_no varchar(50) not null,
+    pe_seq_no char(32) not null,
+    des_svc_name char(50) not null,
+    des_svc_dsp varchar(300) not null,
+    stat char(4) not null,
+    exc_type char(2) not null,
+    tran_time varchar(32),
+    rev_time varchar(32),
+    ret_code char(10),
+    ret_msg varchar(256),
+    rmrk1 varchar(255),
+    rmrk2 varchar(255)
+);
+
+create unique index uidx_t_except_detail on t_except_detail ( plat_date,seq_no,pe_seq_no);
+
+create index  i_t_except_detai1  on  t_except_detail  (plat_date, seq_no, exc_type);
+
+-- t_order_payee  应收帐单表
+drop table t_order_payee;
+create table t_order_payee
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    payee_seq_no BIGINT default 0 not null,
+    brch_no char(12) not null,
+    teller_no char(12) not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    pay_runup_brch_no char(12),
+    curr_operate_type1 char(23),
+    curr_productid1 char(20),
+    busi_id1 char(60),
+    busi_id2 char(60),
+    busi_id3 char(60),
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    trn_amt decimal(15,2) default 0 not null,
+    fin_item_no varchar(20),
+    fee_productid char(20),
+    fee_cust_no char(40),
+    fee_add_flag char(1),
+    fee_orderid char(32),
+    fee_agree_id char(10),
+    b_productid char(20),
+    b_product_name char(255),
+    b_product_ant BIGINT,
+    mer_no char(20),
+    pay_agt_date char(8),
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    stat char(1) not null,
+    dac char(16),
+    rsv_rmrk1 varchar(60),
+    rsv_rmrk2 varchar(60),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_order_payee on t_order_payee ( plat_date,seq_no,payee_seq_no);
+
+create index  i_t_order_payee2  on  t_order_payee  (chnl_no, chnl_date, chnl_seq_no);
+
+-- t_remit_brch_map  汇兑机构清算信息表
+drop table t_remit_brch_map;
+create table t_remit_brch_map
+(
+    brch_no char(12) not null,
+    path_no char(4) not null,
+    curr_cod char(5) not null,
+    runup_brch_no char(12),
+    clear_acct_no varchar(64),
+    clear_acct_name varchar(146),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0,
+    rsv_int2 BIGINT default 0,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255)
+);
+
+create unique index uidx_t_remit_brch_map on t_remit_brch_map ( brch_no,path_no,curr_cod);
+
+
+-- t_sys_no  系统编码表
+drop table t_sys_no;
+create table t_sys_no
+(
+    sys_no char(3) not null,
+    sys_name varchar(60) not null,
+    flag char(1)
+);
+
+create unique index uidx_t_sys_no on t_sys_no ( sys_no);
+
+
+-- t_de_flw  日切流程控制表
+drop table t_de_flw;
+create table t_de_flw
+(
+    plat_date varchar(8) not null,
+    clear_date varchar(8) not null,
+    do_job varchar(20) not null,
+    do_task varchar(20) not null,
+    beg_time varchar(6) not null,
+    end_time varchar(6) not null,
+    run_stat varchar(1) not null
+);
+
+create unique index uidx_t_de_flw on t_de_flw ( plat_date);
+
+
+-- t_auto_rev  冲正任务表
+drop table t_auto_rev;
+create table t_auto_rev
+(
+    seq_no char(50),
+    seri_no BIGINT(50) not null,
+    src_dta char(22) not null,
+    src_mch char(50),
+    svc_name char(50),
+    dst_dta char(50),
+    thd_svc char(50),
+    rev_code char(50),
+    thd_seq_no char(50),
+    tran_date char(10),
+    tran_time char(8),
+    rev_stat char(1),
+    last_time BIGINT,
+    rev_times BIGINT,
+    save_data_seq BIGINT,
+    rev_pid BIGINT,
+    rev_mch char(50),
+    step_no BIGINT
+);
+
+create unique index uidx_t_auto_rev on t_auto_rev ( thd_seq_no);
+
+create index  i_t_auto_rev1  on  t_auto_rev  (tran_date, tran_time, rev_stat, rev_times);
+create index  i_t_auto_rev2  on  t_auto_rev  (rev_stat);
+
+-- t_rev_jrnl  冲正流水记录表
+drop table t_rev_jrnl;
+create table t_rev_jrnl
+(
+    org_chnl_seq_no char(32) not null,
+    chnl_seq_no char(32) not null,
+    eswt_seq char(22) not null,
+    seq_no BIGINT,
+    plat_date char(8) not null,
+    tran_date char(8) not null,
+    tran_time char(9) not null
+);
+
+create unique index uidx_t_rev_jrnl on t_rev_jrnl ( chnl_seq_no);
+
+create index  i_t_rev_jrnl1  on  t_rev_jrnl  (org_chnl_seq_no);
+
+-- t_ctrl_noti  支付通知表
+drop table t_ctrl_noti;
+create table t_ctrl_noti
+(
+    pe_chnl_seq char(32) not null,
+    plat_date char(8) not null,
+    seq_no BIGINT not null,
+    order_id char(20),
+    pay_jrnl_seq BIGINT,
+    org_pe_chnl_seq char(32),
+    rev_pe_chnl_seq char(32),
+    tran_type char(1),
+    dta_name varchar(50),
+    svc_name varchar(60),
+    noti_type char(20),
+    stat char(1),
+    tran_time char(9),
+    times BIGINT,
+    send_time char(9),
+    extend_data varchar(255),
+    remark varchar(100)
+);
+
+create unique index uidx_t_ctrl_noti on t_ctrl_noti ( pe_chnl_seq);
+
+create index  i_t_ctrl_noti1  on  t_ctrl_noti  (plat_date, seq_no);
+
+-- t_rope_book  支票圈存登记簿
+drop table t_rope_book;
+create table t_rope_book
+(
+    rope_seq_no char(24),
+    order_id char(20),
+    chnl_seq_no char(32),
+    plat_date char(8),
+    seq_no BIGINT default 0 not null,
+    chnl_no char(4),
+    pay_mode char(4),
+    out_bill_date char(8),
+    out_brch_no char(14),
+    rope_date char(8),
+    pay_brch_no char(14),
+    pay_brch_name char(100),
+    pay_acct_type char(1),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    trn_amt decimal(15,2) default 0 not null,
+    payee_acct_brch_no char(14),
+    payee_acct_brch_name char(100),
+    payee_acct_type char(1),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    tmp_payee_acct_type char(1),
+    tmp_payee_acct_no varchar(64),
+    tmp_payee_acct_name varchar(146),
+    runup_brch_no char(12),
+    cncl_date char(8),
+    brch_no char(12),
+    cncl_teller_no char(12),
+    cncl_wrnt_teller_no char(12),
+    msg_date char(8),
+    org_dict_brch_no char(14),
+    org_brch_no char(14),
+    rcv_dict_brch_no char(14),
+    rcv_brch_no char(14),
+    vou_pic_len char(9),
+    vou_pic_data char(35),
+    rope_flag char(35),
+    rope_rmrk varchar(300),
+    rope_rls_date char(8),
+    rope_rls_flag char(35),
+    rope_rls_rmrk varchar(300),
+    next_order_id char(20),
+    rsv1 varchar(300),
+    rsv2 varchar(300),
+    rsv3 varchar(300),
+    rsv4 varchar(300),
+    rsv5 varchar(300),
+    rope_stat char(1),
+    disp_res varchar(300)
+);
+
+create unique index uidx_t_rope_book on t_rope_book ( order_id);
+create unique index  ui_t_rope_book1  on  t_rope_book  (plat_date, seq_no);
+create unique index  ui_t_rope_book2  on  t_rope_book  (rope_seq_no);
+
+create index  i_t_rope_book2  on  t_rope_book  (pay_vou_no);
+
+-- t_virt_prdt_map  虚拟产品映射表
+drop table t_virt_prdt_map;
+create table t_virt_prdt_map
+(
+    payee_acct_no char(64) not null,
+    payee_acct_name varchar(146),
+    productid char(20) not null,
+    runup_brch_no char(30) not null,
+    sys_no char(3),
+    sys_name varchar(60),
+    crt_date char(8),
+    rvs1 char(8),
+    rvs2 char(100),
+    rvs3 varchar(255),
+    stat char(1) not null
+);
+
+create unique index uidx_t_virt_prdt_map on t_virt_prdt_map ( payee_acct_no);
+
+
+-- t_ctrl_task  任务控制表
+drop table t_ctrl_task;
+create table t_ctrl_task
+(
+    plat_date char(8) not null,
+    task_name char(30) not null,
+    stat char(1) not null,
+    beg_date char(8) not null,
+    beg_time char(6) not null,
+    end_date char(8) not null,
+    end_time char(6) not null
+);
+
+create unique index uidx_t_ctrl_task on t_ctrl_task ( plat_date,task_name);
+
+
+-- t_ovd_acct_ctrl  透支受控账号表
+drop table t_ovd_acct_ctrl;
+create table t_ovd_acct_ctrl
+(
+    pay_acct_no char(64) not null,
+    payee_acct_no char(64) not null,
+    payee_acct_name varchar(146),
+    payee_acct_brch_no char(30) not null,
+    payee_acct_brch_name char(100),
+    chnl_no char(4) not null,
+    sys_no char(3),
+    brch_no char(12),
+    teller_no char(12),
+    crt_date char(8),
+    crt_time char(9),
+    last_mod_brch_no char(12),
+    last_modteller_no char(12),
+    last_mod_date char(8),
+    last_mod_time char(9),
+    rsv_rmrk1 varchar(100),
+    rsv_rmrk2 varchar(100),
+    rsv_rmrk3 varchar(200),
+    dac char(16)
+);
+
+create unique index uidx_t_ovd_acct_ctrl on t_ovd_acct_ctrl ( pay_acct_no,payee_acct_no,payee_acct_brch_no);
+
+
+-- t_tt_ctrl  TT映射表
+drop table t_tt_ctrl;
+create table t_tt_ctrl
+(
+    s_tt_no varchar(20) not null,
+    o_tt_no_in varchar(20),
+    o_tt_no_out varchar(20),
+    tt_des char(30),
+    rsv_rmrk1 varchar(100),
+    rsv_rmrk2 varchar(100),
+    rsv_rmrk3 varchar(200),
+    dac char(16)
+);
+
+create unique index uidx_t_tt_ctrl on t_tt_ctrl ( s_tt_no);
+
+
+-- t_chn_seqno_reg  渠道流水号注册表
+drop table t_chn_seqno_reg;
+create table t_chn_seqno_reg
+(
+    plat_date char(8) not null,
+    chnl_seq_no char(32) not null
+);
+
+create unique index uidx_t_chn_seqno_reg on t_chn_seqno_reg ( chnl_seq_no);
+
+create index  i_t_chn_seqno_re1  on  t_chn_seqno_reg  (plat_date);
+
+-- t_clear_proxy  代理清算信息表
+drop table t_clear_proxy;
+create table t_clear_proxy
+(
+    acct_class_no char(6) not null,
+    acct_class_name varchar(146),
+    clear_acct_no char(64) not null,
+    clear_acct_name varchar(146) not null,
+    chnl_seq_no char(32) not null,
+    teller_no char(12),
+    wrnt_teller_no char(12),
+    operate_type char(23),
+    productid char(20),
+    runup_brch_no char(30) not null,
+    sys_no char(3),
+    sys_name varchar(146),
+    crt_date char(8),
+    stat char(1) not null,
+    rvs1 char(8),
+    rvs2 char(100),
+    rvs3 varchar(255)
+);
+
+create unique index uidx_t_clear_proxy on t_clear_proxy ( acct_class_no);
+
+
+-- t_trade_ext  交易扩展信息表
+drop table t_trade_ext;
+create table t_trade_ext
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    chnl_seq_no char(32) not null,
+    svc_name char(50) not null,
+    col_num BIGINT default 0,
+    trade_data1 varchar(2048),
+    trade_data2 varchar(2048),
+    trade_data3 varchar(2048),
+    trade_data4 varchar(2048)
+);
+
+create unique index uidx_t_trade_ext on t_trade_ext ( plat_date,seq_no);
+create unique index  ui_t_trade_ext1  on  t_trade_ext  (chnl_seq_no);
+
+
+-- t_ctrl_bw_bfr  黑白名单辅助表
+drop table t_ctrl_bw_bfr;
+create table t_ctrl_bw_bfr
+(
+    chnl_no char(4),
+    drawee_party_id char(30),
+    drawee_party_name char(100),
+    drawee_party_type char(100),
+    product_id char(20),
+    operate_type char(23),
+    flag char(1),
+    rsv1 varchar(255),
+    rsv2 varchar(255)
+);
+
+
+create index  i_t_ctrl_bw_bfr1  on  t_ctrl_bw_bfr  (chnl_no, drawee_party_id, flag);
+create index  i_t_ctrl_bw_bfr2  on  t_ctrl_bw_bfr  (product_id, operate_type);
+
+-- t_ctrl_bw  黑白名单表（with户名）
+drop table t_ctrl_bw;
+create table t_ctrl_bw
+(
+    drawacct_no varchar(40) not null,
+    drawacct_name varchar(146),
+    payeeacct_no varchar(40) not null,
+    payeeacct_name varchar(146),
+    product_id varchar(20) not null,
+    operate_type varchar(30) not null,
+    ctrl_flag varchar(2) not null
+);
+
+create unique index uidx_t_ctrl_bw on t_ctrl_bw ( drawacct_no,payeeacct_no,product_id,operate_type);
+
+create index  i_t_ctrl_bw1  on  t_ctrl_bw  (drawacct_no, product_id, operate_type);
+create index  i_t_ctrl_bw2  on  t_ctrl_bw  (payeeacct_no, product_id, operate_type);
+
+-- t_fta_info  自贸区帐户管理信息表
+drop table t_fta_info;
+create table t_fta_info
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    pe_date char(8) not null,
+    pe_seq_no char(32) not null,
+    busi_order_id char(20) not null,
+    svc_name char(128) not null,
+    org_chnl_no char(4),
+    org_operate_type char(23),
+    org_productid char(20),
+    org_brch_no char(12),
+    org_teller_no char(12),
+    org_pay_mode char(4),
+    org_payee_mode char(4),
+    path_no char(4),
+    pay_acct_no char(64),
+    pay_acct_name char(146),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name char(100),
+    pay_cert_type char(6),
+    pay_cert_no char(60),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_nation char(3),
+    pay_acct_type char(1),
+    pay_acct_property char(2),
+    pay_addr char(255),
+    payee_acct_no char(64),
+    payee_acct_name char(146),
+    payee_info char(60),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name char(100),
+    payee_cert_type char(6),
+    payee_cert_no char(60),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_mb_no char(20),
+    payee_nation char(3),
+    payee_proper char(1),
+    payee_acct_type char(1),
+    payee_addr char(255),
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    trn_amt decimal(15,2) default 0 not null,
+    pay_curr_cod char(5) not null,
+    pay_curr_type char(1) not null,
+    amt1 decimal(15,2) default 0 not null,
+    payee_curr_cod char(5) not null,
+    payee_curr_type char(1) not null,
+    amt2 decimal(15,2) default 0 not null,
+    pay_bal decimal(15,2) default 0 not null,
+    payee_bal decimal(15,2) default 0 not null,
+    fee_type char(1),
+    fee_acct_no varchar(64),
+    fee_amt decimal(15,2) default 0 not null,
+    fee_item_no varchar(20),
+    fee_runup_brch_no char(12),
+    fee_agree_id char(10),
+    dc_flag char(1),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    purpose varchar(300),
+    rungup_brch_no char(12),
+    ext_data varchar(300),
+    busi_type char(15),
+    busi_kind char(15),
+    pay_trn_id char(32),
+    clr_date char(8),
+    busi_stat char(15),
+    act_payee_acct_type char(1),
+    act_payee_acct_name varchar(146),
+    act_payee_acct_no varchar(60),
+    payee_code char(12),
+    is_cancel char(1),
+    cash_prjct_cod varchar(20),
+    cash_box_id varchar(20),
+    cash_type char(1),
+    data_supply_flag char(1) not null,
+    data_rev_supply_flag char(1) not null,
+    auth_flag char(1) not null,
+    auth_brch_no char(12),
+    auth_teller_no char(12),
+    auth_chnl_seq_no char(32),
+    auth_plat_date char(8),
+    auth_seq_no char(32),
+    auth_host_seq_no char(32),
+    auth_fail_msg varchar(128),
+    auth_result char(1),
+    new_order_id char(20),
+    auth_rev_brch_no char(12),
+    auth_rev_teller_no char(12),
+    auth_rev_chnl_seq_no char(32),
+    auth_rev_flag char(1) not null,
+    auth_rev_plat_date char(8),
+    auth_rev_seq_no char(32),
+    auth_rev_host_seq_no char(32),
+    auth_rev_fail_msg varchar(128),
+    bpm_snd_flag char(1) not null,
+    bpm_snd_batno char(20),
+    bpm_snd_seq_no char(32),
+    bpm_snd_bat_seq BIGINT default 0 not null,
+    stat char(1) not null,
+    errcode varchar(128),
+    errmsg varchar(128),
+    crt_seq_no char(32),
+    crt_host_seq_no char(32),
+    result char(1),
+    order_id char(20),
+    rev_pe_plat_date char(8),
+    rev_pe_seq_no char(32),
+    rev_brch_no char(12),
+    rev_teller_no char(12),
+    rev_plat_date char(8),
+    rev_seq_no char(32),
+    rev_host_seq_no char(32),
+    rev_errcode varchar(128),
+    rev_errmsg varchar(128),
+    int1 BIGINT default 0 not null,
+    int2 BIGINT default 0 not null,
+    amt3 decimal(15,2) default 0 not null,
+    amt4 decimal(15,2) default 0 not null,
+    rate1 decimal(15,4) default 0 not null,
+    rate2 decimal(15,4) default 0 not null,
+    msg1 char(64),
+    msg2 char(64),
+    msg3 char(64),
+    msg4 char(64),
+    msg5 varchar(255),
+    msg6 varchar(255),
+    msg7 varchar(255),
+    msg8 varchar(255),
+    dac char(16)
+);
+
+create unique index uidx_t_fta_info on t_fta_info ( plat_date,seq_no);
+create unique index  ui_t_fta_info1  on  t_fta_info  (pe_date, pe_seq_no);
+create unique index  ui_t_fta_info2  on  t_fta_info  (busi_order_id);
+
+create index  i_t_fta_info1  on  t_fta_info  (auth_chnl_seq_no);
+
+-- t_unft_acct  人行指定非Ft账户表
+drop table t_unft_acct;
+create table t_unft_acct
+(
+    acct_no varchar(40),
+    ctrl_type char(2),
+    ctrl_no varchar(20)
+);
+
+create unique index uidx_t_unft_acct on t_unft_acct ( acct_no,ctrl_type);
+
+
+-- t_check_load  支票圈存登记簿
+drop table t_check_load;
+create table t_check_load
+(
+    chnl_seq_no char(32),
+    plat_date char(8),
+    seq_no BIGINT default 0 not null,
+    chnl_no char(4),
+    operate_type char(23) not null,
+    productid char(20) not null,
+    load_date char(8),
+    pay_acct_type char(1),
+    pay_acct_no char(64) not null,
+    pay_acct_name varchar(146),
+    pay_vou_type char(13),
+    pay_vou_no char(20) not null,
+    short_pay_vou_no char(20) not null,
+    curr_cod char(5) not null,
+    curr_type char(1),
+    trn_amt decimal(15,2) default 0 not null,
+    payee_acct_type char(1),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    load_stat char(1) not null,
+    load_no char(12) not null,
+    out_chnl_seq_no char(32),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0,
+    rsv_int2 BIGINT default 0,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255)
+);
+
+create unique index uidx_t_check_load on t_check_load ( chnl_seq_no);
+create unique index  ui_t_check_load1  on  t_check_load  (plat_date, seq_no);
+
+create index  i_t_check_load1  on  t_check_load  (pay_vou_no);
+
+-- t_ctrl_chkldrule  支票圈存行为限制规则表
+drop table t_ctrl_chkldrule;
+create table t_ctrl_chkldrule
+(
+    ctrl_no char(20) not null,
+    ctrl_name char(60) not null,
+    ctrl_sys char(10),
+    product_id char(20) not null,
+    operate_type char(30) not null,
+    ctrl_flag char(2) not null
+);
+
+create unique index uidx_t_ctrl_chkldrule on t_ctrl_chkldrule ( ctrl_no,product_id,operate_type,ctrl_flag);
+
+
+-- t_sndbpm_bat  BPM推送包信息表
+drop table t_sndbpm_bat;
+create table t_sndbpm_bat
+(
+    bpm_snd_batno char(20) not null,
+    bat_type char(2) not null,
+    org_batno char(20),
+    det_num BIGINT default 0 not null,
+    start_id BIGINT default 0 not null,
+    end_id BIGINT default 0 not null,
+    crt_date char(8),
+    crt_time char(6),
+    last_snd_date char(8),
+    last_snd_time char(6),
+    proc_id BIGINT default 0 not null,
+    snd_times BIGINT default 0 not null,
+    proc_flag char(1) not null,
+    stat char(1),
+    chnl_seq_no char(40),
+    brch_no char(14),
+    teller_no char(14),
+    chnl_no char(4),
+    domain char(3),
+    ext_data char(100),
+    bpm_domain char(3),
+    bpm_type char(1),
+    bpm_retcode char(8),
+    bpm_msg varchar(255),
+    dac char(16)
+);
+
+create unique index uidx_t_sndbpm_bat on t_sndbpm_bat ( bpm_snd_batno);
+create unique index  ui_t_sndbpm_bat1  on  t_sndbpm_bat  (org_batno);
+
+
+-- t_remit_payee  提出借记汇兑信息表
+drop table t_remit_payee;
+create table t_remit_payee
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    tx_code char(40),
+    curr_cod char(5) not null,
+    cash_type char(1),
+    curr_type char(1) not null,
+    trn_amt decimal(16,2),
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    operate_type char(23) not null,
+    productid char(20) not null,
+    brch_no char(12),
+    teller_no char(12),
+    pay_mode char(4),
+    pay_mode_type char(1),
+    pay_clr_date char(8),
+    pay_work_date char(8),
+    pay_date_time char(40),
+    pay_seq_no char(40),
+    rmit_urgnt_flag char(1),
+    remit_acct_seq_no char(32),
+    remit_trn_seq_no char(40),
+    remit_pay_runup_brch_no char(12),
+    remit_pay_cncl_id char(40),
+    remit_sys_date char(8),
+    remit_sys_time char(9),
+    remit_ret_cod varchar(128),
+    remit_ret_msg varchar(128),
+    pay_agt_date char(8),
+    pay_exh_session char(2),
+    pay_tx_id char(100),
+    pay_brch_no char(30),
+    pay_clr_brch_no char(30),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_vou_date char(8),
+    pay_acct_type char(1),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    pay_acct_no char(40),
+    pay_acct_name varchar(146),
+    pay_addr varchar(60),
+    pay_nation char(3),
+    pay_cert_type char(6),
+    pay_cert_no varchar(60),
+    pay_tel char(20),
+    pay_inform_flag char(1),
+    pay_app_info varchar(256),
+    remitter_name varchar(146),
+    remitter_cert_type char(6),
+    remittr_cert_no varchar(60),
+    remitter_cert_grnt varchar(60),
+    remitter_tel_no char(20),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_type char(1),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(100),
+    payee_acct_no char(40),
+    payee_acct_name varchar(146),
+    payee_clr_brch_no char(30),
+    payee_addr varchar(60),
+    payee_nation char(3),
+    payee_cert_type char(6),
+    payee_cert_no varchar(60),
+    payee_tel char(20),
+    payee_inform_flag char(1),
+    payee_app_info varchar(256),
+    pwd_chk_mode char(3),
+    key_idx char(40),
+    app_sys_id char(4),
+    payment_type varchar(30),
+    mchnt_id char(20),
+    acq_inst_code char(13),
+    pe_seq_no char(40),
+    pe_ref_no char(40),
+    trmnl_id char(10),
+    trmnl_type char(8),
+    mchnt_type char(20),
+    dr_date_time char(10),
+    accept_brch char(30),
+    appr_way char(3),
+    read_ablity char(1),
+    work_key char(16),
+    safe_info char(50),
+    card_cvn2 char(3),
+    card_expire char(8),
+    pho_num char(11),
+    chek_cod char(6),
+    issl_code char(32),
+    dr_seq_no char(32),
+    crd_data varchar(255),
+    crd_code char(1),
+    crd_srl_no char(3),
+    acct_input_mode char(3),
+    dr_add_info varchar(256),
+    agree_id varchar(128),
+    rev_plat_date char(8),
+    rev_seq_no BIGINT,
+    rev_date_time char(40),
+    rev_dr_seq_no char(32),
+    rev_pe_seq_no char(40),
+    rev_pe_ref_no char(40),
+    rev_pay_clr_date char(8),
+    rev_pay_seq_no char(40),
+    rev_pay_work_date char(8),
+    rev_pay_date_time char(40),
+    rev_app_info varchar(256),
+    order_id char(20),
+    pay_jrnl_seq BIGINT default 0 not null,
+    pay_runup_amt decimal(16,2),
+    payee_runup_amt decimal(16,2),
+    pay_clr_amt decimal(16,2),
+    pay_fee decimal(16,2),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    ext_data varchar(300),
+    proc_stat char(1),
+    proc_id BIGINT,
+    stat char(1),
+    rev_stat char(1),
+    clr_stat char(1),
+    return_stat char(1),
+    crt_date char(8) not null,
+    crt_time char(9) not null,
+    snd_date char(8),
+    snd_time char(9),
+    qry_date char(8),
+    qry_time char(9),
+    snd_stat char(1) not null,
+    qry_stat char(1) not null,
+    qry_times BIGINT default 0 not null,
+    snd_times BIGINT default 0 not null,
+    qry_ret char(30),
+    fee_Type char(1),
+    fee_party_id char(12),
+    fee_add_count char(1),
+    fee_order_id char(32),
+    fee_agree_id char(10),
+    fee_amt decimal(20),
+    fee_acct_no char(40),
+    fee_ltem char(20),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    memo4 varchar(255),
+    memo5 varchar(255),
+    dac char(16)
+);
+
+create unique index uidx_t_remit_payee on t_remit_payee ( plat_date,seq_no);
+create unique index  ui_t_remit_payee1  on  t_remit_payee  (dr_seq_no);
+
+create index  i_t_remit_payee1  on  t_remit_payee  (pe_seq_no);
+
+-- t_route_payee  汇路选择表
+drop table t_route_payee;
+create table t_route_payee
+(
+    sys_no char(3),
+    product_id char(20),
+    operate_type char(23),
+    svc_pay_dir BIGINT not null,
+    svc_dta varchar(20) not null,
+    svc_name varchar(20) not null,
+    flag char(1),
+    rsv1 varchar(255),
+    rsv2 varchar(255)
+);
+
+create unique index uidx_t_route_payee on t_route_payee ( sys_no,product_id,operate_type,svc_pay_dir);
+
+
+-- t_scene_ctrl  交易控制特例场景表
+drop table t_scene_ctrl;
+create table t_scene_ctrl
+(
+    pay_acct_no varchar(64),
+    payee_acct_no varchar(64),
+    sys_no varchar(3),
+    product_id varchar(20) not null,
+    operate_type varchar(30) not null,
+    ctrl_flag varchar(1) not null,
+    scene varchar(3)
+);
+
+
+create index  i_t_scene_ctrl1  on  t_scene_ctrl  (product_id, operate_type, scene);
+
+-- t_ft_amtcacl_data  自贸区资金头寸表
+drop table t_ft_amtcacl_data;
+create table t_ft_amtcacl_data
+(
+    cacl_date char(8) not null,
+    cacl_path char(4) not null,
+    curr_cod char(5) not null,
+    list_index char(8) not null,
+    unit_name varchar(255),
+    pay_amt varchar(20),
+    payee_amt varchar(20),
+    cncl_amt varchar(20),
+    cncl_dir char(1),
+    run_time char(9),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255)
+);
+
+create unique index uidx_t_ft_amtcacl_data on t_ft_amtcacl_data ( cacl_date,cacl_path,curr_cod);
+
+create index  i_t_ft_amtcacl_d1  on  t_ft_amtcacl_data  (cacl_date);
+
+-- t_bank_route  智能汇路行号通道关系表
+drop table t_bank_route;
+create table t_bank_route
+(
+    norm_bank_code char(30) not null,
+    bank_name varchar(255) not null,
+    bank_short_name1 varchar(255),
+    bank_short_name2 varchar(255),
+    bank_short_name3 varchar(255),
+    pay_chnl char(4) not null,
+    pay_chnl_name varchar(128) not null,
+    chnl_sys_no char(3) not null,
+    chnl_bank_code char(30) not null,
+    chnl_bank_name varchar(255) not null,
+    chnl_bank_short_name varchar(255),
+    bank_cat char(5),
+    bank_type char(5),
+    clear_bank_code char(30),
+    node_code char(10),
+    parent_bank_code char(30),
+    parent_pbc_bank_code char(30),
+    city_code char(4),
+    address varchar(255),
+    post_code char(6),
+    telephone char(30),
+    email char(50),
+    clear_level char(3),
+    crt_date char(8),
+    eff_date char(8),
+    dis_date char(8),
+    bank_rec_level char(3),
+    last_date char(8),
+    stat char(1),
+    summary varchar(200),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0,
+    rsv_int2 BIGINT default 0,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    dac char(16)
+);
+
+
+
+-- t_remit_route  智能汇路通道属性表
+drop table t_remit_route;
+create table t_remit_route
+(
+    pay_chnl char(4) not null,
+    pay_chnl_name varchar(128) not null,
+    svr_type char(1) not null,
+    begin_time char(9),
+    end_time char(9),
+    min_amount decimal(15,2) default 0 not null,
+    max_amount decimal(15,2) default 0 not null,
+    reach_time int default 0 not null,
+    fee decimal(15,2) default 0 not null,
+    dac char(16)
+);
+
+create unique index uidx_t_remit_route on t_remit_route ( pay_chnl);
+
+
+-- t_except_acct  异常账号表
+drop table t_except_acct;
+create table t_except_acct
+(
+    acct_no varchar(64) not null,
+    acct_name varchar(146),
+    brch_no char(30),
+    ctrl_flag char(1) not null,
+    add_date char(8)
+);
+
+create unique index uidx_t_except_acct on t_except_acct ( acct_no);
+
+
+-- t_sms  短信信息表
+drop table t_sms;
+create table t_sms
+(
+    plat_date char(8) not null,
+    plat_seq BIGINT default 0 not null,
+    tel_no char(20) not null,
+    crt_time char(6) not null,
+    sm_cmd char(16),
+    cust_type char(1) not null,
+    sm_type char(1) not null,
+    busi_type char(1) not null,
+    fee_type char(1) not null,
+    sm_info varchar(765),
+    file_name varchar(255),
+    snd_type char(1) not null,
+    snd_beg_date char(8),
+    snd_beg_time char(6),
+    snd_end_date char(8),
+    snd_end_time char(6),
+    acct_no char(32),
+    teller_no char(10),
+    brch_no char(4),
+    acct_brch_no char(4),
+    class_id char(4),
+    app_id char(16),
+    snd_date char(8),
+    snd_time char(9),
+    stat char(1) not null,
+    errmsg varchar(255),
+    redo_times BIGINT default 0,
+    dac char(16)
+);
+
+create unique index uidx_t_sms on t_sms ( plat_date,plat_seq,tel_no);
+
+create index  i_t_sms1  on  t_sms  (stat, redo_times);
+
+-- t_snd_iccard  借记卡销户通知表
+drop table t_snd_iccard;
+create table t_snd_iccard
+(
+    chnl_seq_no char(32) not null,
+    brch_no char(4) not null,
+    chnl_no char(4) not null,
+    teller_no char(10) not null,
+    card_no char(30) not null,
+    cust_no char(10),
+    acct_no char(35) not null,
+    stat char(1) not null,
+    errmsg varchar(330),
+    redo_times BIGINT default 0,
+    next_snd_time char(14),
+    snd_date char(8),
+    snd_time char(9),
+    rsv_int1 BIGINT default 0,
+    rsv_int2 BIGINT default 0,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    dac char(16)
+);
+
+create unique index uidx_t_snd_iccard on t_snd_iccard ( chnl_seq_no);
+
+create index  i_t_snd_iccard1  on  t_snd_iccard  (stat);
+
+-- t_scene_type_ctrl  借贷合一卡场景控制表
+drop table t_scene_type_ctrl;
+create table t_scene_type_ctrl
+(
+    sys_no varchar(3),
+    product_id varchar(20) not null,
+    operate_type varchar(30) not null,
+    ctrl_flag varchar(1) not null,
+    tran_type char(2) not null,
+    scene varchar(3),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    dac char(16)
+);
+
+
+create index  i_t_scene_type_c1  on  t_scene_type_ctrl  (product_id, operate_type, scene);
+
+-- t_pwage_bat_ctrl  PE支付扩展应用批处理表
+drop table t_pwage_bat_ctrl;
+create table t_pwage_bat_ctrl
+(
+    plat_date char(8),
+    node_no BIGINT,
+    busi_no char(8),
+    seq_no BIGINT,
+    busi_msg varchar(255),
+    sou_filename char(128),
+    des_filename char(128),
+    tot_num BIGINT,
+    tot_amt decimal(16,2),
+    suc_num BIGINT,
+    suc_amt decimal(16,2),
+    fal_num BIGINT,
+    fal_amt decimal(16,2),
+    stat char(2),
+    times BIGINT,
+    bat_ip char(20),
+    bat_port char(10),
+    err_no char(5),
+    ret_code char(20),
+    ret_msg char(255),
+    begin_date char(8),
+    begin_time char(6),
+    end_date char(8),
+    end_time char(6),
+    remark1 varchar(255),
+    remark2 varchar(255),
+    remark3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    ext_data varchar(300)
+);
+
+create unique index uidx_t_pwage_bat_ctrl on t_pwage_bat_ctrl ( plat_date,node_no,busi_no);
+
+
+-- t_acctno_ctrl  账号并发控制表
+drop table t_acctno_ctrl;
+create table t_acctno_ctrl
+(
+    acct_no char(40),
+    chnl_seq_no char(32),
+    last_time char(10),
+    rsv_rmrk varchar(255)
+);
+
+create unique index uidx_t_acctno_ctrl on t_acctno_ctrl ( acct_no);
+
+
+-- t_result_notify  异步通知表
+drop table t_result_notify;
+create table t_result_notify
+(
+    plat_date char(8),
+    seq_no BIGINT,
+    notify_no char(16),
+    notify_name varchar(60),
+    org_chnl_seq_no char(32) not null,
+    pe_seq_no char(32) not null,
+    trans_seq_no char(32),
+    notify_seq_no char(32),
+    order_id char(20),
+    pay_clear_partyId char(4),
+    clear_condition char(40),
+    payee_clear_partyId char(4),
+    payee_clear_condition char(40),
+    order_bal1 decimal(15,2),
+    order_bal2 decimal(15,2),
+    dta_name char(40) not null,
+    svc_name char(40) not null,
+    svr_type char(1) not null,
+    rst_stat char(1) not null,
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    ext_data varchar(8000),
+    times BIGINT default 0,
+    stat char(2) not null,
+    ret_code char(20),
+    ret_msg varchar(255),
+    err_code char(20),
+    err_msg varchar(300),
+    sys_no char(3),
+    send_brch char(12),
+    send_oper char(20),
+    operate_type char(23),
+    productid char(20),
+    chnl_no char(4),
+    sys_domain char(3),
+    pay_mode char(4),
+    pay_acct_type char(1),
+    pay_acct_no char(40),
+    pay_acct_name varchar(146),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    pay_acct_address varchar(255),
+    pay_acct_nation varchar(3),
+    pay_cert_type char(6),
+    pay_cert_no char(60),
+    payee_mode char(4),
+    payee_acct_type char(1),
+    payee_acct_no char(40),
+    payee_acct_name varchar(146),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(100),
+    payee_acct_address varchar(255),
+    payee_nation char(3),
+    payee_cert_type char(6),
+    payee_cert_no char(60),
+    curr_cod char(5) not null,
+    curr_type char(1),
+    trn_amt decimal(15,2),
+    oth_amt1 decimal(15,2) default 0,
+    oth_amt2 decimal(15,2) default 0,
+    snd_times BIGINT default 0,
+    task_type char(1),
+    err_type char(1),
+    task_date char(8),
+    balance_date char(8),
+    agent_no char(20),
+    pay_date char(8),
+    set_date char(8),
+    product_id char(20),
+    trade_amt decimal(15,2) default 0,
+    rmb_amt decimal(15,2) default 0,
+    snd_time char(9),
+    exchange_type char(1),
+    exchange_flag char(1),
+    extract_flag char(1),
+    deduct_type char(1),
+    deposit_type char(1),
+    customer_number char(20),
+    customer_name char(80),
+    trade_code char(6),
+    rate_arrange decimal(13,6),
+    err_code1 char(20),
+    err_msg1 varchar(255),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255)
+);
+
+create unique index uidx_t_result_notify on t_result_notify ( plat_date,seq_no);
+create unique index  ui_t_result_notif1  on  t_result_notify  (trans_seq_no);
+
+create index  i_t_result_notif1  on  t_result_notify  (notify_seq_no);
+create index  i_t_result_notif2  on  t_result_notify  (org_chnl_seq_no);
+create index  i_t_result_notif3  on  t_result_notify  (set_date, snd_time);
+
+-- t_notifnum_info  通知编号配置表
+drop table t_notifnum_info;
+create table t_notifnum_info
+(
+    notif_no char(16) not null,
+    notif_name char(180),
+    sys_no char(8),
+    product_id char(20),
+    operate_type char(30),
+    svc_dta char(40) not null,
+    svc_name char(40) not null,
+    svc_pay_dir BIGINT,
+    svc_type char(2),
+    memo char(255)
+);
+
+create unique index uidx_t_notifnum_info on t_notifnum_info ( notif_no);
+
+
+-- t_cust_sign  客户信息表
+drop table t_cust_sign;
+create table t_cust_sign
+(
+    cust_no char(20) not null,
+    acct_no char(40) not null,
+    acct_name varchar(300),
+    acct_brch_no char(30) not null,
+    acct_brch_name varchar(300),
+    acct_type char(1),
+    sign_seq_no varchar(32),
+    payee_acct_no char(40),
+    busi_type char(1),
+    link_name varchar(255),
+    phone char(20),
+    email char(60),
+    sale_type char(5),
+    cert_type char(6),
+    cert_no char(60),
+    stat char(1) not null,
+    prod_id char(30),
+    open_org char(4) not null,
+    open_teller char(13) not null,
+    open_dt char(8) not null,
+    last_change_org char(4),
+    last_change_teller char(13),
+    last_change_reason varchar(200),
+    last_change_dt char(8),
+    last_change_time char(6),
+    remark1 varchar(300),
+    remark2 varchar(300),
+    remark3 varchar(300),
+    memo varchar(255),
+    dac char(16)
+);
+
+create unique index uidx_t_cust_sign on t_cust_sign ( cust_no,acct_no,payee_acct_no);
+create unique index  ui_t_cust_sign1  on  t_cust_sign  (acct_name, busi_type, link_name, phone, email, sale_type, cert_type, cert_no, prod_id, last_change_org, last_change_teller, last_change_reason, last_change_dt, last_change_time);
+
+
+-- t_assets_info  客户资产表
+drop table t_assets_info;
+create table t_assets_info
+(
+    cust_no char(20) not null,
+    au_acct_no char(40) not null,
+    order_id char(20) not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    order_type char(1) not null,
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    cash_type char(1) not null,
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    amt decimal(15,2) default 0 not null,
+    tran_amt decimal(15,2) default 0 not null,
+    bal_amt decimal(15,2) default 0 not null,
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_vou_date char(8),
+    pay_mode char(4),
+    pay_acct_type char(1),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name char(100),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    payee_mode varchar(4),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_type char(1),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name char(100),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    retreat_seq_no char(32),
+    batch_seq_no char(32),
+    batch_id char(20),
+    snd_notice char(1),
+    times BIGINT,
+    ret_cod char(20),
+    ret_msg varchar(255),
+    last_date char(8),
+    last_time char(6),
+    dac char(16)
+);
+
+create unique index uidx_t_assets_info on t_assets_info ( cust_no,au_acct_no,order_id);
+
+create index  i_t_assets_info1  on  t_assets_info  (plat_date, seq_no);
+create index  i_t_assets_info2  on  t_assets_info  (chnl_seq_no, retreat_seq_no, batch_seq_no, batch_id, snd_notice);
+
+-- t_assets_info_sub  客户资产子表
+drop table t_assets_info_sub;
+create table t_assets_info_sub
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    serail_no BIGINT not null,
+    au_acct_no char(40) not null,
+    order_id char(20),
+    ora_order_id char(20),
+    chnl_seq_no char(32) not null,
+    chnl_date char(8),
+    chnl char(8),
+    party_id char(4) not null,
+    order_type char(1) default '1' not null,
+    tran_amt decimal(15,2) default 0 not null,
+    bal_amt decimal(15,2) default 0 not null,
+    file_name varchar(255),
+    batch_seq_no char(32),
+    host_batch_id char(20),
+    snd_notice char(1),
+    times BIGINT,
+    ret_cod char(20),
+    ret_msg varchar(255),
+    timestamp char(14),
+    allcount BIGINT,
+    allamt decimal(15,2),
+    succcount BIGINT,
+    succamt decimal(15,2),
+    res_filename varchar(512),
+    bat_status char(2),
+    bat_res char(1) default '0' not null,
+    rt_amt_seq char(32),
+    rt_amt_stat char(1),
+    bk_val1 decimal(15,2),
+    bk_val2 decimal(15,2),
+    bk_num1 BIGINT,
+    bk_num2 BIGINT,
+    bk_str1 varchar(256),
+    bk_str2 varchar(512),
+    bk_str3 varchar(1024),
+    dac char(16)
+);
+
+create unique index uidx_t_assets_info_sub on t_assets_info_sub ( plat_date,seq_no,serail_no);
+
+create index  i_t_assets_info_2  on  t_assets_info_sub  (chnl_seq_no, batch_seq_no, host_batch_id, snd_notice, timestamp);
+
+-- t_cust_acct  挡板账号维护表
+drop table t_cust_acct;
+create table t_cust_acct
+(
+    brch_no char(4) not null,
+    acct_no char(40) not null,
+    stat char(1) not null
+);
+
+create unique index uidx_t_cust_acct on t_cust_acct ( brch_no,acct_no);
+
+create index  i_t_cust_acct1  on  t_cust_acct  (stat);
+
+-- t_tran_book  交易登记簿
+drop table t_tran_book;
+create table t_tran_book
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    chnl_svc_name char(40) not null,
+    sys_no char(3),
+    brch_no char(12),
+    teller_no char(12),
+    tx_code char(40),
+    operate_type char(23) not null,
+    productid char(20) not null,
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    trn_amt decimal(15,2) default 0 not null,
+    fee decimal(15,2) default 0 not null,
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    cust_no char(20),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_vou_date char(8),
+    pay_mode char(4),
+    pay_acct_type char(1),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name char(100),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    payee_mode varchar(4),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_type char(1),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name char(100),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    runup_brch_no char(12),
+    fee_acct_no varchar(64),
+    fee_item_no varchar(20),
+    fee_type char(1),
+    fee_runup_brch_no char(12),
+    fee_add_flag char(1),
+    fee_agree_id char(10),
+    rev_plat_date char(8),
+    rev_seq_no BIGINT default 0 not null,
+    order_id char(20),
+    org_order_id char(20),
+    cncl_id char(40),
+    bat_no char(20),
+    tx_stat char(1) not null,
+    ret_cod char(20),
+    ret_msg varchar(255),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    ext_data varchar(300),
+    beg_date char(8) not null,
+    beg_time char(9) not null,
+    end_date char(8),
+    end_time char(9),
+    last_date char(8) not null,
+    dac char(16)
+);
+
+create unique index uidx_t_tran_book on t_tran_book ( plat_date,seq_no);
+create unique index  ui_t_tran_book1  on  t_tran_book  (chnl_seq_no);
+
+create index  i_t_tran_book1  on  t_tran_book  (bat_no);
+create index  i_t_tran_book2  on  t_tran_book  (chnl_date, sys_no, tx_code, cust_no, tx_stat);
+
+-- t_product  产品信息表
+drop table t_product;
+create table t_product
+(
+    prd_id char(20),
+    prd_name char(64),
+    prd_grpid char(16),
+    mm_prd_id char(16),
+    mm_mode char(1),
+    pay_ind char(1),
+    mer_no char(20),
+    agt_brch char(12),
+    prd_price decimal(15,2),
+    prd_cur char(3),
+    sett_mode char(1),
+    sett_type char(1),
+    sett_intv BIGINT,
+    sett_pird char(20),
+    last_sett_pird char(20),
+    fee_rat decimal(5,5),
+    fee_mode char(1),
+    fee_item char(20),
+    pur_mode char(1),
+    pur_acct char(35),
+    acc_usett char(1),
+    acc_refund char(2)
+);
+
+create unique index uidx_t_product on t_product ( prd_id);
+
+
+-- t_pu_order  订单表
+drop table t_pu_order;
+create table t_pu_order
+(
+    pu_order_id char(20) not null,
+    pa_seq_no char(32),
+    pa_order_id char(20),
+    pa_order_cncl char(40),
+    order_type char(1),
+    org_pu_id char(20),
+    brch_no char(12),
+    cust_id char(16),
+    pay_acct_type char(1),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    currency char(3),
+    tot_amt decimal(15,2),
+    ref_amt decimal(15,2),
+    crt_date char(8),
+    crt_time char(9),
+    stat char(2),
+    last_date char(8)
+);
+
+create unique index uidx_t_pu_order on t_pu_order ( pu_order_id);
+
+create index  i_t_pu_order1  on  t_pu_order  (pa_order_cncl);
+create index  i_t_pu_order2  on  t_pu_order  (order_type, brch_no, crt_date);
+create index  i_t_pu_order3  on  t_pu_order  (org_pu_id);
+
+-- t_pu_list  采购订单产品
+drop table t_pu_list;
+create table t_pu_list
+(
+    pu_order_id char(20) not null,
+    list_id BIGINT not null,
+    prd_id char(20),
+    prd_name char(64),
+    serial_no char(32),
+    serial_no_to char(32),
+    prd_num BIGINT,
+    currency char(3),
+    price decimal(15,2)
+);
+
+create unique index uidx_t_pu_list on t_pu_list ( pu_order_id,list_id);
+
+
+-- t_stock  库存表
+drop table t_stock;
+create table t_stock
+(
+    brch_no char(12) not null,
+    prd_id char(20),
+    mm_id char(20),
+    act_quant BIGINT,
+    avl_quant BIGINT
+);
+
+create unique index uidx_t_stock on t_stock ( brch_no,prd_id);
+
+
+-- t_sett_stat  结算状态表
+drop table t_sett_stat;
+create table t_sett_stat
+(
+    mer_no char(20) not null,
+    prd_id char(20),
+    sett_pird char(20),
+    plat_date char(8),
+    last_sett_pird char(20),
+    pa_seq_no char(32),
+    pa_order_id char(20),
+    sett_stat char(2),
+    currency char(3),
+    sett_amt decimal(15,2),
+    sett_count BIGINT,
+    fee_amt decimal(15,2),
+    pay_amt decimal(15,2),
+    pay_count BIGINT,
+    refund_amt decimal(15,2),
+    refund_count BIGINT,
+    sett_seq_no char(32),
+    sett_order_id char(20),
+    last_date char(8)
+);
+
+create unique index uidx_t_sett_stat on t_sett_stat ( mer_no,prd_id,sett_pird);
+
+
+-- t_short_prdid  缩位商品编号对照表
+drop table t_short_prdid;
+create table t_short_prdid
+(
+    short_prdid char(8) not null,
+    prd_id char(20) not null,
+    crt_date char(8),
+    valid_from char(8),
+    valid_to char(8)
+);
+
+create unique index uidx_t_short_prdid on t_short_prdid ( short_prdid);
+
+
+-- t_pu_para  参数配置表
+drop table t_pu_para;
+create table t_pu_para
+(
+    para_type varchar(30) not null,
+    para_name char(30) not null,
+    para_desc char(60) not null,
+    para_val varchar(255),
+    pre_date char(8) default '99999999',
+    pre_time char(6) default '999999',
+    pre_val varchar(255),
+    memo varchar(100),
+    Dac char(16)
+);
+
+create unique index uidx_t_pu_para on t_pu_para ( para_type,para_name);
+
+
+-- t_pu_acct  虚拟帐号表
+drop table t_pu_acct;
+create table t_pu_acct
+(
+    vacct_no char(50) not null,
+    acct_no char(35),
+    stat char(1),
+    seq_no char(50),
+    inst_seq char(50),
+    start_date char(8),
+    start_time char(9),
+    end_date char(8),
+    end_time char(9),
+    crt_date char(8),
+    times BIGINT,
+    rsv1 varchar(300),
+    rsv2 varchar(300)
+);
+
+create unique index uidx_t_pu_acct on t_pu_acct ( vacct_no);
+
+create index  i_t_pu_acct1  on  t_pu_acct  (acct_no, stat);
+
+-- t_pu_chk_det  对账明细表
+drop table t_pu_chk_det;
+create table t_pu_chk_det
+(
+    chnl_seq_no char(32),
+    chk_date char(8),
+    acct_no char(35),
+    vacct_no char(50),
+    tran_date char(8),
+    tran_time char(9),
+    tran_amt decimal(15,2),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    date char(8),
+    time char(9),
+    stat char(1),
+    rsv1 varchar(300),
+    rsv2 varchar(300)
+);
+
+create unique index uidx_t_pu_chk_det on t_pu_chk_det ( chnl_seq_no);
+
+create index  i_t_pu_chk_det1  on  t_pu_chk_det  (chk_date);
+
+-- t_pu_chk_ctrl  对账控制表
+drop table t_pu_chk_ctrl;
+create table t_pu_chk_ctrl
+(
+    plat_date char(8) not null,
+    seq_no BIGINT not null,
+    eod_job_no char(32) not null,
+    mer_no char(20),
+    prd_id char(20),
+    stat char(1),
+    chk_date char(8),
+    beg_time char(9),
+    end_time char(9),
+    rsv1 varchar(300)
+);
+
+create unique index uidx_t_pu_chk_ctrl on t_pu_chk_ctrl ( plat_date,seq_no);
+
+create index  i_t_pu_chk_ctrl1  on  t_pu_chk_ctrl  (eod_job_no);
+
+-- t_pu_acct_det  虚拟帐号明细表
+drop table t_pu_acct_det;
+create table t_pu_acct_det
+(
+    chnl_seq_no char(32),
+    pu_order_id char(20),
+    plat_date char(8),
+    acct_no char(35),
+    vacct_no char(50),
+    tran_date char(8),
+    tran_time char(9),
+    tran_amt decimal(15,2),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    pay_bal decimal(15,2) default 0 not null,
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(100),
+    payee_bal decimal(15,2) default 0 not null,
+    mer_no char(20),
+    prd_id char(20),
+    pe_order_id char(20),
+    req_seq_no char(32),
+    pe_seq_no char(32),
+    org_seq_no char(32),
+    host_seq_no char(50),
+    noti_seq_no char(50),
+    inst_seq char(50),
+    curr_cod char(5) not null,
+    rev char(1),
+    stat char(2),
+    rsv1 varchar(300),
+    rsv2 varchar(300),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    last_date char(8)
+);
+
+create unique index uidx_t_pu_acct_det on t_pu_acct_det ( chnl_seq_no);
+
+create index  i_t_pu_acct_det1  on  t_pu_acct_det  (acct_no, tran_date);
+create index  i_t_pu_acct_det2  on  t_pu_acct_det  (vacct_no, tran_date);
+
+-- t_sal_sett_qry_upd_task  结算转异步后续处理表
+drop table t_sal_sett_qry_upd_task;
+create table t_sal_sett_qry_upd_task
+(
+    mer_no char(20),
+    prd_id char(20),
+    sett_pird char(20),
+    chnl_seq_no char(32),
+    chnl char(4),
+    chnl_date char(8),
+    pa_seq_no char(32),
+    pa_order_id char(20),
+    plat_date char(8),
+    pre_stat char(2),
+    stat char(2),
+    times BIGINT,
+    ret_code char(256),
+    ret_msg char(256),
+    err_msg char(256),
+    rsv1 char(256),
+    rsv2 char(256),
+    rsv3 char(256)
+);
+
+create unique index uidx_t_sal_sett_qry_upd_task on t_sal_sett_qry_upd_task ( mer_no,prd_id,sett_pird,chnl_seq_no);
+
+create index  i_t_sal_sett_qry1  on  t_sal_sett_qry_upd_task  (stat);
+
+-- t_pu_bat_ctrl  批量控制表
+drop table t_pu_bat_ctrl;
+create table t_pu_bat_ctrl
+(
+    plat_date char(8) not null,
+    seq_no BIGINT not null,
+    bat_no char(20) not null,
+    chn_no char(4),
+    chn_seqno char(50),
+    mer_no char(20),
+    prd_id char(20),
+    rel_bat_no varchar(100),
+    batch_prt_flag char(1),
+    bat_class char(1),
+    bat_type char(1),
+    file_bat_kind char(1),
+    snd_brch char(12),
+    snd_oper char(20),
+    product_id char(20),
+    sys_domain char(3),
+    fee_item char(20),
+    ch_amt decimal(16,2) default 0,
+    tot_row BIGINT default 0,
+    tot_amt decimal(16,2) default 0,
+    suc_row BIGINT default 0,
+    suc_amt decimal(16,2) default 0,
+    fal_row BIGINT default 0,
+    fal_amt decimal(16,2) default 0,
+    priority char(1),
+    clear_ction char(40),
+    entr_Date char(8),
+    sys_datetime char(14),
+    plan_datetime char(14),
+    lmt_datetime char(14),
+    bat_file char(128),
+    return_file char(128),
+    recv_ip char(20),
+    recv_port char(10),
+    post_scrpt varchar(300),
+    summary varchar(300),
+    extend_data varchar(300),
+    save_stat char(2),
+    stat char(2) not null,
+    node_no BIGINT,
+    bat_pid BIGINT,
+    ret_code char(20),
+    ret_msg varchar(255),
+    memo varchar(60),
+    cnt BIGINT,
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pu_bat_ctrl on t_pu_bat_ctrl ( plat_date,seq_no);
+create unique index  ui_t_pu_bat_ctrl1  on  t_pu_bat_ctrl  (bat_no);
+create unique index  ui_t_pu_bat_ctrl2  on  t_pu_bat_ctrl  (chn_seqno, mer_no);
+
+
+-- t_pu_bat_detail  批量明细表
+drop table t_pu_bat_detail;
+create table t_pu_bat_detail
+(
+    plat_date char(8) not null,
+    bat_no char(20) not null,
+    node_seq char(32) not null,
+    dmu_seq char(32) not null,
+    bat_flag char(1),
+    mer_no char(20),
+    prd_id char(20),
+    vacct char(40),
+    instSeq char(50),
+    acct_date char(8),
+    tran_amt decimal(16,2) default 0.00,
+    pay_amt decimal(16,2) default 0.00,
+    pay_type char(1),
+    th_pt char(1),
+    trans_seq char(32),
+    curr_code char(3),
+    curr_iden char(1),
+    pay_acct_no char(40),
+    pay_acct_name varchar(146),
+    pay_acct_type char(1),
+    pay_bank_class char(1),
+    pay_acct_brch char(12),
+    pay_acct_bank_no char(30),
+    pay_acct_brch_nm varchar(100),
+    pay_cust_no char(10),
+    pay_cust_name varchar(146),
+    payee_acct_no char(40),
+    payee_acct_name varchar(146),
+    payee_acct_type char(1),
+    payee_bank_class char(1),
+    payee_acct_brch char(12),
+    payee_acct_bank_no char(30),
+    payee_acct_brch_nm varchar(100),
+    payee_cust_no char(10),
+    payee_cust_name varchar(146),
+    path char(4),
+    operate_type char(23),
+    productid char(20),
+    refund_type char(16) not null,
+    fee_type char(1) not null,
+    fee_runup_brch_no char(12),
+    fee_orderid char(32),
+    fee_agree_id char(10),
+    fee decimal(16,2) default 0,
+    fee_acct_no varchar(64),
+    fee_item_no varchar(20),
+    interest decimal(16,2),
+    interest_af_tax decimal(16,2),
+    interest_day BIGINT,
+    rate decimal(2,8),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    host_seq char(32),
+    org_seq char(32),
+    org_noti_seq char(50),
+    pu_order_id char(20),
+    ret_code char(20),
+    ret_msg varchar(255),
+    stat char(2) not null,
+    flag char(10),
+    memo varchar(300),
+    memo1 varchar(300),
+    memo2 varchar(300),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_pu_bat_detail on t_pu_bat_detail ( bat_no,node_seq);
+
+create index  i_t_pu_bat_detai1  on  t_pu_bat_detail  (plat_date, bat_no, stat);
+create index  i_t_pu_bat_detai2  on  t_pu_bat_detail  (mer_no, vacct, payee_acct_no);
+
+-- t_pu_page_cache  对账控制表
+drop table t_pu_page_cache;
+create table t_pu_page_cache
+(
+    seq char(32) not null,
+    idx BIGINT not null,
+    page BIGINT,
+    num BIGINT,
+    tot_page BIGINT,
+    tot_num BIGINT,
+    det varchar(4096),
+    date char(8),
+    time char(9),
+    stat char(1)
+);
+
+create unique index uidx_t_pu_page_cache on t_pu_page_cache ( seq,idx);
+
+create index  i_t_pu_page_cach1  on  t_pu_page_cache  (seq, page, num);
+
+-- t_micss_agent  代理商信息表
+drop table t_micss_agent;
+create table t_micss_agent
+(
+    agent_no char(20) not null,
+    bp_id char(30),
+    agent_acct_no char(35) not null,
+    agent_name varchar(255),
+    agent_bank_no char(32),
+    agent_bank_name varchar(255),
+    mobile varchar(120),
+    stat char(1) not null,
+    last_date char(8),
+    pay_date char(8),
+    timestamp char(14) not null,
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255)
+);
+
+create unique index uidx_t_micss_agent on t_micss_agent ( agent_no);
+
+
+-- t_micss_calendar  航协日历
+drop table t_micss_calendar;
+create table t_micss_calendar
+(
+    calendar_type char(1) not null,
+    calendar_date char(8) not null,
+    stat char(1) not null,
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255)
+);
+
+create unique index uidx_t_micss_calendar on t_micss_calendar ( calendar_type,calendar_date);
+
+
+-- t_micss_airlines  航空公司信息表
+drop table t_micss_airlines;
+create table t_micss_airlines
+(
+    airlines_id char(20) not null,
+    airlines_name varchar(400),
+    english_name varchar(400),
+    airlines_acct_no char(20),
+    airlines_bank_no char(30),
+    airlines_bank_name varchar(255),
+    stat char(1) not null,
+    flag char(1),
+    timestamp char(14) not null,
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255)
+);
+
+create unique index uidx_t_micss_airlines on t_micss_airlines ( airlines_acct_no);
+
+
+-- t_micss_balance  核心余额表
+drop table t_micss_balance;
+create table t_micss_balance
+(
+    acct_date char(8) not null,
+    acct_no char(40) not null,
+    acct_name varchar(146),
+    acct_brch_no char(30),
+    acct_brch_name varchar(100),
+    last_bal decimal(16,2) default 0,
+    balance decimal(16,2) default 0,
+    stat char(1) not null,
+    timestamp char(14) not null,
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255)
+);
+
+create unique index uidx_t_micss_balance on t_micss_balance ( acct_date,acct_no);
+
+create index  i_t_micss_balanc2  on  t_micss_balance  (stat);
+
+-- t_message_send  短信发送表
+drop table t_message_send;
+create table t_message_send
+(
+    plat_date char(8) not null,
+    seq_no BIGINT not null,
+    sub_seqno char(32),
+    ext_seqno char(32),
+    msgkind char(1),
+    paycode char(30),
+    sendcode varchar(1200),
+    sendnum BIGINT,
+    sendmsg char(140),
+    sendtimes BIGINT,
+    custtype char(2),
+    iffreepay char(1),
+    stat char(1) default '0',
+    flag char(1) default '0'
+);
+
+create unique index uidx_t_message_send on t_message_send ( plat_date,seq_no);
+
+
+-- t_micss_task  扣款任务表
+drop table t_micss_task;
+create table t_micss_task
+(
+    plat_date char(8) not null,
+    seq_no BIGINT not null,
+    bat_no char(20) not null,
+    task_date char(8) not null,
+    task_kind char(1) not null,
+    balance_date char(8),
+    chnl_no char(4),
+    chnl_seq_no char(32) not null,
+    chnl_svc_name char(40) not null,
+    notice_flag char(1),
+    send_brch char(12) not null,
+    send_oper char(20),
+    host_seq_no char(32),
+    other_seq_no char(32),
+    fail_flag char(1),
+    flight_acct_no char(40),
+    product_id char(20),
+    operate_type char(23),
+    sys_domain char(3),
+    curr_code char(5) not null,
+    amt decimal(16,2) default 0,
+    total_row BIGINT default 0,
+    total_amt decimal(16,2) default 0,
+    lock_row BIGINT default 0,
+    lock_amt decimal(16,2) default 0,
+    pay_row BIGINT default 0,
+    pay_amt decimal(16,2) default 0,
+    suc_row BIGINT default 0,
+    suc_amt decimal(16,2) default 0,
+    fal_row BIGINT,
+    fal_amt decimal(16,2),
+    priority char(1) not null,
+    pay_mode char(2),
+    times BIGINT,
+    recv_file varchar(128),
+    send_file varchar(128),
+    last_stat char(2),
+    stat char(2) not null,
+    save_stat char(2),
+    ret_code char(20),
+    ret_msg varchar(255),
+    node_no BIGINT,
+    bat_pid BIGINT,
+    lmt_datetime char(14),
+    last_date char(8) not null,
+    last_time char(9) not null,
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    dac char(16)
+);
+
+create unique index uidx_t_micss_task on t_micss_task ( plat_date,seq_no);
+create unique index  ui_t_micss_task1  on  t_micss_task  (bat_no);
+
+create index  i_t_micss_task1  on  t_micss_task  (task_date, stat);
+
+-- t_micss_task_detail  扣款明细表
+drop table t_micss_task_detail;
+create table t_micss_task_detail
+(
+    bat_no char(20) not null,
+    task_date char(8) not null,
+    node_seq char(32) not null,
+    busi_code char(20) not null,
+    busi_no char(16) not null,
+    sys_domain char(3) not null,
+    product_id char(20),
+    operate_type char(23),
+    dmu_seq char(32),
+    trans_seq char(32),
+    brch_flag char(1),
+    host_date char(8),
+    pay_host_seq_no char(32),
+    payee_host_seq_no char(32),
+    priority char(1) not null,
+    task_kind char(1) not null,
+    balance_date char(8),
+    payee_acct_no char(40),
+    payee_acct_name varchar(146),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(100),
+    pay_acct_no char(40),
+    pay_acct_name varchar(146),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    curr_code char(3),
+    curr_iden char(1),
+    tran_amt decimal(16,2) default 0,
+    lock_amt decimal(16,2) default 0,
+    pay_amt decimal(16,2) default 0,
+    sub_amt decimal(16,2) default 0,
+    bk_amt decimal(16,2),
+    airlines_id char(20),
+    agent_no char(20),
+    dta_name char(31),
+    svc_name char(63),
+    rope_no char(32),
+    isf_rope char(1),
+    isf_rs char(1),
+    stat char(2) not null,
+    parse_stat char(1),
+    times BIGINT,
+    area_err varchar(255),
+    err_no char(16),
+    check_acct_flag char(1),
+    ret_type char(1),
+    ret_code char(20),
+    ret_msg varchar(255),
+    ps_crpt varchar(300),
+    bank_sum varchar(300),
+    last_date char(8) not null,
+    last_time char(9) not null,
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    dac char(16)
+);
+
+create unique index uidx_t_micss_task_detail on t_micss_task_detail ( busi_no);
+create unique index  ui_t_micss_task_d1  on  t_micss_task_detail  (dmu_seq);
+
+create index  i_t_micss_task_d1  on  t_micss_task_detail  (bat_no);
+create index  i_t_micss_task_d2  on  t_micss_task_detail  (stat);
+create index  i_t_micss_task_d3  on  t_micss_task_detail  (pay_host_seq_no);
+
+-- t_micss_swift  航协对账表
+drop table t_micss_swift;
+create table t_micss_swift
+(
+    swift_date char(8) not null,
+    bat_no char(16),
+    busi_no char(16) not null,
+    busi_code char(16),
+    sys_domain char(3) not null,
+    tran_date char(8),
+    tran_time char(6),
+    dc_flag char(1) not null,
+    tran_type char(1),
+    host_seq_no char(32) not null,
+    chnl_seq_no char(32),
+    airlines_id char(20),
+    airlines_name varchar(400),
+    agent_no char(20),
+    agent_name varchar(255),
+    acct_no char(40),
+    acct_name varchar(146),
+    acct_brch_no char(30),
+    acct_brch_name varchar(100),
+    opp_acct_no char(40),
+    opp_acct_name varchar(146),
+    opp_acct_brch_no char(30),
+    opp_acct_brch_name varchar(100),
+    curr_code char(3),
+    curr_iden char(1),
+    tran_amt decimal(16,2) default 0,
+    balance decimal(16,2),
+    settlement_flag char(1),
+    brch_no char(30),
+    vou_no char(20),
+    teller_id char(12),
+    channel char(4),
+    pay_vou_type char(7),
+    pay_vou_no char(20),
+    rcv_vou_type char(7),
+    rcv_vou_no char(20),
+    paym_path char(10),
+    org_tran_type char(6),
+    is_revs char(1),
+    item_status char(2),
+    ps_crpt varchar(300),
+    bank_sum varchar(300),
+    stat char(2) not null,
+    last_date char(8) not null,
+    last_time char(9) not null,
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    dac char(16)
+);
+
+create unique index uidx_t_micss_swift on t_micss_swift ( host_seq_no);
+create unique index  ui_t_micss_swift1  on  t_micss_swift  (busi_no);
+
+create index  i_t_micss_swift1  on  t_micss_swift  (tran_date);
+create index  i_t_micss_swift2  on  t_micss_swift  (stat);
+
+-- t_micss_swift_para  航协对账参数表
+drop table t_micss_swift_para;
+create table t_micss_swift_para
+(
+    tran_date char(8),
+    acct_no char(40),
+    swift_date char(8) not null,
+    acct_name varchar(146),
+    party_id char(30),
+    party_name varchar(146),
+    curr_iden char(1),
+    curr_code char(3),
+    channel_num BIGINT,
+    chnl_seq_no char(32) not null,
+    file_path varchar(255),
+    file_name varchar(255),
+    stat char(2) not null,
+    last_date char(8) not null,
+    last_time char(9) not null,
+    memo varchar(100),
+    Dac char(16)
+);
+
+create unique index uidx_t_micss_swift_para on t_micss_swift_para ( tran_date,acct_no);
+
+
+-- t_micss_para  参数配置表
+drop table t_micss_para;
+create table t_micss_para
+(
+    para_type varchar(30) not null,
+    para_name char(30) not null,
+    para_desc char(60) not null,
+    para_val varchar(255),
+    pre_date char(8) default '99999999',
+    pre_time char(6) default '999999',
+    pre_val varchar(255),
+    memo varchar(100),
+    Dac char(16)
+);
+
+create unique index uidx_t_micss_para on t_micss_para ( para_type,para_name);
+
+
+-- t_remittance  主动汇款明细表
+drop table t_remittance;
+create table t_remittance
+(
+    plat_date char(8),
+    seq_no BIGINT not null,
+    originatePartyId char(12),
+    originateTellerId char(12),
+    channelDate char(8),
+    channelSerialNo char(32),
+    channel char(4),
+    domain char(3),
+    operationType varchar(23),
+    productId char(20),
+    draweePaymentPath char(4),
+    draweeVoucherType char(13),
+    draweeVoucherNo char(20),
+    draweeAccType char(1) not null,
+    draweePartyId char(30) not null,
+    draweePartyName varchar(146),
+    draweeAccNo char(40) not null,
+    draweeAccName varchar(146) not null,
+    draweeAddress char(60),
+    draweeNation char(3),
+    draweeCertType char(6) default '0' not null,
+    draweeCertNo char(60) default '0' not null,
+    currencyCategory char(3) default '0' not null,
+    cashOrRemitFlag char(1) default '0' not null,
+    tranAmount decimal(20) default 0 not null,
+    ropeNo char(32) default '0' not null,
+    isFallRope char(1),
+    cashOrTallyFlag char(1),
+    cashProjectCode char(20),
+    cashUserLoginId char(20),
+    cashTransactionType char(20),
+    branchPartyId char(12) not null,
+    payeePaymentPath char(4),
+    payeeVoucherType char(13),
+    payeeVoucherNo char(20),
+    payeeAccType char(1),
+    payeePartyId char(30),
+    payeePartyName varchar(146),
+    payeeAccNo char(40) not null,
+    payeeAccName varchar(146),
+    payeeNation char(3),
+    payeeCertType char(6),
+    payeeCertNo char(60),
+    payeeMobileTel char(20),
+    feeType char(1),
+    feePartyId varchar(12),
+    feeAddCount varchar(1),
+    feeOrderId varchar(32),
+    feeAgreeId char(10),
+    feeAmount varchar(20),
+    feeAccNo varchar(40),
+    feeItem char(20),
+    postscript varchar(300),
+    summary varchar(300),
+    extendData varchar(300),
+    agent_no char(20),
+    airlines_id char(20) default '0'
+);
+
+create unique index uidx_t_remittance on t_remittance ( plat_date,seq_no);
+create unique index  ui_t_remittance1  on  t_remittance  (channelSerialNo);
+
+
+-- t_bpm_trace  BPM操作记录表
+drop table t_bpm_trace;
+create table t_bpm_trace
+(
+    originatePartyId char(12),
+    originateTellerId char(12),
+    channelDate char(8),
+    channelSerialNo char(32),
+    channel char(4),
+    domain char(3),
+    dmu_seq char(32),
+    remitflag char(1),
+    seq_no BIGINT,
+    detail_stat char(2),
+    bpm_stat char(2),
+    draweeAccNo char(40),
+    detail_draweeAccName char(146),
+    bpm_draweeAccName char(146),
+    currencyCategory char(3),
+    Amt char(20),
+    payeeAccNo char(40),
+    detail_payeeAccName char(146),
+    bpm_payeeAccName char(146),
+    detail_payeeBankCode char(30),
+    bpm_payeeBankCode char(30),
+    detail_payeeBankName char(146),
+    bpm_payeeBankName char(146),
+    bpm_postscript char(150),
+    bpm_summary char(160)
+);
+
+create unique index uidx_t_bpm_trace on t_bpm_trace ( channelSerialNo,dmu_seq);
+
+
+-- t_micss_airlines  航空公司信息表
+drop table t_micss_airlines;
+create table t_micss_airlines
+(
+    airlines_id char(20) not null,
+    airlines_name varchar(400),
+    english_name varchar(400),
+    airlines_acct_no char(20),
+    airlines_bank_no char(30),
+    airlines_bank_name varchar(255),
+    stat char(1) not null,
+    flag char(1),
+    timestamp char(14) not null,
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255)
+);
+
+create unique index uidx_t_micss_airlines on t_micss_airlines ( airlines_acct_no);
+
+
+-- t_micss_bpm_task  BPM任务表
+drop table t_micss_bpm_task;
+create table t_micss_bpm_task
+(
+    plat_date char(8),
+    seq_no BIGINT,
+    bat_no char(20) not null,
+    trans_seq_no char(32) not null,
+    bpm_times BIGINT default 0,
+    task_type char(1) not null,
+    err_type char(1),
+    task_date char(8),
+    balance_date char(8),
+    dta_name char(40),
+    chnl_svc_name char(40),
+    chnl_seq_no char(32),
+    send_brch char(12),
+    send_oper char(20),
+    chnl_no char(4),
+    sys_domain char(3),
+    flight_acct_no char(40),
+    airlines_business_code char(20),
+    agent_no char(20),
+    pay_date char(8),
+    set_date char(8),
+    product_id char(20),
+    trade_amt decimal(16,2) default 0,
+    rmb_amt decimal(16,2) default 0,
+    currencyCategory char(3),
+    cashOrRemitFlag char(1),
+    times BIGINT default 0,
+    stat char(2) not null,
+    payee_acct_no char(40),
+    payee_acct_name varchar(146),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(100),
+    payee_code char(40),
+    payee_payment_path char(4),
+    pay_acct_no char(40),
+    pay_acct_name varchar(146),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    pay_code char(40),
+    pay_acct_address varchar(255),
+    pay_acct_nation varchar(100),
+    pay_payment_path char(4),
+    pay_clear_partyId char(4),
+    clear_condition char(40),
+    exchange_type char(1),
+    exchange_flag char(1),
+    extract_flag char(1),
+    deduct_type char(1),
+    deposit_type char(1),
+    customer_number char(20),
+    customer_name char(80),
+    trade_main_part char(2),
+    trade_kind char(3),
+    trade_project_code char(3),
+    trade_code char(6),
+    rate_arrange decimal(13,6),
+    ret_code char(20),
+    ret_msg varchar(255),
+    err_code char(20),
+    err_msg varchar(255),
+    postscript varchar(255),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255)
+);
+
+create unique index  ui_t_micss_bpm_ta1  on  t_micss_bpm_task  (bat_no, trans_seq_no, bpm_times);
+
+create index  i_t_micss_bpm_ta1  on  t_micss_bpm_task  (task_type);
+create index  i_t_micss_bpm_ta2  on  t_micss_bpm_task  (stat);
+
+-- t_micss_ftp_noti  FTP通知表
+drop table t_micss_ftp_noti;
+create table t_micss_ftp_noti
+(
+    ftp_noti_type char(1) not null,
+    ftp_noti_code char(8),
+    ftp_noti_message varchar(255),
+    cur_time char(14),
+    last_time char(14),
+    stat char(1),
+    stat_info varchar(255),
+    remark varchar(255)
+);
+
+
+create index  i_t_micss_ftp_no1  on  t_micss_ftp_noti  (ftp_noti_type);
+create index  i_t_micss_ftp_no2  on  t_micss_ftp_noti  (stat);
+
+-- t_bank_acct_sign  银企直联签约表
+drop table t_bank_acct_sign;
+create table t_bank_acct_sign
+(
+    brch_no char(30),
+    teller_id char(12),
+    sign_date char(8),
+    sign_sysno char(3),
+    sign_flag char(1),
+    pay_acct_no char(40),
+    pay_acct_name varchar(146),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    pay_lim_amt decimal(16,2) default 9999999999999.99,
+    pay_day_lim_amt decimal(16,2) default 9999999999999.99,
+    pay_mon_lim_amt decimal(16,2) default 9999999999999.99,
+    pay_day_sum_amt decimal(16,2),
+    pay_mon_sum_amt decimal(16,2) default 0,
+    payee_acct_no char(40),
+    client_group char(1),
+    status char(1),
+    last_date char(8) not null,
+    last_time char(6) not null,
+    last_teller_id char(12),
+    sign_type char(1),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    dac char(16)
+);
+
+
+create index  i_t_bank_acct_si1  on  t_bank_acct_sign  (pay_acct_no, payee_acct_no);
+create index  i_t_bank_acct_si2  on  t_bank_acct_sign  (status);
+
+-- t_payee_sign  收款人限额表
+drop table t_payee_sign;
+create table t_payee_sign
+(
+    brch_no char(30),
+    teller_id char(12),
+    sign_date char(8),
+    sign_sysno char(3),
+    payee_acct_no char(40),
+    payee_acct_name varchar(146),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(100),
+    payee_lim_amt decimal(16,2) default 9999999999999.99,
+    payee_day_lim_amt decimal(16,2) default 9999999999999.99,
+    payee_mon_lim_amt decimal(16,2) default 9999999999999.99,
+    payee_day_sum_amt decimal(16,2),
+    payee_mon_sum_amt decimal(16,2),
+    sign_flag char(1),
+    client_group char(1),
+    status char(1),
+    avible_limt char(1),
+    last_date char(8) not null,
+    last_time char(6) not null,
+    last_teller_id char(12),
+    sign_type char(1),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    dac char(16)
+);
+
+
+create index  i_t_payee_sign1  on  t_payee_sign  (payee_acct_no);
+create index  i_t_payee_sign2  on  t_payee_sign  (status);
+
+-- t_sys_arg  银企日切表
+drop table t_sys_arg;
+create table t_sys_arg
+(
+    plat_no char(20) not null,
+    plat_name varchar(60),
+    sys_no char(4) not null,
+    plat_stat char(1) default '1' not null,
+    plat_date char(8),
+    clear_date char(8),
+    beg_time char(6),
+    end_time char(6),
+    pre_date char(8),
+    dayend_flag BIGINT,
+    dayend_date char(8),
+    dayend_time char(6),
+    plat_version char(20) default '0',
+    dac char(16)
+);
+
+create unique index uidx_t_sys_arg on t_sys_arg ( plat_no);
+
+
+-- t_tran_seq  交易流水表
+drop table t_tran_seq;
+create table t_tran_seq
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    pe_seq_no char(32) not null,
+    host_pay_seq_no char(32) not null,
+    host_payee_seq_no char(32) not null,
+    chnl_svc_name char(40) not null,
+    chnl_svc_dsp varchar(128) not null,
+    sys_no char(3),
+    brch_no char(12),
+    teller_no char(12),
+    tx_code char(40),
+    operate_type char(23) not null,
+    productid char(20) not null,
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    in_curr_cod char(5),
+    in_curr_type char(1),
+    trn_amt decimal(15,2) default 0 not null,
+    fee decimal(15,2) default 0 not null,
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    oth_amt3 decimal(15,2) default 0 not null,
+    oth_amt4 decimal(15,2) default 0 not null,
+    exh_rate char(14),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_vou_date char(8),
+    pay_mode char(4),
+    pay_trn_flag char(1) not null,
+    pay_acct_type char(1),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name char(100),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    payee_mode varchar(4),
+    payee_trn_flag char(1) not null,
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_type char(1),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name char(100),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    runup_brch_no char(12),
+    fee_acct_no varchar(64),
+    fee_item_no varchar(20),
+    fee_type char(1),
+    fee_runup_brch_no char(12),
+    fee_add_flag char(1),
+    fee_agree_id char(10),
+    rev_plat_date char(8),
+    rev_seq_no BIGINT default 0 not null,
+    oth_plat_date char(8),
+    oth_seq_no BIGINT default 0 not null,
+    order_id char(20),
+    org_order_id char(20),
+    cncl_id char(40),
+    payee_runup_cncl_id char(40),
+    cncl_dir char(2),
+    bat_no char(20),
+    auth_no char(60),
+    bat_plat_date char(8),
+    bat_seq_no BIGINT default 0 not null,
+    tx_stat char(1) not null,
+    tx_msg varchar(255) not null,
+    pay_jrnl_num BIGINT default 0 not null,
+    pay_stat char(16) default 'NNNNNNNNNNNNNNNN' not null,
+    ret_cod char(20),
+    ret_msg varchar(255),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255),
+    ext_data varchar(300),
+    beg_date char(8) not null,
+    beg_time char(9) not null,
+    end_date char(8),
+    end_time char(9),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_tran_seq on t_tran_seq ( plat_date,seq_no);
+create unique index  ui_t_tran_seq1  on  t_tran_seq  (chnl_seq_no);
+
+create index  i_t_tran_seq1  on  t_tran_seq  (rsv_stat2);
+create index  i_t_tran_seq2  on  t_tran_seq  (chnl_date, sys_no, cncl_id, payee_runup_cncl_id);
+
+-- t_repeal  不确定明细查询表
+drop table t_repeal;
+create table t_repeal
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    org_chnl_no char(32) not null,
+    org_pe_no char(32) not null,
+    rep_serial_no char(32) not null,
+    host_payee_seq_no char(32) not null,
+    tx_code char(40),
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    day_amt decimal(15,2) default 0 not null,
+    mon_amt decimal(15,2) default 0 not null,
+    trn_amt decimal(15,2) default 0 not null,
+    pay_mode char(4),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    payee_mode varchar(4),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    order_id char(20),
+    repeal_num BIGINT not null,
+    stat char(1),
+    tx_stat char(1) not null,
+    ret_cod char(20),
+    ret_msg varchar(255),
+    rep_date char(8) not null,
+    beg_time char(9) not null,
+    end_time char(9),
+    sign_flag char(1) not null
+);
+
+create unique index uidx_t_repeal on t_repeal ( plat_date,seq_no);
+create unique index  ui_t_repeal1  on  t_repeal  (org_chnl_no);
+
+
+-- t_bill_book  
+drop table t_bill_book;
+create table t_bill_book
+(
+    plat_date char(10) not null,
+    seq_no bigint,
+    sys_seq char(50),
+    channel char(9),
+    chnl_date char(8),
+    chnl_seq char(32),
+    timestamp char(14),
+    send_tx_date char(8),
+    send_tx_time char(6),
+    area_code char(12),
+    area_name char(60),
+    clear_date char(8),
+    clear_times char(1),
+    send_bank char(14),
+    send_bank_name varchar(146),
+    send_bank_type char(1),
+    recv_bank char(14),
+    recv_bank_name varchar(146),
+    recv_bank_type char(1),
+    clear_wait_type char(2),
+    clear_type char(1),
+    corr_flag char(2) default '0',
+    send_brch char(12),
+    clear_brch char(12),
+    effect_brch char(12),
+    entr_teller char(12),
+    chk_teller char(12),
+    auth_teller char(12),
+    busi_type char(3),
+    credit_flag char(1),
+    my_bank char(14),
+    processmode char(2),
+    curr_no char(3),
+    rate_type char(1),
+    tx_amt decimal(16,2),
+    tx_type char(2),
+    cash_pro_code char(8),
+    cashlogid char(20),
+    cashtype char(20),
+    brchid char(12),
+    drawee_wait_no char(45),
+    drawee_type char(3),
+    drawee_acct char(35),
+    drawee_name varchar(146),
+    drawee_vch_type char(13),
+    drawee_vch_no char(20),
+    drawee_vch_date char(8),
+    pay_passwd char(20),
+    keyindex char(40),
+    sysid char(4),
+    pwd_chktype char(3),
+    drawee_track2 char(37),
+    drawee_track3 char(37),
+    frozeseq char(32),
+    bill_amt decimal(16,2),
+    bill_balamt decimal(16,2),
+    tc_agent_type char(8),
+    tc_agent_no char(60),
+    payee_type char(3),
+    payee_acct char(35),
+    payee_name varchar(146),
+    real_payee_type char(3),
+    real_payee_acct char(35),
+    real_payee_name varchar(146),
+    cust_remark varchar(300),
+    bank_remark varchar(300),
+    last_orderid char(32),
+    insert_orderid char(32),
+    transactor varchar(146),
+    trans_nation char(6),
+    trans_cert_type char(4),
+    trans_cert_no char(20),
+    trans_cert_addr char(60),
+    trans_phone char(15),
+    agent_man varchar(146),
+    agent_nation char(6),
+    agent_cert_type char(4),
+    agent_cert_no char(20),
+    agent_cert_addr char(60),
+    agent_phone char(15),
+    oth_nation char(6),
+    oth_act_type char(3),
+    oth_tran_no char(20),
+    tran_stat char(2),
+    clear_stat char(2),
+    clr_err_stat char(2),
+    ret_code char(20),
+    ret_msg varchar(80),
+    ref_code char(20),
+    ref_msg char(200),
+    ref_plat_date char(8),
+    ref_seq_no bigint,
+    ref_flag char(1) default '“0”',
+    prt_times long(1),
+    host_date char(10),
+    host_seq char(32),
+    bat_no char(45),
+    db_proc_stat char(2) default '"00"',
+    db_proc_num long default 0,
+    db_plat_date char(8),
+    db_seq_no bigint,
+    db_host_date char(8),
+    db_host_seq char(32),
+    db_orderid char(32),
+    old_plat_date char(8),
+    old_seq_no bigint,
+    mod_brch char(12),
+    mod_teller char(12),
+    mod_tx_time char(14),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index uidx_t_bill_book on t_bill_book ( plat_date,seq_no);
+create unique index  ui_t_bill_book1  on  t_bill_book  (chnl_seq);
+
+create index  i_t_bill_book1  on  t_bill_book  (area_code, clear_date, clear_times, curr_no);
+create index  i_t_bill_book2  on  t_bill_book  (busi_type, tran_stat, db_proc_stat);
+
+-- t_bill_tracert  
+drop table t_bill_tracert;
+create table t_bill_tracert
+(
+    tc_plat_date char(8),
+    tc_seq_no bigint,
+    plat_date char(8),
+    seq_no bigint,
+    act_date char(8),
+    act_time char(6),
+    timestamp char(14),
+    brch_no char(12),
+    teller_no char(12),
+    chk_teller char(12),
+    auth_teller char(12),
+    tran_code char(30),
+    tran_name char(100),
+    old_stat char(2),
+    curr_stat char(2),
+    last_no char(32),
+    wait_no char(32),
+    tx_amt double,
+    remark varchar(300),
+    summary varchar(300),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index uidx_t_bill_tracert on t_bill_tracert ( tc_plat_date,plat_date,act_date,act_time,tran_code);
+create unique index  ui_t_bill_tracert1  on  t_bill_tracert  (tc_plat_date, tc_seq_no, plat_date, seq_no);
+
+create index  i_t_bill_tracert2  on  t_bill_tracert  (wait_no);
+create index  i_t_bill_tracert3  on  t_bill_tracert  (wait_no);
+
+-- t_bill_bank  
+drop table t_bill_bank;
+create table t_bill_bank
+(
+    area_code char(12) not null,
+    bank_no char(14) not null,
+    bank_name char(200),
+    bank_type char(1),
+    stat char(1),
+    mybank_flag char(1),
+    major_brch char(12),
+    addr_post char(256),
+    link_man char(60),
+    link_phone char(40),
+    eff_date char(8) not null,
+    inv_date char(8),
+    update_date char(8) not null,
+    teller_no char(12),
+    auth_teller char(12),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index uidx_t_bill_bank on t_bill_bank ( stat);
+create unique index  ui_t_bill_bank1  on  t_bill_bank  (area_code, bank_no);
+
+create index  i_t_bill_bank2  on  t_bill_bank  (bank_name);
+
+-- t_bill_brch_msg  
+drop table t_bill_brch_msg;
+create table t_bill_brch_msg
+(
+    area_code char(12),
+    brch_no char(12),
+    brch_name char(146),
+    bank_no char(14),
+    major_flag char(1),
+    major_brch char(12),
+    stat char(1),
+    tran_brch char(12),
+    tran_teller char(12),
+    auth_teller char(12),
+    tran_date char(8),
+    tran_time char(6),
+    mod_type char(2),
+    mod_date char(8),
+    mod_time char(6),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index uidx_t_bill_brch_msg on t_bill_brch_msg ( major_flag);
+create unique index  ui_t_bill_brch_ms1  on  t_bill_brch_msg  (area_code, brch_no, stat);
+
+
+-- t_bill_brch_times  
+drop table t_bill_brch_times;
+create table t_bill_brch_times
+(
+    area_code char(12),
+    brch_no char(12),
+    curr_no char(3),
+    out_date char(8),
+    out_times char(1),
+    in_date char(8),
+    in_times char(2),
+    chg_times_brch char(12),
+    chg_times_teller char(12),
+    chg_times_date char(8),
+    chg_times_time char(6),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index  ui_t_bill_brch_ti1  on  t_bill_brch_times  (area_code, brch_no, curr_no);
+
+
+-- t_bill_mng_area  
+drop table t_bill_mng_area;
+create table t_bill_mng_area
+(
+    area_code char(12),
+    area_name char(80) not null,
+    clear_brch char(12),
+    cb_clear_acct char(35),
+    cb_clear_acct_name char(80),
+    stat char(1),
+    entr_teller char(12),
+    auth_teller char(12),
+    mod_date char(8),
+    crt_date char(8),
+    stop_date char(8),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index uidx_t_bill_mng_area on t_bill_mng_area ( stat,stop_date);
+create unique index  ui_t_bill_mng_are1  on  t_bill_mng_area  (area_code);
+
+
+-- t_bill_ref_code  
+drop table t_bill_ref_code;
+create table t_bill_ref_code
+(
+    area_code char(12),
+    ref_code char(3) not null,
+    ref_msg varchar(256),
+    stat char(1),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index uidx_t_bill_ref_code on t_bill_ref_code ( area_code,ref_code);
+
+
+-- t_bill_clear  
+drop table t_bill_clear;
+create table t_bill_clear
+(
+    plat_date char(10) not null,
+    seq_no bigint,
+    area_code char(12),
+    clear_date char(8),
+    clear_times char(1),
+    curr_no char(3),
+    clear_brch char(12),
+    db_num1 long(1),
+    db_amt1 decimal(16,2),
+    cr_num1 long(1),
+    cr_amt1 decimal(16,2),
+    db_num2 long(1),
+    db_amt2 decimal(16,2),
+    cr_num2 long(1),
+    cr_amt2 decimal(16,2),
+    tot_num long(1),
+    tot_amt decimal(16,2),
+    send_date char(8),
+    send_time char(6),
+    proc_flag char(2),
+    host_date char(8),
+    host_seq char(32),
+    order_id char(32),
+    detail_order_id char(32),
+    channel char(4),
+    channel_date char(8),
+    channel_seq_no char(32),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index uidx_t_bill_clear on t_bill_clear ( plat_date,tot_amt);
+create unique index  ui_t_bill_clear1  on  t_bill_clear  (plat_date, seq_no);
+
+create index  i_t_bill_clear2  on  t_bill_clear  (area_code, clear_date, clear_times, curr_no);
+
+-- t_bill_clear_detail  
+drop table t_bill_clear_detail;
+create table t_bill_clear_detail
+(
+    area_code char(12),
+    clear_date char(8),
+    clear_times char(1),
+    curr_no char(3),
+    bank_no char(14),
+    db_num1 long(1) default 0,
+    db_amt1 decimal(16,2) default 0,
+    cr_num1 long(1) default 0,
+    cr_amt1 decimal(16,2) default 0,
+    db_num2 long(1) default 0,
+    db_amt2 decimal(16,2) default 0,
+    cr_num2 long(1) default 0,
+    cr_amt2 decimal(16,2) default 0,
+    tot_num long(1),
+    tot_amt decimal(16,2),
+    my_db_num1 long(1) default 0,
+    my_db_amt1 decimal(16,2) default 0,
+    my_cr_num1 long(1) default 0,
+    my_cr_amt1 decimal(16,2) default 0,
+    my_db_num2 long(1) default 0,
+    my_db_amt2 decimal(16,2) default 0,
+    my_cr_num2 long(1) default 0,
+    my_cr_amt2 decimal(16,2) default 0,
+    my_tot_num long(1),
+    my_tot_amt decimal(16,2),
+    cmp_flag char(2) not null,
+    detail_order_id char(32),
+    channel char(4),
+    channel_date char(8),
+    channel_seq_no char(32),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index  ui_t_bill_clear_d1  on  t_bill_clear_detail  (area_code, clear_date, clear_times, curr_no, bank_no);
+
+
+-- t_bill_bat_bank  
+drop table t_bill_bat_bank;
+create table t_bill_bat_bank
+(
+    plat_date char(10) not null,
+    seq_no long(1) not null,
+    area_code char(12),
+    send_file_name char(200),
+    recv_file_name char(200),
+    stat char(1),
+    fail_reason char(200),
+    timestamp char(14),
+    tran_brch char(12),
+    tran_teller char(12),
+    auth_teller char(12),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index uidx_t_bill_bat_bank on t_bill_bat_bank ( stat);
+create unique index  ui_t_bill_bat_ban1  on  t_bill_bat_bank  (plat_date, seq_no);
+
+create index  i_t_bill_bat_ban2  on  t_bill_bat_bank  (send_file_name);
+
+-- t_bill_mng_area_acct  
+drop table t_bill_mng_area_acct;
+create table t_bill_mng_area_acct
+(
+    area_code char(12),
+    curr_no char(3),
+    cb_clear_acct char(35),
+    cb_clear_acct_name char(146),
+    entr_teller char(12),
+    auth_teller char(12),
+    mod_date char(8),
+    memo1 char(32),
+    memo2 char(32),
+    dac char(16)
+);
+
+create unique index  ui_t_bill_mng_are1  on  t_bill_mng_area_acct  (area_code, curr_no);
+
+
+-- t_pu_acct_info  虚拟帐号信息表
+drop table t_pu_acct_info;
+create table t_pu_acct_info
+(
+    inst_seq char(50),
+    seq_no char(50),
+    vacct_no char(50) not null,
+    times BIGINT,
+    start_date char(8),
+    start_time char(9),
+    end_date char(8),
+    end_time char(9),
+    crt_date char(8),
+    dst_type char(8),
+    dst_amt decimal(15,2),
+    dst_seq1 char(100),
+    dst_name1 varchar(300),
+    dst_type1 char(8),
+    dst_seq2 char(100),
+    dst_name2 varchar(300),
+    dst_type2 char(8),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    pay_cert_type char(6),
+    pay_cert_no varchar(60),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(100),
+    payee_cert_type char(6),
+    payee_cert_no varchar(60)
+);
+
+create unique index uidx_t_pu_acct_info on t_pu_acct_info ( inst_seq);
+
+
+-- t_pay_chnl_ext  资金通道表
+drop table t_pay_chnl_ext;
+create table t_pay_chnl_ext
+(
+    pay_chnl char(4) not null,
+    dc_type char(1) not null,
+    rev_flag char(1) not null,
+    refund_flag char(1),
+    svc_name char(50),
+    dta_name char(50),
+    bat_flag char(1),
+    flag1 char(1),
+    flag2 char(1),
+    flag3 char(1),
+    flag4 char(1),
+    flag5 char(1),
+    flag6 char(1),
+    num1 BIGINT,
+    num2 BIGINT,
+    value1 char(20),
+    value2 char(20),
+    value3 char(20),
+    value4 char(20),
+    memo1 varchar(300),
+    memo2 varchar(300),
+    memo3 varchar(300),
+    memo4 varchar(300)
+);
+
+create unique index uidx_t_pay_chnl_ext on t_pay_chnl_ext ( pay_chnl);
+
+create index  i_t_pay_chnl_ext1  on  t_pay_chnl_ext  (pay_chnl, flag2);
+
+-- t_order_task  汇总核销生成文件控制表
+drop table t_order_task;
+create table t_order_task
+(
+    plat_date char(8) not null,
+    seq_no BIGINT not null,
+    order_id char(20) not null,
+    chn_seq_no char(32),
+    clr_type char(1),
+    clear_ction char(40),
+    tot_row BIGINT default 0,
+    tot_amt decimal(16,2) default 0,
+    clr_row BIGINT default 0,
+    clr_amt decimal(16,2) default 0,
+    clear_sdate char(8),
+    clear_edate char(8),
+    file_name varchar(255),
+    file_path varchar(300),
+    org_stat char(1),
+    clr_stat char(1),
+    times BIGINT default 0 not null,
+    crt_stat char(2),
+    ftp_stat char(2) not null,
+    errmsg char(60),
+    memo varchar(60),
+    dac char(16),
+    last_date char(8) not null
+);
+
+create unique index uidx_t_order_task on t_order_task ( plat_date,seq_no);
+create unique index  ui_t_order_task1  on  t_order_task  (order_id);
+
+
+-- t_order_clr_ctrl  单笔订单自动汇总核销控制表
+drop table t_order_clr_ctrl;
+create table t_order_clr_ctrl
+(
+    sys_no char(3) not null,
+    clr_cond_exp char(40) not null,
+    star_time char(6) not null,
+    end_time char(6) not null,
+    clr_dir char(1) not null,
+    wait_time BIGINT default 0 not null,
+    div_date BIGINT default 0 not null,
+    flag char(1) not null,
+    operate_type char(23),
+    productid char(20),
+    max_num BIGINT default 0 not null,
+    min_num BIGINT default 0 not null,
+    div_time BIGINT default 0,
+    rmk1_int BIGINT,
+    rmk2_int BIGINT,
+    rmk1_str char(300),
+    rmk2_str char(300),
+    dac char(100)
+);
+
+create unique index uidx_t_order_clr_ctrl on t_order_clr_ctrl ( sys_no,clr_cond_exp,clr_dir);
+
+create index  i_t_order_clr_ct1  on  t_order_clr_ctrl  (star_time, end_time, flag);
+
+-- t_order_clr_book  单笔订单自动汇总核销记录表
+drop table t_order_clr_book;
+create table t_order_clr_book
+(
+    sys_no char(3) not null,
+    clr_condition char(40) not null,
+    clr_dir char(1) not null,
+    crt_date char(8) not null,
+    order_id char(20) not null,
+    payee_amt decimal(15,2) default 0 not null,
+    pay_amt decimal(15,2) default 0 not null,
+    payee_tot_num BIGINT default 0 not null,
+    pay_tot_num BIGINT default 0 not null,
+    oth_payee_amt decimal(15,2) default 0 not null,
+    oth_pay_amt decimal(15,2) default 0 not null,
+    oth_payee_tot_num BIGINT default 0 not null,
+    oth_pay_tot_num BIGINT default 0 not null,
+    stat char(1) not null,
+    status1 char(100),
+    star_time char(6) not null,
+    end_time char(6) not null,
+    wait_time BIGINT default 0 not null,
+    div_date BIGINT default 0 not null,
+    max_num BIGINT default 0 not null,
+    min_num BIGINT default 0 not null,
+    operate_type char(23),
+    productid char(20),
+    upt_date char(8),
+    upt_time char(6),
+    dtl_table_name char(100),
+    div_time BIGINT default 0,
+    next_time char(20) default '0',
+    do_times BIGINT default 0 not null,
+    rmk1_int BIGINT,
+    rmk2_int BIGINT,
+    rmk1_str char(300),
+    rmk2_str char(300),
+    dac char(100)
+);
+
+create unique index uidx_t_order_clr_book on t_order_clr_book ( sys_no,clr_condition,clr_dir);
+
+create index  i_t_order_clr_bo1  on  t_order_clr_book  (crt_date, order_id, stat, star_time, end_time, next_time);
+
+-- t_ctrl_group  分组信息表
+drop table t_ctrl_group;
+create table t_ctrl_group
+(
+    operate_type char(23) not null,
+    productid char(20) not null,
+    ctrl_id char(20) not null,
+    group_id char(40) not null,
+    dc_flag BIGINT not null,
+    stat BIGINT default 0 not null,
+    rmk1_str varchar(300),
+    rmk2_str varchar(300),
+    dac varchar(100)
+);
+
+create unique index uidx_t_ctrl_group on t_ctrl_group ( operate_type,productid,ctrl_id,group_id,dc_flag);
+
+
+-- t_prd_sign  多维产品签约表
+drop table t_prd_sign;
+create table t_prd_sign
+(
+    par_ctrl_id char(22) not null,
+    ctrl_id char(20) not null,
+    idx BIGINT(6) not null,
+    sys_no char(6) not null,
+    group_id char(40) default '0' not null,
+    befor_epx varchar(300),
+    after_epx varchar(300),
+    acct_flag char(1),
+    tran_type char(1),
+    rmk1 varchar(100),
+    rmk2 varchar(300),
+    rmk3 varchar(300),
+    rmk4 varchar(300)
+);
+
+create unique index uidx_t_prd_sign on t_prd_sign ( par_ctrl_id,ctrl_id,idx,sys_no,group_id);
+
+
+-- t_mutl_data  多维产品数据表
+drop table t_mutl_data;
+create table t_mutl_data
+(
+    operate_type char(23) not null,
+    productid char(20) not null,
+    acct_no varchar(40) not null,
+    ctrl_id char(20) not null,
+    dc_flag BIGINT not null,
+    ext_data varchar(300),
+    rmk1_str varchar(300),
+    rmk2_str varchar(300),
+    dac varchar(100)
+);
+
+create unique index uidx_t_mutl_data on t_mutl_data ( operate_type,productid,acct_no,ctrl_id,dc_flag);
+
+
+-- t_pro_svc_noti  产品映射通知表
+drop table t_pro_svc_noti;
+create table t_pro_svc_noti
+(
+    sys_no char(3) not null,
+    operate_type char(23) not null,
+    productid char(20) not null,
+    noti_type char(2) not null,
+    rev_dta_name char(50) not null,
+    rev_svc_name char(50) not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255)
+);
+
+create unique index uidx_t_pro_svc_noti on t_pro_svc_noti ( sys_no,operate_type,productid,noti_type);
+
+
+-- t_par_task  并行任务表
+drop table t_par_task;
+create table t_par_task
+(
+    job_id char(20) not null,
+    task_id char(20) not null,
+    src_tbl char(50),
+    tgt_tbl char(50),
+    start_idx BIGINT,
+    end_idx BIGINT,
+    scope_state varchar(255),
+    node_no char(10),
+    task_pid BIGINT,
+    ala_name char(50),
+    svc_name char(50),
+    crt_date char(8),
+    crt_time char(10),
+    beg_date char(8),
+    beg_time char(10),
+    end_date char(8),
+    end_time char(10),
+    try_times BIGINT,
+    stat char(2) not null,
+    err_msg varchar(255),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_int1 BIGINT default 0,
+    rsv_int2 BIGINT default 0,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255)
+);
+
+create unique index uidx_t_par_task on t_par_task ( job_id,task_id);
+
+create index  i_t_par_task1  on  t_par_task  (job_id, stat);
+
+-- t_com_bat_ctrl  PE扩展业务控制表
+drop table t_com_bat_ctrl;
+create table t_com_bat_ctrl
+(
+    plat_date char(8) not null,
+    seq_no BIGINT not null,
+    chnl_seq_no char(32) not null,
+    busi_no char(8),
+    busi_name varchar(255),
+    bat_prj_no char(15),
+    bat_no char(20),
+    order_id char(20),
+    org_order_id char(20),
+    chnl_no char(4),
+    snd_brch char(12),
+    snd_oper char(20),
+    sys_domain char(3),
+    tot_num BIGINT default 0,
+    tot_amt decimal(16,2) default 0,
+    suc_num BIGINT default 0,
+    suc_amt decimal(16,2) default 0,
+    fal_num BIGINT default 0,
+    fal_amt decimal(16,2) default 0,
+    stat char(2),
+    times BIGINT default 0,
+    act_date char(8),
+    act_time char(6),
+    redo_date char(8),
+    redo_tims char(6),
+    pe_seq_no char(32),
+    oth_seq_no char(32),
+    oth_amt1 decimal(16,2) default 0,
+    oth_amt2 decimal(16,2) default 0,
+    oth_num1 BIGINT default 0,
+    oth_num2 BIGINT default 0,
+    oth_date1 char(8),
+    oth_date2 char(8),
+    node_no BIGINT default 0,
+    bat_pid BIGINT default 0,
+    ret_code char(20),
+    ret_msg varchar(255),
+    bat_file char(128),
+    ret_file char(128),
+    bat_ip char(20),
+    bat_port char(10),
+    begin_date char(8),
+    begin_time char(6),
+    end_date char(8),
+    end_time char(6),
+    remark1 varchar(255),
+    remark2 varchar(255),
+    remark3 varchar(255),
+    remark4 varchar(255),
+    ext_data varchar(300)
+);
+
+create unique index uidx_t_com_bat_ctrl on t_com_bat_ctrl ( plat_date,seq_no);
+create unique index  ui_t_com_bat_ctrl1  on  t_com_bat_ctrl  (chnl_seq_no);
+
+create index  i_t_com_bat_ctrl1  on  t_com_bat_ctrl  (busi_no, stat);
+
+-- t_ic_noti_redo  IC卡脚本通知补偿表
+drop table t_ic_noti_redo;
+create table t_ic_noti_redo
+(
+    plat_date char(8) not null,
+    seq_no int not null,
+    chnl_seq_no char(32) not null,
+    org_chnl_seq_no char(32) not null,
+    stat char(1) not null,
+    times int not null,
+    next_date char(8),
+    next_time char(9),
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255)
+);
+
+create unique index uidx_t_ic_noti_redo on t_ic_noti_redo ( plat_date,seq_no);
+create unique index  ui_t_ic_noti_redo1  on  t_ic_noti_redo  (org_chnl_seq_no);
+
+
+-- t_ctrl_drawee  消费场景表
+drop table t_ctrl_drawee;
+create table t_ctrl_drawee
+(
+    sys_no char(3),
+    chnl_no char(4),
+    pay_mode char(4),
+    drawee_operate_type char(23),
+    drawee_product_id char(20),
+    eusp_pay_trntype varchar(128),
+    eusp_payee_trntype varchar(128),
+    dm_pay_trntype varchar(128),
+    dm_payee_trntype varchar(128),
+    dm_pay_crd_savtype char(1),
+    dm_payee_crd_savtype char(1),
+    dm_pay_tt_no char(6),
+    dm_payee_tt_no char(6),
+    para_msg1 varchar(128),
+    para_msg2 varchar(128),
+    para_int1 BIGINT default 0 not null,
+    para_int2 BIGINT default 0 not null,
+    para_amt1 decimal(15,2) default 0 not null,
+    para_amt2 decimal(15,2) default 0 not null,
+    ext_data varchar(300),
+    flag char(2),
+    stat char(2),
+    type char(2),
+    value1 char(50),
+    value2 char(50),
+    value3 char(50),
+    value4 char(50),
+    value5 char(50),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    memo4 varchar(255),
+    memo5 varchar(255)
+);
+
+create unique index uidx_t_ctrl_drawee on t_ctrl_drawee ( sys_no,chnl_no,drawee_operate_type,drawee_product_id);
+
+create index  i_t_ctrl_drawee1  on  t_ctrl_drawee  (sys_no, chnl_no, flag);
+create index  i_t_ctrl_drawee2  on  t_ctrl_drawee  (drawee_operate_type, drawee_product_id, type);
+
+-- t_ctrl_svc_pass  支付控制场景表
+drop table t_ctrl_svc_pass;
+create table t_ctrl_svc_pass
+(
+    ctrl_no char(40) not null,
+    sys_no char(3),
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    memo4 varchar(255),
+    memo5 varchar(300)
+);
+
+create unique index  ui_t_ctrl_svc_pas1  on  t_ctrl_svc_pass  (ctrl_no);
+
+
+-- t_ctrl_competitor  对手信息控制表
+drop table t_ctrl_competitor;
+create table t_ctrl_competitor
+(
+    operate_type char(23),
+    product_id char(20),
+    tx_code char(40) not null,
+    memo1 varchar(255),
+    memo2 varchar(255),
+    memo3 varchar(255),
+    memo4 varchar(255),
+    memo5 varchar(300)
+);
+
+
+create index  i_t_ctrl_competi1  on  t_ctrl_competitor  (tx_code);
+
+-- t_de_flw  日切流程控制表
+drop table t_de_flw;
+create table t_de_flw
+(
+    plat_date varchar(8) not null,
+    clear_date varchar(8) not null,
+    do_job varchar(20) not null,
+    do_task varchar(20) not null,
+    beg_time varchar(6) not null,
+    end_time varchar(6) not null,
+    run_stat varchar(1) not null
+);
+
+create unique index uidx_t_de_flw on t_de_flw ( plat_date);
+
+
+-- t_delay_pay_book  延时汇款登记簿
+drop table t_delay_pay_book;
+create table t_delay_pay_book
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    sys_no char(3),
+    brch_no char(12),
+    teller_no char(12),
+    operate_type char(23) not null,
+    productid char(20) not null,
+    trans_type char(2),
+    app_type char(2),
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    in_curr_cod char(5),
+    in_curr_type char(1),
+    trn_amt decimal(15,2) default 0 not null,
+    fee decimal(15,2) default 0 not null,
+    oth_amt1 decimal(15,2) default 0 not null,
+    oth_amt2 decimal(15,2) default 0 not null,
+    oth_amt3 decimal(15,2) default 0 not null,
+    oth_amt4 decimal(15,2) default 0 not null,
+    exh_rate char(14),
+    pay_vou_type char(13),
+    pay_vou_no char(20),
+    pay_vou_date char(8),
+    pay_mode char(4),
+    pay_trn_flag char(1) not null,
+    pay_acct_type char(1),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name char(100),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    pay_main_acct_no char(64),
+    pay_phone_no char(20),
+    pay_acct_addr varchar(256),
+    pay_nation char(3),
+    pay_cert_type char(6),
+    pay_cert_no char(60),
+    payee_mode varchar(4),
+    payee_trn_flag char(1) not null,
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_type char(1),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name char(100),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    payee_inform_flg char(1),
+    payee_phone_no char(20),
+    payee_acct_addr varchar(256),
+    payee_nation char(3),
+    payee_cert_type char(6),
+    payee_cert_no char(60),
+    clear_acct_no char(64),
+    clear_acct_name varchar(146),
+    urgnt_flag char(1),
+    path_date char(8),
+    entrust_date char(8),
+    exh_session char(2),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    runup_brch_no char(12),
+    fee_acct_no varchar(64),
+    fee_item_no varchar(20),
+    fee_type char(1),
+    fee_runup_brch_no char(12),
+    fee_add_flag char(1),
+    fee_order_id char(32),
+    fee_agree_id char(10),
+    rev_chnl_seq_no char(32) not null,
+    rev_reason varchar(600),
+    rev_date char(8),
+    rev_time char(9),
+    oth_plat_date char(8),
+    oth_seq_no BIGINT default 0 not null,
+    auth_no char(60),
+    auth_amt decimal(15,2) default 0 not null,
+    auth_chnl_seq_no char(32) not null,
+    auth_rev_chnl_seq_no char(32) not null,
+    pay_chnl_seq_no char(32) not null,
+    pay_date char(8),
+    pay_time char(9),
+    pay_rev_chnl_seq_no char(32) not null,
+    pay_rev_date char(8),
+    pay_rev_time char(9),
+    app_date char(8),
+    app_time char(9),
+    next_date char(8),
+    next_time char(9),
+    pre_tx_stat char(2) not null,
+    tx_stat char(2) not null,
+    tx_msg varchar(255) not null,
+    qry_times BIGINT default 0 not null,
+    redo_times BIGINT default 0 not null,
+    auth_rev_times BIGINT default 0 not null,
+    cup_noti_times BIGINT default 0 not null,
+    ret_cod char(20),
+    ret_msg varchar(255),
+    ext_data varchar(300),
+    crt_date char(8),
+    crt_time char(9),
+    end_date char(8),
+    end_time char(9),
+    last_date char(8),
+    last_time char(9),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_stat3 char(8),
+    rsv_stat4 char(8),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    rsv_int3 BIGINT default 0 not null,
+    rsv_int4 BIGINT default 0 not null,
+    rsv_date1 char(8),
+    rsv_date2 char(8),
+    rsv_date3 char(8),
+    rsv_date4 char(8),
+    rsv_time1 char(9),
+    rsv_time2 char(9),
+    rsv_time3 char(9),
+    rsv_time4 char(9),
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255)
+);
+
+create unique index uidx_t_delay_pay_book on t_delay_pay_book ( plat_date,seq_no);
+create unique index  ui_t_delay_pay_bo1  on  t_delay_pay_book  (chnl_seq_no);
+
+create index  i_t_delay_pay_bo1  on  t_delay_pay_book  (trans_type, app_date, app_time, tx_stat);
+create index  i_t_delay_pay_bo2  on  t_delay_pay_book  (trans_type, next_date, next_time, tx_stat, redo_times);
+create index  i_t_delay_pay_bo3  on  t_delay_pay_book  (trans_type, next_date, next_time, tx_stat, auth_rev_times);
+
+-- t_acct_lock_sign  账户锁签约表
+drop table t_acct_lock_sign;
+create table t_acct_lock_sign
+(
+    acct_no varchar(40) not null,
+    cust_no varchar(40) not null,
+    cust_name varchar(300),
+    mobile_tel varchar(20) not null,
+    party_id varchar(40),
+    party_name varchar(300),
+    sign_org varchar(40),
+    sign_teller varchar(20),
+    lock_no varchar(40) not null,
+    d_or_c char(1) not null,
+    sign_stat char(1) not null,
+    sign_time varchar(14) not null,
+    begin_time char(14) not null,
+    end_time varchar(14),
+    last_time varchar(14),
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    sec_date char(8) not null
+);
+
+create unique index uidx_t_acct_lock_sign on t_acct_lock_sign ( acct_no,lock_no);
+
+create index  i_t_acct_lock_si1  on  t_acct_lock_sign  (cust_no);
+create index  i_t_acct_lock_si2  on  t_acct_lock_sign  (acct_no, sign_stat, begin_time);
+create index  i_t_acct_lock_si3  on  t_acct_lock_sign  (sec_date);
+
+-- t_lock_logic  锁逻辑表
+drop table t_lock_logic;
+create table t_lock_logic
+(
+    lock_no varchar(40) not null,
+    logic_no BIGINT default 0 not null,
+    rele_acct char(1),
+    data_elem varchar(40),
+    rule_no varchar(40),
+    rule_attr varchar(100) not null,
+    expr_str varchar(1024) not null,
+    group_num BIGINT default 0 not null,
+    judge_mode char(2),
+    ex_result varchar(20),
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255)
+);
+
+create unique index uidx_t_lock_logic on t_lock_logic ( lock_no,logic_no);
+
+
+-- t_sec_rule  规则表
+drop table t_sec_rule;
+create table t_sec_rule
+(
+    rule_no varchar(40) not null,
+    rule_group BIGINT default 0 not null,
+    rule_attr varchar(100) not null,
+    rule_value varchar(1024) not null,
+    rule_a_v_des varchar(1024),
+    data_ele varchar(40),
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255)
+);
+
+create unique index uidx_t_sec_rule on t_sec_rule ( rule_no,rule_attr,rule_value);
+
+create index  i_t_sec_rule1  on  t_sec_rule  (rule_attr);
+
+-- t_cust_svc_sign  客户服务协议签约表
+drop table t_cust_svc_sign;
+create table t_cust_svc_sign
+(
+    cust_no varchar(40) not null,
+    cust_name varchar(300) not null,
+    mobile_tel varchar(20) not null,
+    sign_org varchar(40),
+    sign_teller varchar(20),
+    sign_time char(14) not null,
+    end_time char(14),
+    sign_stat char(1) not null,
+    last_time char(14) not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    sec_date char(8) not null
+);
+
+create unique index uidx_t_cust_svc_sign on t_cust_svc_sign ( cust_no);
+
+create index  i_t_cust_svc_sig1  on  t_cust_svc_sign  (sec_date);
+
+-- t_lock_jrnl  违规交易明细表
+drop table t_lock_jrnl;
+create table t_lock_jrnl
+(
+    plat_date char(8) not null,
+    seq_no BIGINT default 0 not null,
+    chnl_no char(4) not null,
+    chnl_date char(8) not null,
+    chnl_seq_no char(32) not null,
+    chnl_svc_name char(40) not null,
+    chnl_svc_dsp varchar(128) not null,
+    sys_no char(3),
+    brch_no char(12),
+    teller_no char(12),
+    tx_code varchar(40),
+    curr_cod char(5) not null,
+    curr_type char(1) not null,
+    trn_amt decimal(15,2) default 0 not null,
+    pay_vou_type char(13),
+    pay_vou_no varchar(20),
+    pay_acct_type char(1),
+    pay_acct_brch_no char(30),
+    pay_acct_brch_name varchar(100),
+    pay_acct_no char(64),
+    pay_acct_name varchar(146),
+    payee_mode varchar(4),
+    payee_vou_type char(13),
+    payee_vou_no char(20),
+    payee_acct_brch_no char(30),
+    payee_acct_brch_name varchar(100),
+    payee_acct_no char(64),
+    payee_acct_name varchar(146),
+    dsp_msg varchar(300),
+    rmrk varchar(300),
+    tran_country_no varchar(16),
+    tran_city_no varchar(16),
+    ext_data varchar(300),
+    tx_stat char(1) not null,
+    lock_no_str varchar(1024) not null,
+    last_time char(14) not null,
+    noti_stat char(4) not null,
+    noti_times BIGINT default 0 not null,
+    next_time char(14),
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    sec_date char(8) not null
+);
+
+create unique index uidx_t_lock_jrnl on t_lock_jrnl ( plat_date,seq_no);
+create unique index  ui_t_lock_jrnl1  on  t_lock_jrnl  (chnl_seq_no);
+
+create index  i_t_lock_jrnl1  on  t_lock_jrnl  (pay_acct_no, last_time, noti_stat);
+create index  i_t_lock_jrnl2  on  t_lock_jrnl  (chnl_date, sys_no);
+create index  i_t_lock_jrnl3  on  t_lock_jrnl  (sec_date);
+
+-- t_sec_lock  账户锁表
+drop table t_sec_lock;
+create table t_sec_lock
+(
+    lock_no varchar(40) not null,
+    lock_name varchar(300) not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255)
+);
+
+create unique index uidx_t_sec_lock on t_sec_lock ( lock_no);
+
+
+-- t_sec_city_code  安全账户城市码表
+drop table t_sec_city_code;
+create table t_sec_city_code
+(
+    city_code char(4) not null,
+    city_name varchar(255),
+    main_city_code char(4) not null,
+    main_city_name varchar(255),
+    last_time varchar(14),
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255)
+);
+
+create unique index uidx_t_sec_city_code on t_sec_city_code ( city_code);
+
+
+-- t_chnl  渠道表
+drop table t_chnl;
+create table t_chnl
+(
+    chnl_no char(4) not null,
+    name varchar(256) not null,
+    short_name varchar(128) not null,
+    type char(2),
+    stat char(2),
+    svc_start_time char(9),
+    svc_end_time char(9),
+    ctrl_no char(50),
+    rsv_attr1 char(20),
+    rsv_attr2 char(20),
+    rsv_attr3 char(20),
+    rsv_attr4 char(20),
+    rsv_attr5 char(40),
+    rsv_attr6 char(40),
+    rsv_attr7 char(40),
+    rsv_attr8 char(40),
+    rsv_stat1 char(8),
+    rsv_stat2 char(8),
+    rsv_stat3 char(8),
+    rsv_stat4 char(8),
+    rsv_int1 BIGINT default 0 not null,
+    rsv_int2 BIGINT default 0 not null,
+    rsv_int3 BIGINT default 0 not null,
+    rsv_int4 BIGINT default 0 not null,
+    rsv_date1 char(8),
+    rsv_date2 char(8),
+    rsv_date3 char(8),
+    rsv_date4 char(8),
+    rsv_time1 char(9),
+    rsv_time2 char(9),
+    rsv_time3 char(9),
+    rsv_time4 char(9),
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255),
+    rsv_rmrk4 varchar(255)
+);
+
+create unique index uidx_t_chnl on t_chnl ( chnl_no);
+
+
+-- t_brch_merch_code  机构对应商户表
+drop table t_brch_merch_code;
+create table t_brch_merch_code
+(
+    brch_no varchar(12) not null,
+    pay_chnl char(4) not null,
+    merch_no varchar(255) not null,
+    stat char(1) not null,
+    map_data varchar(1024) not null,
+    rsv_rmrk1 varchar(255),
+    rsv_rmrk2 varchar(255),
+    rsv_rmrk3 varchar(255)
+);
+
+create unique index uidx_t_brch_merch_code on t_brch_merch_code ( brch_no,pay_chnl);
+
+
+-- t_exchange_rate_info  汇率信息表
+drop table t_exchange_rate_info;
+create table t_exchange_rate_info
+(
+    curr_code char(6) not null,
+    china_dsp varchar(200),
+    price decimal(12,6),
+    trade_curr_code char(3),
+    usa_price decimal(12,5),
+    issue_date char(8),
+    curr_unit decimal(6,0),
+    exch_rate_type char(1)
+);
+
+
+create index  i_t_exchange_rat1  on  t_exchange_rate_info  (trade_curr_code, exch_rate_type);
+

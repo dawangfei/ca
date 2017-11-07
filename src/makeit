@@ -1,0 +1,85 @@
+#!/bin/ksh
+
+target=""
+if [[ $# -gt 0 ]]; then
+    target="$@"
+fi
+
+lockfile="${CACHE}/.make.lock"
+tmpfile="${lockfile}.$$"
+echo $$ > $tmpfile
+
+if ln $tmpfile $lockfile 2>&-; then
+    echo ""
+else
+    echo "It's running by [$(<$lockfile)]. Please wait a moment!"
+    rm $tmpfile
+    exit
+fi
+trap "rm ${tmpfile} ${lockfile}" 0 1 2 3 15
+
+cd ${CACHE}/src
+
+# WARN: don't use any space
+list="
+api
+aux
+blk
+crt
+ext
+his
+list
+load
+lock
+query
+rs
+sec
+seg
+shm
+sql
+tm
+tree
+stack
+where
+"
+
+#LOG="./makeit.log"
+#exec 3>${LOG}
+#exec 1>&3
+
+ERR="./makeit.err"
+exec 4>${ERR}
+exec 2>&4
+
+MKFLG="-j 4"
+
+for item in $list
+do
+    item=${item%%#*} # clear all after '#';
+    if [[ -z $item || ${item} = @(* ) ]]; then
+        continue;
+    fi
+    echo "++++ <$item> begin ++++"
+
+    #continue;
+
+    make -f ${item}.mak clean
+    make ${MKFLG} -f ${item}.mak $target
+    rv=$?
+    if [[ $rv -ne 0 ]]; then
+        echo "error: make -f ${item}.mak failure with $rv."
+        echo "\tplease see error in ${ERR}"
+        exit $rv;
+    fi
+    cd -
+
+    echo "++++ <$item> end   ++++"
+done
+
+#exec 3>&-
+exec 4>&-
+
+echo ">>>> Nice, no errors!"
+echo "All warns are redirected in ${ERR}."
+
+# makeit

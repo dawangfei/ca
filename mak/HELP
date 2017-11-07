@@ -1,0 +1,12 @@
+#
+
+# HPUX+ORACLE
+ln -sf database.mak.ora database.mak
+ln -sf platform.mak.HPUX.11.31 platform.mak
+
+
+# AIX+DB2
+ln -sf database.mak.db2  database.mak
+ln -sf platform.mak.AIX6 platform.mak
+
+#

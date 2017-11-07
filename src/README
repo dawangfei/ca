@@ -1,0 +1,28 @@
+# README
+
+log.c           -- 日志
+util.c          -- 基础功能函数
+
+rb_tree.c       -- 红黑树，共享内存版本
+
+shm.c           -- 整个共享内存
+blk.c           -- A/B块
+seg.c           -- 段
+sec.c           -- 扇区unit (NO)
+
+
+load.c          -- 把表读入内存
+
+where.c         -- 解析where字句
+sql.c           -- 解析sql
+
+rs.c            -- 数据结果集 result set
+
+his.c           -- 历史查询缓存 TODO
+
+query.c         -- 查询数据
+
+tm.c            -- 时间，没关键作用
+
+
+# README

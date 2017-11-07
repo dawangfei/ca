@@ -1,0 +1,11 @@
+#!/bin/ksh
+
+# 
+KEY=7788
+
+caadm << EOF
+conn -k ${KEY}
+cache -s enable
+EOF
+
+# enableca

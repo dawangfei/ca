@@ -1,0 +1,23 @@
+include $(CACHE)/mak/platform.mak
+include $(CACHE)/mak/database.mak
+
+SQLOBJS_EXT= dbext.o
+TARGET=${CACHE}/lib/${SQLOBJS_EXT}
+
+BASEINCL  = ${CACHE}/incl/dbincl
+
+all: ${TARGET}
+
+dep:all
+
+clean:
+	@-rm -f ${TARGET} ${SQLOBJS_EXT}
+
+${TARGET}: ${SQLOBJS_EXT}
+	cp -f ${SQLOBJS_EXT} ${TARGET}
+
+.SUFFIXES: .o
+
+.c.o:
+	${CC} ${CCFLG} ${DB2CFLGS} -I${BASEINCL} -DDB2 -c $*.c
+

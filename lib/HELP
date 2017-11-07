@@ -1,0 +1,9 @@
+#
+
+# ORACLE
+ln -sf libdbapi_ora.a.11.2.0.4.0 libdbapi.a
+
+# DB2
+ln -sf libdbapi_db2.a.v9.7.0.10  libdbapi.a
+
+#

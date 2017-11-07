@@ -1,0 +1,7 @@
+#
+
+
+valgrind --leak-check=full  norm > val.log  2>&1
+
+
+#

@@ -1,0 +1,1 @@
+gcc -L/oracle/product/11.2.0/lib -lclntsh `cat /oracle/product/11.2.0/lib/sysliblist` -DORA10 -D_DB_ORA -I/oracle/product/11.2.0/rdbms/public -I/oracle/product/11.2.0/precomp/public -W -mlp64 -D_REENTRANT -D__BIGMSGQUEUE_ENABLED -Wall -g -DDEV  -DDB_KEEPALIVE  -c -I../include  oradbapi.c

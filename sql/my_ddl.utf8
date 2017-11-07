@@ -1,0 +1,146 @@
+-- T_PLAT_PARA  平台参数表
+-- T_TX         交易码表
+-- T_CREDIT_BIN 信用卡卡BIN表
+-- T_BIN        借记卡卡BIN表
+-- T_CTRL_BW_BFR  黑白名单辅助表
+-- T_CTRL_VALUE  产品配置表
+
+-- T_PLAT_PARA
+drop table t_plat_para
+create table t_plat_para \
+( \
+    plat_no char(20) not null, \
+    plat_name varchar(60), \
+    sys_no char(4) not null, \
+    plat_stat char(1) default '1' not null, \
+    plat_date char(8), \
+    clear_date char(8), \
+    pre_date char(8), \
+    act_date char(8), \
+    brch_no char(12), \
+    dayend_flag BIGINT, \
+    dayend_date char(8), \
+    dayend_time char(6), \
+    dayend_sec BIGINT default 28800 not null, \
+    pass_day BIGINT default 90 not null, \
+    hist_day BIGINT default 365 not null, \
+    file_len BIGINT default 10485760 not null, \
+    qry_num BIGINT default 50 not null, \
+    plat_seq BIGINT default 0 not null, \
+    pay_seq BIGINT default 0 not null, \
+    bat_seq BIGINT default 0 not null, \
+    plat_version char(20) default '0', \
+    dac char(16) \
+)
+
+create unique index uidx_t_plat_para on t_plat_para ( plat_no)
+
+-- T_TX  交易码表
+drop table t_tx
+create table t_tx \
+( \
+    tx_code varchar(50) not null, \
+    tx_type char(1), \
+    tx_flag char(1) not null, \
+    jrnl_flag char(1) not null, \
+    tx_stat char(1) default 'Y' not null, \
+    tx_name char(60), \
+    item_no char(6) not null, \
+    rev_dta varchar(20), \
+    rev_svc varchar(50), \
+    crt_psn char(20), \
+    crt_time char(14), \
+    mod_psn char(20), \
+    mod_time char(14), \
+    dac char(16) \
+)
+
+create unique index uidx_t_tx on t_tx ( tx_code)
+
+
+-- T_CREDIT_BIN  信用卡卡BIN表
+drop table t_credit_bin
+create table t_credit_bin \
+( \
+    bin char(6) not null, \
+    name char(50) \
+)
+
+create unique index uidx_t_credit_bin on t_credit_bin ( bin)
+
+
+-- T_BIN  借记卡卡BIN表
+drop table t_bin
+create table t_bin \
+( \
+    bin char(6) not null \
+)
+
+create unique index uidx_t_bin on t_bin ( bin)
+
+
+-- T_CTRL_BW_BFR  黑白名单辅助表
+drop table t_ctrl_bw_bfr
+create table t_ctrl_bw_bfr \
+( \
+    chnl_no char(4), \
+    drawee_party_id char(30), \
+    drawee_party_name char(100), \
+    drawee_party_type char(100), \
+    product_id char(20), \
+    operate_type char(23), \
+    flag char(1), \
+    rsv1 varchar(255), \
+    rsv2 varchar(255) \
+)
+
+
+create index  i_t_ctrl_bw_bfr1  on  t_ctrl_bw_bfr  (chnl_no, drawee_party_id, flag)
+create index  i_t_ctrl_bw_bfr2  on  t_ctrl_bw_bfr  (product_id, operate_type)
+
+
+-- T_CTRL_VALUE  产品配置表
+drop table t_ctrl_value
+create table t_ctrl_value \
+( \
+    ctrl_no varchar(24) not null, \
+    ctrl_name varchar(60) not null, \
+    sys_no varchar(8) not null, \
+    product_id varchar(20) not null, \
+    operate_type varchar(30) not null, \
+    svc_dta varchar(20) not null, \
+    svc_name varchar(20) not null, \
+    svc_pay_dir BIGINT not null, \
+    svc_type varchar(2) not null \
+)
+
+create unique index uidx_t_ctrl_value on t_ctrl_value ( ctrl_no,product_id,operate_type,svc_pay_dir)
+
+
+CREATE TABLE TBL_LOG_COUNTER \
+( \
+    PAN               CHAR(28 BYTE) NOT NULL , \
+    TXN_TYPE          CHAR(6 BYTE) NOT NULL , \
+    TXN_DATE          CHAR(8 BYTE) NOT NULL , \
+    FAIL_CONTINUE_NUM BIGINT NOT NULL , \
+    FAIL_TOTAL_NUM    BIGINT NOT NULL , \
+    SUCC_TOTAL_NUM    BIGINT NOT NULL , \
+    INST_DATE_TIME    CHAR(14 BYTE), \
+    LAST_FAIL_TIME    CHAR(14 BYTE), \
+    LAST_SUCC_TIME    CHAR(14 BYTE) \
+)
+
+CREATE UNIQUE INDEX UIDX_COUNTER_UNIQ_1 ON TBL_LOG_COUNTER ( PAN, TXN_TYPE)
+
+
+create table t_ctrl_acct \
+( \
+    acct_no varchar(40), \
+    ctrl_type char(2), \
+    ctrl_no varchar(20) \
+)
+
+create unique index uidx_t_ctrl_acct on t_ctrl_acct ( acct_no,ctrl_type)
+
+
+

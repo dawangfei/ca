@@ -1,0 +1,1682 @@
+/*
+ *    Copyright (c) 2001-2003 ADTEC Ltd.
+ *    All rights reserved
+ *
+ *    This is unpublished proprietary source code of ADTEC Ltd.
+ *    The copyright notice above does not evidence any actual
+ *    or intended publication of such source code.
+ *
+ *    NOTICE: UNAUTHORIZED DISTRIBUTION, ADAPTATION OR USE MAY BE
+ *    SUBJECT TO CIVIL AND CRIMINAL PENALTIES.
+ */
+
+/*
+ *    ProgramName : db2sqldyn.sqc
+ *    SystemName  : StarRing
+ *    Version     : 3.0
+ *    Language    : C
+ *    OS & Env    : RedHat Linux 9.0
+                    DB2    8.1.0.0
+ *    Description : 提供DB2 SQLDA操作封装
+ *    History     : 
+ *    YYYY/MM/DD        Position        Author         Description
+ *    -------------------------------------------------------------
+ *    2003/10/26        BeiJing         Handq          Creation
+ */
+
+#include <arcbcl.h>
+#include <arclog.h>
+
+#include <sql.h>
+#include <sqlenv.h>
+#include <sqlda.h>
+#include <sqlca.h>
+
+/*  Application include file define using different type */
+#include <__pladb.h>
+#include <arctrc.h>
+extern long FAP_SQLCODE;
+
+/* Global variable definition */
+static struct sqlca sqlca;
+static char err_msg[ERR_MSG_LEN+1];
+
+
+/*Function in this program define*/
+static double bcl_myatof_deleted( char * str );
+
+/*------------------------------------------------------------------------*
+ *  Function Name :int Db2Fun ()                                          *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+static long
+Db2Fun( char option, tSqlStru * _sqlstru, const char * _statement )
+{
+    EXEC SQL BEGIN DECLARE SECTION; 
+        char *h_sql_str;
+    EXEC SQL END DECLARE SECTION;
+    struct sqlda *h_desc_in=NULL;
+    struct sqlda *h_desc_out=NULL;
+    char sql_str[SQLSTRLEN];
+
+    trc_db_rec( "", sqlca.sqlcode );
+    switch( option ){
+        case 'p':
+            h_sql_str = _statement;
+            if( !strcmp( _sqlstru->prep_id, "0" )) {
+                EXEC SQL PREPARE S0 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S0 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "1" )) {
+                EXEC SQL PREPARE S1 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S1 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "2" )) {
+                EXEC SQL PREPARE S2 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S2 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "3" )) {
+                EXEC SQL PREPARE S3 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S3 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "4" )) {
+                EXEC SQL PREPARE S4 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S4 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "5" )) {
+                EXEC SQL PREPARE S5 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S5 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "6" )) {
+                EXEC SQL PREPARE S6 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S6 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "7" )) {
+                EXEC SQL PREPARE S7 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S7 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "8" )) {
+                EXEC SQL PREPARE S8 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S8 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "9" )) {
+                EXEC SQL PREPARE S9 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S9 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "10" )) {
+                EXEC SQL PREPARE S10 FROM :h_sql_str;
+                snprintf( sql_str, SQLSTRLEN, "PREPARE S10 FROM :%s", h_sql_str );
+                trc_db_rec( sql_str, sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        case 'd':
+            if( !strcmp( _sqlstru->curs_id, "C0" )) {
+                EXEC SQL DECLARE C0 CURSOR WITH HOLD FOR S0;
+                trc_db_rec( "DECLARE C0 CURSOR WITH HOLD FOR S0", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C1" )) {
+                EXEC SQL DECLARE C1 CURSOR WITH HOLD FOR S1;
+                trc_db_rec( "DECLARE C1 CURSOR WITH HOLD FOR S1", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C2" )) {
+                EXEC SQL DECLARE C2 CURSOR WITH HOLD FOR S2;
+                trc_db_rec( "DECLARE C2 CURSOR WITH HOLD FOR S2", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C3" )) {
+                EXEC SQL DECLARE C3 CURSOR WITH HOLD FOR S3;
+                trc_db_rec( "DECLARE C3 CURSOR WITH HOLD FOR S3", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C4" )) {
+                EXEC SQL DECLARE C4 CURSOR WITH HOLD FOR S4;
+                trc_db_rec( "DECLARE C4 CURSOR WITH HOLD FOR S4", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C5" )) {
+                EXEC SQL DECLARE C5 CURSOR WITH HOLD FOR S5;
+                trc_db_rec( "DECLARE C5 CURSOR WITH HOLD FOR S5", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C6" )) {
+                EXEC SQL DECLARE C6 CURSOR WITH HOLD FOR S6;
+                trc_db_rec( "DECLARE C6 CURSOR WITH HOLD FOR S6", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C7" )) {
+                EXEC SQL DECLARE C7 CURSOR WITH HOLD FOR S7;
+                trc_db_rec( "DECLARE C7 CURSOR WITH HOLD FOR S7", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C8" )) {
+                EXEC SQL DECLARE C8 CURSOR WITH HOLD FOR S8;
+                trc_db_rec( "DECLARE C8 CURSOR WITH HOLD FOR S8", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C9" )) {
+                EXEC SQL DECLARE C9 CURSOR WITH HOLD FOR S9;
+                trc_db_rec( "DECLARE C9 CURSOR WITH HOLD FOR S9", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C10" )) {
+                EXEC SQL DECLARE C10 CURSOR WITH HOLD FOR S10;
+                trc_db_rec( "DECLARE C10 CURSOR WITH HOLD FOR S10", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        case 'b':
+            h_desc_in = ( struct sqlda * )(_sqlstru->desc_id_in);
+            if( !strcmp( _sqlstru->prep_id, "0" )) {
+                EXEC SQL DESCRIBE INPUT S0 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S0 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "1" )) {
+                EXEC SQL DESCRIBE INPUT S1 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S1 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "2" )) {
+                EXEC SQL DESCRIBE INPUT S2 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S2 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "3" )) {
+                EXEC SQL DESCRIBE INPUT S3 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S3 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "4" )) {
+                EXEC SQL DESCRIBE INPUT S4 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S4 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "5" )) {
+                EXEC SQL DESCRIBE INPUT S5 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S5 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "6" )) {
+                EXEC SQL DESCRIBE INPUT S6 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S6 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "7" )) {
+                EXEC SQL DESCRIBE INPUT S7 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S7 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "8" )) {
+                EXEC SQL DESCRIBE INPUT S8 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S8 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "9" )) {
+                EXEC SQL DESCRIBE INPUT S9 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S9 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "10" )) {
+                EXEC SQL DESCRIBE INPUT S10 INTO :*h_desc_in;
+                trc_db_rec( "DESCRIBE INPUT S10 INTO :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        case 'o':
+            h_desc_in = ( struct sqlda * )(_sqlstru->desc_id_in);
+            if( !strcmp( _sqlstru->curs_id, "C0" )) {
+                EXEC SQL OPEN C0 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C0 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C1" )) {
+                EXEC SQL OPEN C1 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C1 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C2" )) {
+                EXEC SQL OPEN C2 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C2 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C3" )) {
+                EXEC SQL OPEN C3 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C3 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C4" )) {
+                EXEC SQL OPEN C4 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C4 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C5" )) {
+                EXEC SQL OPEN C5 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C5 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C6" )) {
+                EXEC SQL OPEN C6 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C6 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C7" )) {
+                EXEC SQL OPEN C7 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C7 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C8" )) {
+                EXEC SQL OPEN C8 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C8 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C9" )) {
+                EXEC SQL OPEN C9 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C9 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C10" )) {
+                EXEC SQL OPEN C10 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "OPEN C10 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        case 'u':
+            if( !strcmp( _sqlstru->curs_id, "C0" )) {
+                EXEC SQL OPEN C0;
+                trc_db_rec( "OPEN C0", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C1" )) {
+                EXEC SQL OPEN C1;
+                trc_db_rec( "OPEN C1", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C2" )) {
+                EXEC SQL OPEN C2;
+                trc_db_rec( "OPEN C2", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C3" )) {
+                EXEC SQL OPEN C3;
+                trc_db_rec( "OPEN C3", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C4" )) {
+                EXEC SQL OPEN C4;
+                trc_db_rec( "OPEN C4", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C5" )) {
+                EXEC SQL OPEN C5;
+                trc_db_rec( "OPEN C5", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C6" )) {
+                EXEC SQL OPEN C6;
+                trc_db_rec( "OPEN C6", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C7" )) {
+                EXEC SQL OPEN C7;
+                trc_db_rec( "OPEN C7", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C8" )) {
+                EXEC SQL OPEN C8;
+                trc_db_rec( "OPEN C8", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C9" )) {
+                EXEC SQL OPEN C9;
+                trc_db_rec( "OPEN C9", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C10" )) {
+                EXEC SQL OPEN C10;
+                trc_db_rec( "OPEN C10", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        case 's':
+            h_desc_out = ( struct sqlda * )(_sqlstru->desc_id_out);
+            if( !strcmp( _sqlstru->prep_id, "0" )) {
+                EXEC SQL DESCRIBE OUTPUT S0 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S0 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "1" )) {
+                EXEC SQL DESCRIBE OUTPUT S1 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S1 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "2" )) {
+                EXEC SQL DESCRIBE OUTPUT S2 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S2 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "3" )) {
+                EXEC SQL DESCRIBE OUTPUT S3 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S3 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "4" )) {
+                EXEC SQL DESCRIBE OUTPUT S4 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S4 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "5" )) {
+                EXEC SQL DESCRIBE OUTPUT S5 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S5 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "6" )) {
+                EXEC SQL DESCRIBE OUTPUT S6 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S6 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "7" )) {
+                EXEC SQL DESCRIBE OUTPUT S7 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S7 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "8" )) {
+                EXEC SQL DESCRIBE OUTPUT S8 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S8 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "9" )) {
+                EXEC SQL DESCRIBE OUTPUT S9 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S9 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "10" )) {
+                EXEC SQL DESCRIBE OUTPUT S10 INTO :*h_desc_out;
+                trc_db_rec( "DESCRIBE OUTPUT S10 INTO :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        case 'f':
+            h_desc_out = ( struct sqlda * )(_sqlstru->desc_id_out);
+            if( !strcmp( _sqlstru->curs_id, "C0" )) {
+                EXEC SQL FETCH C0 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C0 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C1" )) {
+                EXEC SQL FETCH C1 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C1 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C2" )) {
+                EXEC SQL FETCH C2 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C2 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C3" )) {
+                EXEC SQL FETCH C3 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C3 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C4" )) {
+                EXEC SQL FETCH C4 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C4 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C5" )) {
+                EXEC SQL FETCH C5 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C5 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C6" )) {
+                EXEC SQL FETCH C6 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C6 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C7" )) {
+                EXEC SQL FETCH C7 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C7 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C8" )) {
+                EXEC SQL FETCH C8 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C8 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C9" )) {
+                EXEC SQL FETCH C9 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C9 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C10" )) {
+                EXEC SQL FETCH C10 USING DESCRIPTOR :*h_desc_out;
+                trc_db_rec( "FETCH C10 USING DESCRIPTOR :desc_id_out", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        case 'c':
+            if( !strcmp( _sqlstru->curs_id, "C0" )) {
+                EXEC SQL CLOSE C0;
+                trc_db_rec( "CLOSE C0", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C1" )) {
+                EXEC SQL CLOSE C1;
+                trc_db_rec( "CLOSE C1", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C2" )) {
+                EXEC SQL CLOSE C2;
+                trc_db_rec( "CLOSE C2", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C3" )) {
+                EXEC SQL CLOSE C3;
+                trc_db_rec( "CLOSE C3", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C4" )) {
+                EXEC SQL CLOSE C4;
+                trc_db_rec( "CLOSE C4", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C5" )) {
+                EXEC SQL CLOSE C5;
+                trc_db_rec( "CLOSE C5", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C6" )) {
+                EXEC SQL CLOSE C6;
+                trc_db_rec( "CLOSE C6", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C7" )) {
+                EXEC SQL CLOSE C7;
+                trc_db_rec( "CLOSE C7", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C8" )) {
+                EXEC SQL CLOSE C8;
+                trc_db_rec( "CLOSE C8", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C9" )) {
+                EXEC SQL CLOSE C9;
+                trc_db_rec( "CLOSE C9", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->curs_id, "C10" )) {
+                EXEC SQL CLOSE C10;
+                trc_db_rec( "CLOSE C10", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        case 'e':
+            h_desc_in = ( struct sqlda * )(_sqlstru->desc_id_in);
+            if( !strcmp( _sqlstru->prep_id, "0" )) {
+                EXEC SQL EXECUTE S0 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S0 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "1" )) {
+                EXEC SQL EXECUTE S1 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S1 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "2" )) {
+                EXEC SQL EXECUTE S2 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S2 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "3" )) {
+                EXEC SQL EXECUTE S3 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S3 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "4" )) {
+                EXEC SQL EXECUTE S4 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S4 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "5" )) {
+                EXEC SQL EXECUTE S5 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S5 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "6" )) {
+                EXEC SQL EXECUTE S6 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S6 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "7" )) {
+                EXEC SQL EXECUTE S7 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S7 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "8" )) {
+                EXEC SQL EXECUTE S8 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S8 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "9" )) {
+                EXEC SQL EXECUTE S9 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S9 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "10" )) {
+                EXEC SQL EXECUTE S10 USING DESCRIPTOR :*h_desc_in;
+                trc_db_rec( "EXECUTE S10 USING DESCRIPTOR :desc_id_in", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        case 'w':
+            if( !strcmp( _sqlstru->prep_id, "0" )) {
+                EXEC SQL EXECUTE S0;
+                trc_db_rec( "EXECUTE S0", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "1" )) {
+                EXEC SQL EXECUTE S1;
+                trc_db_rec( "EXECUTE S1", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "2" )) {
+                EXEC SQL EXECUTE S2;
+                trc_db_rec( "EXECUTE S2", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "3" )) {
+                EXEC SQL EXECUTE S3;
+                trc_db_rec( "EXECUTE S3", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "4" )) {
+                EXEC SQL EXECUTE S4;
+                trc_db_rec( "EXECUTE S4", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "5" )) {
+                EXEC SQL EXECUTE S5;
+                trc_db_rec( "EXECUTE S5", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "6" )) {
+                EXEC SQL EXECUTE S6;
+                trc_db_rec( "EXECUTE S6", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "7" )) {
+                EXEC SQL EXECUTE S7;
+                trc_db_rec( "EXECUTE S7", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "8" )) {
+                EXEC SQL EXECUTE S8;
+                trc_db_rec( "EXECUTE S8", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "9" )) {
+                EXEC SQL EXECUTE S9;
+                trc_db_rec( "EXECUTE S9", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+            if( !strcmp( _sqlstru->prep_id, "10" )) {
+                EXEC SQL EXECUTE S10;
+                trc_db_rec( "EXECUTE S10", sqlca.sqlcode );
+                return sqlca.sqlcode;
+            }
+        default:
+             return E_FAIL;
+    }
+
+    return E_OK;
+}
+
+static struct sqlda *
+sqldald( int _num )
+{
+    struct sqlda * psqlda;
+
+    psqlda = ( struct sqlda * )calloc( 1, SQLDASIZE( _num ) );
+    if( psqlda == NULL )
+        return NULL;
+
+    memcpy(psqlda->sqldaid, "SQLDA   ", 8);
+    psqlda->sqldabc = (sqlint32)SQLDASIZE( _num );
+    psqlda->sqln = _num;
+    psqlda->sqld = 0;
+
+    return psqlda;
+}
+/*------------------------------------------------------------------------*
+ *  Function Name :int Db2SqlAllocate ()                                  *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int 
+Db2SqlAllocate( tSqlStru *_sqlstru, const char * _descname, int _alloc_count )
+{
+    int i;
+
+    /* 20030815 handq SQLDA区优化,只在CloseDB时释放 */
+    if( _sqlstru->tsqlstat.alloc_stat )
+        return E_OK;
+
+    _sqlstru->desc_id_in = (char *)sqldald( _alloc_count );
+    if( _sqlstru->desc_id_in == ( char *) 0 )
+        _sqlstru->user_code = E_ALLOC;
+
+    _sqlstru->desc_id_out = (char *)sqldald( _alloc_count );
+    if( _sqlstru->desc_id_out == ( char *) 0 )
+        _sqlstru->user_code = E_ALLOC;
+    _sqlstru->desc_id_tmp = (char *)sqldald( _alloc_count );
+    if( _sqlstru->desc_id_tmp == ( char *) 0 )
+        _sqlstru->user_code = E_ALLOC;
+
+    if( _sqlstru->user_code == 0 )
+        _sqlstru->tsqlstat.alloc_stat = _alloc_count;
+    else {
+        if( _sqlstru->desc_id_in != ( char *) 0 )
+            free( _sqlstru->desc_id_in );
+        if( _sqlstru->desc_id_out != ( char *) 0 )
+            free( _sqlstru->desc_id_out );
+        if( _sqlstru->desc_id_tmp != ( char *) 0 )
+            free( _sqlstru->desc_id_tmp );
+        sprintf( _sqlstru->user_msg, " Db2 SqlAllocate error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    /* Allocate the pointers to the indicator variables, and the actual data. */
+    for( i = 0; i < _alloc_count; i++) {
+/*  DB2 Describe 重置了 sqlind/sqldata字段, 使用desc_id_tmp保存/恢复 */
+        (((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar)[i].sqlind = \
+                                    (short *)malloc( sizeof(short) );
+        (((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar)[i].sqldata = \
+                                    (char *)malloc( 1 );
+    }
+
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name :int Db2SqlDealloc  ()                                  *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int
+Db2SqlDealloc( tSqlStru *_sqlstru )
+{
+    int i;
+
+    if( _sqlstru->tsqlstat.alloc_stat ) {
+        /* Free space used by the descriptors themselves. */
+        for (i = 0; i < _sqlstru->tsqlstat.alloc_stat; i++ ) {
+            free((((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar)[i].sqlind);
+            if ((((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar)[i].sqldata )
+                free((((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar)[i].sqldata);
+        }
+
+        free((char *)(_sqlstru->desc_id_in));
+        free((char *)(_sqlstru->desc_id_out));
+        free((char *)(_sqlstru->desc_id_tmp));
+
+        _sqlstru->user_code = E_OK;
+        _sqlstru->tsqlstat.alloc_stat = 0;
+    }
+    else
+        _sqlstru->user_code=E_DESC_UNALLOCATED;
+
+    if( (_sqlstru->user_code == 0) && (_sqlstru->sql_code >= 0) ) {
+        _sqlstru->desc_id_in = NULL;
+        _sqlstru->desc_id_out = NULL;
+        _sqlstru->desc_id_tmp = NULL;
+    }
+    if(_sqlstru->sql_code || _sqlstru->user_code ) {
+        sprintf( _sqlstru->user_msg, " Db2 SqlDealloc error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name : int Db2SqlPrepare  ()                                 *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int 
+Db2SqlPrepare( tSqlStru *_sqlstru, const char *_prepare_name,const char *_sql_str )
+{
+    if( _sqlstru->tsqlstat.prep_stat == 0 )  {
+        strcpy(_sqlstru->prep_id,_prepare_name);
+        strcpy(_sqlstru->sql_str, _sql_str );
+
+        _sqlstru->sql_code = Db2Fun( 'p', _sqlstru, _sql_str );
+        if( _sqlstru->sql_code >= 0 )
+            _sqlstru->tsqlstat.prep_stat =1;
+    }
+    else 
+        _sqlstru->user_code = E_MULTI_PREP;
+
+    if(_sqlstru->sql_code || _sqlstru->user_code )  {
+        sprintf( _sqlstru->user_msg , " Db2 SqlPrepare error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name : int Db2SqlDeclare  ()                                 *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int 
+Db2SqlDeclare( tSqlStru *_sqlstru ,const char * _cursor_name , char _op_flag )
+{
+    strcpy(_sqlstru->curs_id,_cursor_name);
+    _sqlstru->op_flag = _op_flag;
+
+    if( _sqlstru->tsqlstat.prep_stat )  {
+        _sqlstru->sql_code = Db2Fun( 'd', _sqlstru, "" );
+        if(_sqlstru->sql_code >= 0 )
+            _sqlstru->tsqlstat.cur_allocstat = 1;
+    }
+    else 
+        _sqlstru->user_code = E_PREP_ID;
+
+    if( _sqlstru->sql_code || _sqlstru->user_code ) {
+        sprintf( _sqlstru->user_msg , " Db2 SqlDeclare error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    return E_OK;
+}
+
+static int
+sqldalen( struct sqlda * _sqlda, int _i )
+{
+    int h_get_length;
+    short h_precision;
+
+    if( _sqlda == NULL )
+        return -1;
+
+    switch( _sqlda->sqlvar[_i].sqltype ) {
+        case SQL_TYP_DATE:
+        case SQL_TYP_NDATE:
+        case SQL_TYP_TIME:
+        case SQL_TYP_NTIME:
+        case SQL_TYP_STAMP:
+        case SQL_TYP_NSTAMP:
+        case SQL_TYP_VARCHAR:
+        case SQL_TYP_NVARCHAR:
+        case SQL_TYP_CHAR:
+        case SQL_TYP_NCHAR:
+        case SQL_TYP_LONG:
+        case SQL_TYP_NLONG:
+        case SQL_TYP_CSTR:
+        case SQL_TYP_NCSTR:
+        case SQL_TYP_LSTR:
+        case SQL_TYP_NLSTR:
+            _sqlda->sqlvar[_i].sqltype = SQL_TYP_NCSTR;
+            h_get_length = _sqlda->sqlvar[_i].sqllen;
+            break;
+        case SQL_TYP_FLOAT:
+        case SQL_TYP_NFLOAT:
+        case SQL_TYP_BIGINT:
+        case SQL_TYP_NBIGINT:
+        case SQL_TYP_INTEGER:
+        case SQL_TYP_NINTEGER:
+        case SQL_TYP_SMALL:
+        case SQL_TYP_NSMALL:
+            h_get_length = _sqlda->sqlvar[_i].sqllen;
+            break;
+        case SQL_TYP_DECIMAL:
+        case SQL_TYP_NDECIMAL:
+            h_precision = ((char *)&( _sqlda->sqlvar[_i].sqllen ))[0];
+            h_get_length = h_precision / 2 + 1;
+            break;
+        case SQL_TYP_CGSTR:
+        case SQL_TYP_NCGSTR:
+        case SQL_TYP_VARGRAPH:
+        case SQL_TYP_NVARGRAPH:
+        case SQL_TYP_GRAPHIC:
+        case SQL_TYP_NGRAPHIC:
+        case SQL_TYP_LONGRAPH:
+        case SQL_TYP_NLONGRAPH:
+            h_get_length = 2 * _sqlda->sqlvar[_i].sqllen;
+            break;
+        case SQL_TYP_BLOB:
+        case SQL_TYP_NBLOB:
+        case SQL_TYP_CLOB:
+        case SQL_TYP_NCLOB:
+            h_get_length = GETSQLDALONGLEN( _sqlda, _i );
+            break;
+        case SQL_TYP_DBCLOB:
+        case SQL_TYP_NDBCLOB:
+            h_get_length = 2 * GETSQLDALONGLEN( _sqlda, _i );
+            break;
+        default:
+            h_get_length = -1;
+            break;
+    } /* switch end */
+
+    return h_get_length;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name : int Db2SqlDescribe ( )                                *
+ *  Description   : 目前在Redhat9.0 UDB8.1上测试,DESCRIBE命令有内存泄漏   *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int
+Db2SqlDescribe( tSqlStru *_sqlstru, char _flag )
+{
+    int i;
+    int h_get_length;
+
+    if( _sqlstru->tsqlstat.cur_openstat ) {
+        _sqlstru->sql_code = Db2Fun('s', _sqlstru, "" );
+        if( _sqlstru->sql_code >= 0 && _sqlstru->sql_code != SQLNOTFOUND ) {
+            _sqlstru->column_num = ((struct sqlda *)(_sqlstru->desc_id_out))->sqld;
+            for( i = 0; i < _sqlstru->column_num; i++ ) {
+                /* 保存初始类型，GetTabDesc函数取表信息时用 */
+                ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i].sqltype=((struct sqlda *)(_sqlstru->desc_id_out))->sqlvar[i].sqltype;
+                if( (h_get_length=sqldalen( (struct sqlda *)(_sqlstru->desc_id_out), i )) < 0 ) {
+                    _sqlstru->user_code = E_ILLLEGAL_TYPE;
+                    DB_ERR( _sqlstru );
+                }
+                /* 保存初始长度，GetTabDesc函数取表信息时用 */
+                ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i].sqllen=h_get_length;
+
+                /* Allocate space for the select-list data values.
+                   sqldald() reserves a pointer location for
+                   sqlvar but does not allocate the full space for sqldata.  */
+                /* 根据返回字段长度，重新分配sqldata */
+                /* 20051116必须先清空sqlind，DB2 FETCH时有可能不处理该字段
+                 * 数值类型，如果FETCH不处理，上次错误操作sqlind为-1时，
+                 * 导致这次成功FETCH后取出0值
+                 */
+                *((((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar)[i].sqlind) = 0;
+                (((struct sqlda *)(_sqlstru->desc_id_out))->sqlvar)[i].sqlind = (((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar)[i].sqlind;
+                ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i].sqldata = realloc( ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i].sqldata, h_get_length+1 );
+                if( ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i].sqldata == NULL ) {
+                    bclerreg( E_ALLOC, _FL_, h_get_length+1 );
+                    return E_FAIL;
+                }
+
+                memset( ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i].sqldata, 0x00, h_get_length+1 );
+                ((struct sqlda *)(_sqlstru->desc_id_out))->sqlvar[i].sqldata = ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i].sqldata;
+
+            } /* end for */
+        }
+    }
+    else
+        if( _sqlstru->tsqlstat.cur_allocstat||_sqlstru->tsqlstat.alloc_stat ) {
+            _sqlstru->sql_code = Db2Fun('b', _sqlstru, "" );
+            if( _sqlstru->sql_code >= 0 && _sqlstru->sql_code != SQLNOTFOUND )
+                _sqlstru->ques_num = ((struct sqlda *)(_sqlstru->desc_id_in))->sqld;
+        }
+        else
+            _sqlstru->user_code=E_PREP_ID;
+
+    if( _sqlstru->sql_code || _sqlstru->user_code ) {
+        sprintf( _sqlstru->user_msg, " Db2 SqlDescribe error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name : int Db2SqlOpenCur  ()                                 *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int
+Db2SqlOpenCur( tSqlStru *_sqlstru )
+{
+    if( _sqlstru->tsqlstat.cur_allocstat )
+        if( _sqlstru->tsqlstat.alloc_stat ) {
+            if( _sqlstru->ques_num != 0 )  
+                if( _sqlstru->ques_num == (short)_sqlstru->tsqlstat.put_stat ) {
+                    _sqlstru->sql_code = Db2Fun( 'o', _sqlstru, "" );
+                    if ( _sqlstru->sql_code >= 0 && _sqlstru->sql_code != SQLNOTFOUND )
+                        _sqlstru->tsqlstat.cur_openstat = 1;
+                }
+                else 
+                    _sqlstru->user_code = E_PUT_NOMATCH;
+            else {
+                _sqlstru->sql_code = Db2Fun( 'u', _sqlstru, "" );
+                if ( _sqlstru->sql_code >= 0 && _sqlstru->sql_code != SQLNOTFOUND )
+                    _sqlstru->tsqlstat.cur_openstat = 1;
+            } /* end of else */
+        } /* end of alloc_stat */
+        else 
+            _sqlstru->user_code = E_CUR_NOALLOC;
+    else 
+        _sqlstru->user_code=E_CURS_ID;
+    
+    if(_sqlstru->sql_code || _sqlstru->user_code ) {
+        sprintf( _sqlstru->user_msg , " Db2 SqlOpenCur error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name : int Db2SqlFetchCur ()                                 *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int 
+Db2SqlFetchCur( tSqlStru *_sqlstru, long _off_set )
+{
+    long i; /* 当前游标指针位置 */
+
+    _sqlstru->offset = _off_set;
+    if ( !_sqlstru->tsqlstat.cur_openstat ) {
+        _sqlstru->user_code=E_CUR_NOOPEN;
+        DB_ERR( _sqlstru );
+    }
+
+    _sqlstru->tsqlstat.cur_fetchstat = 1;
+
+    switch ( _sqlstru->op_flag ) {
+       case 'P':
+       case 'p':
+           if( _sqlstru->proc_row <= 1 ) {
+               if( _sqlstru->proc_row < 1 ) {
+                   _sqlstru->proc_row = 0;
+               }
+               break;
+           }
+
+           Db2SqlCloseCur( _sqlstru );
+           Db2SqlOpenCur( _sqlstru );
+           for( i=0; i < _sqlstru->proc_row-1; i++ ) {
+               _sqlstru->sql_code = Db2Fun( 'f', _sqlstru, "" );
+               if( _sqlstru->sql_code != 0 ) {
+                   if( _sqlstru->sql_code != SQLNOTFOUND ) {
+                       DB_ERR( _sqlstru );
+                   }
+                   else {
+                       break;
+                   }
+               }
+           }
+           _sqlstru->proc_row = i;
+
+           break;
+       case 'C':
+       case 'c':
+         break;
+       case 'F':
+       case 'f':
+           Db2SqlCloseCur( _sqlstru );
+           Db2SqlOpenCur( _sqlstru );
+           _sqlstru->proc_row = 0;
+           _sqlstru->sql_code = Db2Fun( 'f', _sqlstru, "" );
+           if( _sqlstru->sql_code != 0 ) {
+               if( _sqlstru->sql_code != SQLNOTFOUND ) {
+                   DB_ERR( _sqlstru );
+               }
+               else
+                   break;
+           }
+
+           if ( _sqlstru->sql_code >= 0 && _sqlstru->sql_code != SQLNOTFOUND )
+                _sqlstru->proc_row++;
+
+           break;
+       case 'L':
+       case 'l':
+           Db2SqlCloseCur( _sqlstru );
+           Db2SqlOpenCur( _sqlstru );
+           _sqlstru->proc_row = 0;
+           _sqlstru->sql_code = 0;
+           while( _sqlstru->sql_code >= 0 ) {
+               _sqlstru->sql_code = Db2Fun( 'f', _sqlstru, "" );
+               if( _sqlstru->sql_code != 0 ) {
+                   if( _sqlstru->sql_code != SQLNOTFOUND ) {
+                       DB_ERR( _sqlstru );
+                   }
+                   else
+                       break;
+               }
+
+               _sqlstru->proc_row++;
+           }
+
+           Db2SqlCloseCur( _sqlstru );
+           Db2SqlOpenCur( _sqlstru );
+           for( i = 0; i < _sqlstru->proc_row; i++ ) {
+               _sqlstru->sql_code = Db2Fun( 'f', _sqlstru, "" );
+               if( _sqlstru->sql_code != 0 ) {
+                   if( _sqlstru->sql_code != SQLNOTFOUND ) {
+                       DB_ERR( _sqlstru );
+                   }
+                   else {
+                       break;
+                   }
+               }
+           }
+
+           break;
+       case 'A':
+       case 'a':
+           if( _sqlstru->proc_row == _off_set )
+               break;
+           else if( _sqlstru->proc_row < _off_set ) {
+               for( i = _sqlstru->proc_row; i < _off_set; i++ ) {
+                   _sqlstru->sql_code = Db2Fun( 'f', _sqlstru, "" );
+                   if( _sqlstru->sql_code != 0 ) {
+                       if( _sqlstru->sql_code != SQLNOTFOUND ) {
+                           DB_ERR( _sqlstru );
+                       }
+                       else {
+                           break;
+                       }
+                   }
+               }
+           }
+           else {
+               Db2SqlCloseCur( _sqlstru );
+               Db2SqlOpenCur( _sqlstru );
+               for( i = 0; i < _off_set; i++ ) {
+                   _sqlstru->sql_code = Db2Fun( 'f', _sqlstru, "" );
+                   if( _sqlstru->sql_code != 0 ) {
+                       if( _sqlstru->sql_code != SQLNOTFOUND ) {
+                           DB_ERR( _sqlstru );
+                       }
+                       else {
+                           break;
+                       }
+                   }
+               }
+           }
+           _sqlstru->proc_row = _off_set;
+           break;
+       default:
+           if( _sqlstru->sql_code != 0 ) {
+               if( _sqlstru->sql_code != SQLNOTFOUND ) {
+                   _sqlstru->proc_row = 0;
+                   DB_ERR( _sqlstru );
+               }
+           }
+           else {
+               _sqlstru->sql_code = Db2Fun( 'f', _sqlstru, "" );
+               if( _sqlstru->sql_code != 0 ) {
+                   if( _sqlstru->sql_code != SQLNOTFOUND ) {
+                       DB_ERR( _sqlstru );
+                   }
+               }
+
+               if ( _sqlstru->sql_code >= 0 && _sqlstru->sql_code != SQLNOTFOUND )
+                    _sqlstru->proc_row++;
+           }
+
+           break;
+    } /* end of switch */
+
+    if ( _sqlstru->sql_code == SQLNOTFOUND ) {
+        _sqlstru->tsqlstat.fetchend = 1;
+        return E_NOTFOUND;
+    }
+    else
+       return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name : int Db2SqlCloseCur ()                                 *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int 
+Db2SqlCloseCur( tSqlStru *_sqlstru )
+{
+    if( _sqlstru->tsqlstat.cur_openstat == 1 ) {
+        _sqlstru->sql_code = Db2Fun( 'c', _sqlstru, "" );
+        if (  _sqlstru->sql_code >= 0 )  
+            _sqlstru->tsqlstat.cur_openstat = 0;
+    }
+    else 
+        _sqlstru->user_code = E_CUR_UNCLOSED;
+    
+    if(_sqlstru->sql_code || _sqlstru->user_code ) {
+        sprintf( _sqlstru->user_msg , " Db2 SqlCloseCur error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name : int Db2SqlFreeCur  ()                                 *
+ *  Description   : DB2    不用释放指针                                   *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int 
+Db2SqlFreeCur( tSqlStru *_sqlstru )
+{
+    _sqlstru->tsqlstat.cur_allocstat = 0;
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name : int Db2SqlFreePrep ()                                 *
+ *  Description   : DB2 不用Free prepare                                  *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int
+Db2SqlFreePrep( tSqlStru *_sqlstru )
+{
+    _sqlstru->tsqlstat.prep_stat = 0;
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name :int Db2SqlExecute()                                    *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int 
+Db2SqlExecute( tSqlStru *_sqlstru )
+{
+    if( _sqlstru->tsqlstat.prep_stat )   
+        if( _sqlstru->ques_num != 0 )
+            if( _sqlstru->tsqlstat.alloc_stat )  
+                if(_sqlstru->ques_num==( short )_sqlstru->tsqlstat.put_stat ) {
+                    _sqlstru->sql_code = Db2Fun( 'e', _sqlstru, "" );
+                    _sqlstru->proc_row=sqlca.sqlerrd[2];
+                }
+                else 
+                    _sqlstru->user_code = E_PUT_NOMATCH;
+            else
+                _sqlstru->user_code = E_EXE_NOALLOC;
+        else   {
+        /*这段程序是专为无待定参数的update ,delete,insert 的程序设计的*/
+            _sqlstru->sql_code = Db2Fun( 'w', _sqlstru, "" );
+            _sqlstru->proc_row=sqlca.sqlerrd[2];
+        } /*end of else of ques_num*/
+    else 
+        _sqlstru->user_code = E_PREP_ID;
+
+    if(_sqlstru->sql_code || _sqlstru->user_code ) {
+        sprintf( _sqlstru->user_msg , " Db2 SqlExecute error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name :int Db2PutDescData ()                                  *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+static int 
+Db2PutDescData( tSqlValue *_sqlvalue, char *_datapb )
+{
+    switch ( _sqlvalue->type )   {
+        case DFFAPCHAR:
+        case DFFAPVCHAR:
+        case DFFAPLONG:
+        case DFFAPVCHAR2:
+        case DFFAPDATE:
+        case DFFAPDTIME:
+        case DFFAPINTERVAL:
+             strcpy( _datapb , _sqlvalue->pubdata.c_value );
+             bcl_rtrim(_datapb);
+             bcl_ltrim(_datapb);
+             break;
+        case DFFAPTEXT:
+        case DFFAPBYTES:
+             memcpy( _datapb , _sqlvalue->pubdata.c_value, _sqlvalue->cb );
+             break;
+        case DFFAPSMINT:
+             *(short *)_datapb = _sqlvalue->pubdata.s_value;
+             break;
+        case DFFAPINTEGER:
+             *(int *)_datapb = _sqlvalue->pubdata.i_value;
+             break;
+        case DFFAPINT:
+             *(long *)_datapb = _sqlvalue->pubdata.l_value;
+             break;
+        case DFFAPDECIMAL:
+        case DFFAPFLOAT:
+             *(double *)_datapb = _sqlvalue->pubdata.d_value;
+             break;
+        /* 关于SQLSMFLOAT有待测试*/ 
+        case DFFAPSMFLOAT:
+             *(float *)_datapb = _sqlvalue->pubdata.f_value;
+             break;
+        default: 
+             _datapb = NULL;
+             return E_FAIL;
+    }
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name :int Db2GetDescData ()                                  *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+static int 
+Db2GetDescData( tSqlValue *_sqlvalue, char *_datapb, short _datatype, short _dataind, short _datalen )
+{
+    int i;
+    char buf[MAX_DOUBLE_STR_LEN];
+    short precision;
+    short scale;
+    short numBytes;
+    short top;
+    short bottom;
+    short byteNb;
+    short digNb;
+
+    switch ( _sqlvalue->type ) {
+        case DFFAPCHAR:
+        case DFFAPVCHAR:
+        case DFFAPLONG:
+        case DFFAPTEXT:
+        case DFFAPBYTES:
+        case DFFAPVCHAR2:
+        case DFFAPDATE:
+        case DFFAPDTIME:
+        case DFFAPINTERVAL:
+             if( _sqlvalue->pubdata.c_value != NULL ) {
+                 free( _sqlvalue->pubdata.c_value );
+                 _sqlvalue->pubdata.c_value = NULL;
+             }
+             break;
+    }
+
+    switch ( _datatype ) {
+        case DFFAPCHAR:
+        case DFFAPVCHAR:
+        case DFFAPLONG:
+        case DFFAPVCHAR2:
+        case DFFAPDATE:
+        case DFFAPDTIME:
+        case DFFAPINTERVAL:
+             _sqlvalue->pubdata.c_value = calloc( 1, _sqlvalue->cb+1 );
+             if( _sqlvalue->pubdata.c_value == NULL ) 
+                 return E_FAIL;
+             if( _sqlvalue->cb > 0 && _dataind >= 0 ) {
+                 strncpy(_sqlvalue->pubdata.c_value,_datapb,_sqlvalue->cb);
+                 (_sqlvalue->pubdata.c_value)[_sqlvalue->cb]='\0';
+                 bcl_ltrim( _sqlvalue->pubdata.c_value );
+                 bcl_rtrim( _sqlvalue->pubdata.c_value );
+             }
+             break;
+        case DFFAPTEXT:
+        case DFFAPBYTES:
+             _sqlvalue->pubdata.c_value = calloc( 1, _sqlvalue->cb+1 );
+             if( _sqlvalue->pubdata.c_value == NULL ) 
+                 return E_FAIL;
+             if( _sqlvalue->cb > 0 && _dataind >= 0 )
+                 memcpy( _sqlvalue->pubdata.c_value, _datapb, _sqlvalue->cb );
+             break;
+/* 20051014 handq 统一使用l_value */
+        case DFFAPSMINT:
+             if( _dataind < 0 ) {
+                 _sqlvalue->pubdata.l_value = 0;
+                 break;
+             }
+             _sqlvalue->pubdata.l_value = *(short *)_datapb;
+             break;
+        case DFFAPINTEGER:
+             if( _dataind < 0 ) {
+                 _sqlvalue->pubdata.l_value = 0;
+                 break;
+             }
+             _sqlvalue->pubdata.l_value = *(int *)_datapb;
+             break;
+        case DFFAPINT:
+             if( _dataind < 0 ) {
+                 _sqlvalue->pubdata.l_value = 0;
+                 break;
+             }
+             _sqlvalue->pubdata.l_value =  *(long *)_datapb;
+             break;
+/* 20051014 handq 统一使用d_value */
+        case DFFAPDECIMAL:
+             if( _dataind < 0 ) {
+                 _sqlvalue->pubdata.d_value = 0;
+                 break;
+             }
+             precision = (((char *)&_datalen)[0]);
+             scale = (((char *)&_datalen)[1]);
+             /* adjust the precision to odd value */
+             if( (precision % 2) == 0 )
+                 precision = precision + 1;
+             /* calculate numBytes */
+             numBytes = (short)(precision + 1) / 2;
+             /* determine the sign using bottom of the last byte */
+             bottom = *(_datapb + numBytes - 1) & 0x000F;
+             i = 0;
+             if( bottom == 0x000D || bottom == 0x000B ) {
+                 buf[i] = '-';
+                 i++;
+             }
+             else {
+                 buf[i] = ' ';
+                 i++;
+             }
+             /* prepare the decimal number */
+             digNb = 0;
+             if( digNb == precision - scale ) {
+                 buf[i] = '.';
+                 i++;
+             }
+             /* (top + bottom) from first (numBytes - 1) bytes ... */
+             for( byteNb = 0; byteNb < numBytes - 1; byteNb = byteNb + 1 ) {
+                 top = *(_datapb + byteNb) & 0x00F0;
+                 top = top >> 4;
+                 bottom = *(_datapb + byteNb) & 0x000F;
+                 buf[i] = top + '0';
+                 i++;
+                 digNb++;
+                 if( digNb == precision - scale ) {
+                     buf[i] = '.';
+                     i++;
+                 }
+                 buf[i] = bottom + '0';
+                 i++;
+                 digNb++;
+                 if( digNb == precision - scale ) {
+                     buf[i] = '.';
+                     i++;
+                 }
+             }
+             /* ... and top of the last byte (bottom is the sign) */
+             top = *(_datapb + byteNb) & 0x00F0;
+             top = top >> 4;
+             buf[i] = top + '0';
+             i++;
+             digNb++;
+             if( digNb == precision - scale ) {
+                 buf[i] = '.';
+                 i++;
+             }
+             buf[i] = '\0';
+             _sqlvalue->pubdata.d_value =  bcl_myatof( buf );
+             break;
+        case DFFAPFLOAT:
+             if( _dataind < 0 ) {
+                 _sqlvalue->pubdata.d_value = 0;
+                 break;
+             }
+             _sqlvalue->pubdata.d_value =  *(double *)_datapb;
+             break;
+        /* 关于SQLSMFLOAT有待测试*/ 
+        case DFFAPSMFLOAT:
+             if( _dataind < 0 ) {
+                 _sqlvalue->pubdata.d_value = 0;
+                 break;
+             }
+             _sqlvalue->pubdata.d_value =  *(float *)_datapb;
+             break;
+        default: 
+             return E_FAIL;
+    }
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name : int Db2SqlPutValue ()                                 *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int 
+Db2SqlPutValue( tSqlStru *_sqlstru, short _putvalue_serial )
+{
+    short         h_ques_num;  
+    short         i;
+    int           ret;  
+    short         h_t_type;
+    short         h_t_length;
+
+    if( _sqlstru->tsqlstat.prep_stat ) {
+        if( _sqlstru->tsqlstat.alloc_stat ) {
+            h_ques_num=_sqlstru->ques_num;
+            i=_putvalue_serial;
+            if( h_ques_num >= i ) {
+                h_t_type   = _sqlstru->tValuepb[i-1].type;
+                h_t_length = _sqlstru->tValuepb[i-1].cb;
+/* Get the value of each bind variable as a
+ * character string 
+ */
+                (((struct sqlda *)(_sqlstru->desc_id_in))->sqlvar)[i-1].sqlind = (((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar)[i-1].sqlind;
+                ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i-1].sqldata = realloc( ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i-1].sqldata, h_t_length+1 );
+                if( ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i-1].sqldata == NULL ) {
+                    bclerreg( E_ALLOC, _FL_, h_t_length+1 );
+                    return E_FAIL;
+                }
+                memset( ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i-1].sqldata, 0x00, h_t_length+1 );
+                ((struct sqlda *)(_sqlstru->desc_id_in))->sqlvar[i-1].sqldata = ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[i-1].sqldata;
+                ret=Db2PutDescData( &(_sqlstru->tValuepb[i-1]), ((struct sqlda *)(_sqlstru->desc_id_in))->sqlvar[i-1].sqldata );
+                if( ret != E_OK )  {
+                    _sqlstru->user_code = E_ILLLEGAL_TYPE;
+                    APP_ERR( E_ILLLEGAL_TYPE )
+                }
+                /* 长度在lob结构中，SQLDA区中字段长度设为零 */
+                if( h_t_type == DFFAPTEXT || h_t_type == DFFAPBYTES )
+                    h_t_length = 0;
+                (((struct sqlda *)(_sqlstru->desc_id_in))->sqlvar)[i-1].sqllen = h_t_length;
+
+                /* Set the indicator variable's value. */
+                /* 可以INSERT、UPDATE空值(null)，对数值字段无效 */
+/* 20051027 不判断NULL字符串，提高效率
+                if( (strncmp( (((struct sqlda *)(_sqlstru->desc_id_in))->sqlvar)[i-1].sqldata, "NULL", 4) == 0)||(strncmp( (((struct sqlda *)(_sqlstru->desc_id_in))->sqlvar)[i-1].sqldata, "null", 4) == 0) )
+                    *(((struct sqlda *)(_sqlstru->desc_id_in))->sqlvar)[i-1].sqlind = -1;
+                else
+*/
+                    *(((struct sqlda *)(_sqlstru->desc_id_in))->sqlvar)[i-1].sqlind = 0;
+
+                /* 统一使用DOUBLE方式，存入SQLDA */
+                /* 按DB2的DECIMAL方式，较复杂 */
+                if( h_t_type == DFFAPSMFLOAT || h_t_type == DFFAPDECIMAL )
+                    h_t_type = DFFAPFLOAT;
+                (((struct sqlda *)(_sqlstru->desc_id_in))->sqlvar)[i-1].sqltype = h_t_type;
+
+                _sqlstru->tsqlstat.put_stat++;
+            }
+            else 
+                _sqlstru->user_code=E_PUTERROR;
+        }  /* end of alloc_stat */   
+        else 
+            _sqlstru->user_code = E_PUT_NOALLOC;
+    } /* end of if prep_stat */
+    else 
+        _sqlstru->user_code=E_PREP_ID;
+    
+    if(_sqlstru->sql_code || _sqlstru->user_code ) {
+        sprintf( _sqlstru->user_msg, " Db2 SqlPutValue error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    return E_OK;
+}
+
+/*------------------------------------------------------------------------*
+ *  Function Name :int Db2SqlGetValue ()                                  *
+ *  Description   :                                                       *
+ *  Input         :                                                       *
+ *  Output        :                                                       *
+ *------------------------------------------------------------------------*/
+int 
+Db2SqlGetValue( tSqlStru *_sqlstru, short _getvalue_serial )
+{
+    int       ret;
+    short     h_get_serial;
+    short     h_get_type;
+
+    h_get_serial = _getvalue_serial;
+    if( h_get_serial <= _sqlstru->column_num ) {
+        if( _sqlstru->tsqlstat.cur_fetchstat ) {
+            /* get _sqlstru column message cb type name */
+            _sqlstru->tValuepb[h_get_serial-1].cb = ((struct sqlda *)(_sqlstru->desc_id_tmp))->sqlvar[h_get_serial-1].sqllen;
+            h_get_type = ((struct sqlda *)(_sqlstru->desc_id_out))->sqlvar[h_get_serial-1].sqltype;
+/* 20050430对于not null字段h_get_type为定义值-1的偶数,需要转换成定义类型 */
+            if( !(h_get_type % 2) )
+                h_get_type += 1;
+            /* 转换成单精度浮点数，取值时用 */
+            if( h_get_type == DFFAPFLOAT && _sqlstru->tValuepb[h_get_serial-1].cb == sizeof( float ) )
+                h_get_type = DFFAPSMFLOAT;
+
+            /* 长度在lob结构中，字段长度为零，设为默认值，取值时分配内存用 */
+            if( h_get_type == DFFAPTEXT || h_get_type == DFFAPBYTES )
+                _sqlstru->tValuepb[h_get_serial-1].cb = DEF_CHAR_LEN;
+
+            strcpy( _sqlstru->tValuepb[h_get_serial-1].name, ((struct sqlda *)(_sqlstru->desc_id_out))->sqlvar[h_get_serial-1].sqlname.data );
+
+            ret = Db2GetDescData ( &(_sqlstru->tValuepb[h_get_serial-1]), \
+    ((struct sqlda *)(_sqlstru->desc_id_out))->sqlvar[h_get_serial-1].sqldata, \
+                                   h_get_type, \
+  *(((struct sqlda *)(_sqlstru->desc_id_out))->sqlvar[h_get_serial-1].sqlind), \
+    ((struct sqlda *)(_sqlstru->desc_id_out))->sqlvar[h_get_serial-1].sqllen );
+            _sqlstru->tValuepb[h_get_serial-1].type = h_get_type;
+
+            if( ret != E_OK )   {
+                _sqlstru->user_code = E_NODEF_TYPE;
+                APP_ERR( E_NODEF_TYPE )
+            }
+
+        } /* end of if prep_id */
+        else
+            _sqlstru->user_code = E_CUR_NOFETCH;
+    }
+    else 
+        _sqlstru->user_code =E_GETSERIAL_ERR;
+    
+    if(_sqlstru->sql_code || _sqlstru->user_code ) {
+        sprintf( _sqlstru->user_msg, " Db2 SqlGetValue error! " );
+        DB_ERR( _sqlstru );
+    }
+
+    return E_OK;
+}
+
+/* help */
+/* self defined atof()                                  */
+/* atof in SCO UNIX v3.2 5.0.x has a problem to convert */
+/* a string like "10182.1099999999999990"		*/
+#ifdef HAVE_BUG_ATOF
+static double
+bcl_myatof_deleted( char *str )
+{
+  int           i, slen;
+  double        result1, result2;
+  int           flag;
+
+
+  if( str == NULL )
+      return (double)MINDOUBLE;
+
+  bcl_trimall( str );
+  if( str[0] == 0x0 )
+      return (double)MINDOUBLE;
+
+  if( str[ 0 ] == '-' ) {
+      str += 1;
+      flag = -1.0f;
+  }
+  else if( str[ 0 ] == '+' ) {
+      str += 1;
+      flag = 1.0f;
+  }
+  else {
+      flag = 1.0f;
+  }
+
+
+  result1 = 0.0f;
+  slen = strlen( str );
+  for( i = 0; i < slen; i++ ) {
+      if( str[ i ] == '.' )
+          break;
+
+      if( isdigit( str[ i ] ) == 0 )
+          return (double)MINDOUBLE;
+
+      result1 = result1 * 10.0f + ( str[ i ] - 0x30 );
+  }
+
+
+  result2 = 0.0f;
+  for( i = ( slen - 1 ); i >= 0; i-- ) {
+      if( str[ i ] == '.' )
+          break;
+
+      if( isdigit( str[ i ] ) == 0 )
+          return (double)MINDOUBLE;
+
+      result2 = ( result2 + ( str[ i ] - 0x30 ) ) * 0.1f;
+  }
+  if( i < 0 )
+      result2 = 0.0f;
+
+  return ( flag * ( result1 + result2 ) );
+
+}
+#else
+
+/* 20041123 for atof( "8E6344349BAA5A75" ) */
+#ifdef SCO5
+static double
+bcl_myatof_deleted( char * str )
+{
+    char *p;
+    p = str;
+    while( p[0] != 0 ) {
+        if( !(isdigit( p[0] ) || p[0] == '-' || p[0] == '+' || p[0] =='.') )
+            return 0;
+        p++;
+    }
+
+    return atof( str );
+}
+#else
+static double
+bcl_myatof_deleted( char * str )
+{
+    return atof( str );
+}
+#endif
+
+#endif
+
